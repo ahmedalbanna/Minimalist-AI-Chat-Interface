@@ -3848,6 +3848,263 @@
       font-size: 16px;
     }
 
+    .audio-modal {
+      position: fixed;
+      z-index: 110;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 16px;
+    }
+
+    .audio-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(11, 28, 48, .3);
+      backdrop-filter: blur(7px);
+      -webkit-backdrop-filter: blur(7px);
+    }
+
+    .audio-dialog {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      width: min(540px, 100%);
+      max-height: calc(100vh - 32px);
+      flex-direction: column;
+      overflow: hidden;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      box-shadow: 0 24px 60px rgba(15, 23, 42, .2);
+    }
+
+    .audio-dialog-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 20px 22px 14px;
+    }
+
+    .audio-dialog-heading {
+      display: grid;
+      gap: 5px;
+    }
+
+    .audio-dialog-heading h2 {
+      margin: 0;
+      color: var(--text);
+      font-size: 19px;
+      font-weight: 600;
+      letter-spacing: -.03em;
+    }
+
+    .audio-dialog-heading p {
+      margin: 0;
+      color: var(--secondary);
+      font-size: 10px;
+      line-height: 1.5;
+    }
+
+    .audio-close {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      flex: 0 0 32px;
+      color: var(--muted);
+      background: var(--blue-soft);
+      border-radius: 8px;
+    }
+
+    .audio-close:hover {
+      color: var(--blue);
+      background: #dce9ff;
+    }
+
+    .audio-stage {
+      display: grid;
+      justify-items: center;
+      gap: 14px;
+      padding: 20px 22px 22px;
+      background: linear-gradient(180deg, #eff4ff, #f8f9ff);
+      border-top: 1px solid var(--line-soft);
+      border-bottom: 1px solid var(--line-soft);
+    }
+
+    .audio-orb {
+      position: relative;
+      display: grid;
+      place-items: center;
+      width: 126px;
+      height: 126px;
+      color: var(--blue);
+      background: radial-gradient(circle at 35% 30%, #fff 0 8%, #dbe8ff 32%, #bcd3ff 68%, #8fb2f5 100%);
+      border: 8px solid rgba(255, 255, 255, .8);
+      border-radius: 50%;
+      box-shadow: 0 12px 30px rgba(37, 99, 235, .18), 0 0 0 1px #c8dafa;
+    }
+
+    .audio-orb::after {
+      position: absolute;
+      inset: 16px;
+      content: '';
+      border: 1px solid rgba(37, 99, 235, .2);
+      border-radius: 50%;
+    }
+
+    .audio-orb .material-symbols-outlined {
+      position: relative;
+      z-index: 1;
+      font-size: 34px;
+    }
+
+    .audio-dialog[data-audio-state='listening'] .audio-orb {
+      animation: audio-breathe 1.5s ease-in-out infinite;
+    }
+
+    .audio-dialog[data-audio-state='processing'] .audio-orb,
+    .audio-dialog[data-audio-state='requesting'] .audio-orb {
+      animation: audio-pulse 1.1s ease-in-out infinite;
+    }
+
+    .audio-dialog[data-audio-state='error'] .audio-orb {
+      color: var(--error);
+      background: radial-gradient(circle at 35% 30%, #fff 0 8%, #ffdad6 34%, #f5b8b5 70%, #e8908b 100%);
+      box-shadow: 0 12px 30px rgba(186, 26, 26, .14), 0 0 0 1px #f2b8b5;
+    }
+
+    @keyframes audio-breathe {
+      0%, 100% { box-shadow: 0 12px 30px rgba(37, 99, 235, .18), 0 0 0 1px #c8dafa, 0 0 0 0 rgba(37, 99, 235, .12); }
+      50% { box-shadow: 0 12px 30px rgba(37, 99, 235, .22), 0 0 0 1px #a9c4f5, 0 0 0 14px rgba(37, 99, 235, .08); }
+    }
+
+    @keyframes audio-pulse {
+      0%, 100% { transform: scale(.96); opacity: .72; }
+      50% { transform: scale(1.03); opacity: 1; }
+    }
+
+    .audio-waveform {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      height: 26px;
+    }
+
+    .audio-wave-bar {
+      width: 4px;
+      height: 9px;
+      background: #9cbcf4;
+      border-radius: 99px;
+      animation: audio-wave 1.05s ease-in-out infinite;
+    }
+
+    .audio-wave-bar:nth-child(2n) { animation-delay: .12s; }
+    .audio-wave-bar:nth-child(3n) { animation-delay: .24s; }
+    .audio-wave-bar:nth-child(4n) { animation-delay: .36s; }
+    .audio-wave-bar:nth-child(5n) { animation-delay: .48s; }
+
+    .audio-dialog[data-audio-state='idle'] .audio-waveform,
+    .audio-dialog[data-audio-state='error'] .audio-waveform {
+      opacity: .35;
+    }
+
+    .audio-dialog[data-audio-state='idle'] .audio-wave-bar,
+    .audio-dialog[data-audio-state='error'] .audio-wave-bar {
+      animation-play-state: paused;
+    }
+
+    @keyframes audio-wave {
+      0%, 100% { height: 8px; opacity: .45; }
+      50% { height: 23px; opacity: 1; }
+    }
+
+    .audio-transcript {
+      min-height: 68px;
+      padding: 13px 15px;
+      color: var(--text);
+      background: #fff;
+      border: 1px solid var(--line-soft);
+      border-radius: 11px;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .audio-transcript strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .audio-transcript p {
+      margin: 0;
+    }
+
+    .audio-controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 16px 22px 18px;
+    }
+
+    .audio-primary,
+    .audio-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      min-height: 40px;
+      padding: 0 14px;
+      border-radius: 9px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .audio-primary {
+      color: #fff;
+      background: var(--blue);
+      box-shadow: 0 5px 12px rgba(37, 99, 235, .16);
+    }
+
+    .audio-primary:hover {
+      background: var(--blue-dark);
+    }
+
+    .audio-secondary {
+      color: var(--secondary);
+      background: var(--blue-soft);
+      border: 1px solid #d5e2fb;
+    }
+
+    .audio-secondary:hover {
+      color: var(--blue);
+      background: #dce9ff;
+    }
+
+    .audio-dialog-footer {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 12px 22px max(16px, env(safe-area-inset-bottom));
+      color: var(--muted);
+      border-top: 1px solid var(--line-soft);
+      font-size: 10px;
+      line-height: 1.45;
+    }
+
+    .audio-dialog-footer .material-symbols-outlined {
+      color: var(--blue);
+      font-size: 16px;
+    }
+
     .model-menu {
       position: fixed;
       z-index: 90;
@@ -4908,6 +5165,35 @@
       }
     }
 
+    @media (max-width: 720px) {
+      .audio-modal {
+        padding: 0;
+      }
+
+      .audio-dialog {
+        width: 100%;
+        max-height: 100vh;
+        border: 0;
+        border-radius: 0;
+      }
+
+      .audio-dialog-header {
+        padding: 18px 16px 14px;
+      }
+
+      .audio-stage {
+        padding: 20px 16px;
+      }
+
+      .audio-controls {
+        padding: 14px 16px 16px;
+      }
+
+      .audio-dialog-footer {
+        padding: 12px 16px max(16px, env(safe-area-inset-bottom));
+      }
+    }
+
     @media (prefers-reduced-motion: reduce) {
       *,
       *::before,
@@ -5016,6 +5302,24 @@
           <section class="mcp-tool-panel" aria-labelledby="mcp-server-heading"><div class="mcp-tool-heading"><h3 id="mcp-server-heading">Filesystem</h3><p id="mcp-server-description">Read-only workspace context for local documents.</p></div><div id="mcp-tool-list" class="mcp-tool-list"></div></section>
         </div>
         <footer class="mcp-dialog-footer"><span class="material-symbols-outlined" aria-hidden="true">info</span><span>MCP connections and tool invocations are preview controls in this browser tab.</span></footer>
+      </aside>
+    </div>
+
+    <div id="audio-modal" class="audio-modal" hidden>
+      <button class="audio-backdrop" type="button" data-action="close-audio" aria-label="Close voice mode"></button>
+      <aside class="audio-dialog" data-audio-state="idle" role="dialog" aria-modal="true" aria-labelledby="audio-title" aria-describedby="audio-description">
+        <header class="audio-dialog-header">
+          <div class="audio-dialog-heading"><h2 id="audio-title">Voice &amp; audio mode</h2><p id="audio-description">A local preview of spoken context and response playback.</p></div>
+          <button class="audio-close" type="button" data-action="close-audio" aria-label="Close voice mode"><span class="material-symbols-outlined" aria-hidden="true">close</span></button>
+        </header>
+        <div class="audio-stage">
+          <div class="audio-orb"><span id="audio-orb-icon" class="material-symbols-outlined" aria-hidden="true">graphic_eq</span></div>
+          <div id="audio-waveform" class="audio-waveform" aria-hidden="true"><span class="audio-wave-bar"></span><span class="audio-wave-bar"></span><span class="audio-wave-bar"></span><span class="audio-wave-bar"></span><span class="audio-wave-bar"></span><span class="audio-wave-bar"></span><span class="audio-wave-bar"></span><span class="audio-wave-bar"></span><span class="audio-wave-bar"></span></div>
+          <div id="audio-status" class="staging-state-message" role="status" aria-live="polite">Ready when you are.</div>
+        </div>
+        <div class="audio-transcript"><strong>Latest context</strong><p id="audio-transcript-text">Start a voice session to preview a spoken question about your staged files.</p></div>
+        <div class="audio-controls"><button id="audio-primary" class="audio-primary" type="button" data-action="audio-primary"><span class="material-symbols-outlined" aria-hidden="true">mic</span><span id="audio-primary-label">Start listening</span></button><button class="audio-secondary" type="button" data-action="audio-secondary"><span class="material-symbols-outlined" aria-hidden="true">refresh</span>Reset preview</button><button class="audio-secondary" type="button" data-action="audio-error"><span class="material-symbols-outlined" aria-hidden="true">cloud_off</span>Simulate issue</button></div>
+        <footer class="audio-dialog-footer"><span class="material-symbols-outlined" aria-hidden="true">info</span><span>No microphone, speaker, network, or persistence access is used in this preview.</span></footer>
       </aside>
     </div>
 
@@ -5249,6 +5553,11 @@
         mcpFocusGuard: false,
         mcpQuery: '',
         mcpSelectedServer: 'filesystem',
+        audioOpen: false,
+        audioTrigger: null,
+        audioFocusGuard: false,
+        audioState: 'idle',
+        audioTimer: null,
         preferences: {
           streaming: true,
           memoryOnly: true,
@@ -5296,6 +5605,13 @@
       const mcpServerHeading = document.getElementById('mcp-server-heading');
       const mcpServerDescription = document.getElementById('mcp-server-description');
       const mcpToolList = document.getElementById('mcp-tool-list');
+      const audioModal = document.getElementById('audio-modal');
+      const audioDialog = audioModal?.querySelector('.audio-dialog');
+      const audioOrbIcon = document.getElementById('audio-orb-icon');
+      const audioStatus = document.getElementById('audio-status');
+      const audioTranscript = document.getElementById('audio-transcript-text');
+      const audioPrimary = document.getElementById('audio-primary');
+      const audioPrimaryLabel = document.getElementById('audio-primary-label');
       const modelOptions = Array.from(document.querySelectorAll('[data-action="select-model"]'));
 
       function createElement(tag, className, text) {
@@ -5463,6 +5779,111 @@
         if (!tool) return;
         closeMcp(false);
         showToast(`${tool.label} is ready in this local context.`, 'extension');
+      }
+
+      function clearAudioTimer() {
+        if (state.audioTimer) {
+          window.clearTimeout(state.audioTimer);
+          state.audioTimer = null;
+        }
+      }
+
+      function renderAudioState() {
+        if (!audioDialog) return;
+        const copy = {
+          idle: { icon: 'graphic_eq', status: 'Ready when you are.', transcript: 'Start a voice session to preview a spoken question about your staged files.', action: 'Start listening', disabled: false },
+          requesting: { icon: 'mic', status: 'Preparing a local voice preview…', transcript: 'Aura is preparing the preview session without requesting microphone access.', action: 'Cancel', disabled: true },
+          listening: { icon: 'mic', status: 'Listening for a local preview…', transcript: 'Speak naturally. This preview does not capture or store audio.', action: 'Stop listening', disabled: false },
+          processing: { icon: 'auto_awesome', status: 'Preparing your context…', transcript: 'Aura is turning the preview request into context for the current canvas.', action: 'Processing…', disabled: true },
+          playing: { icon: 'volume_up', status: 'Playing a sample response…', transcript: 'Sample response: I will keep the first pass small, explicit, and easy to verify.', action: 'Listen again', disabled: false },
+          error: { icon: 'error', status: 'Voice preview unavailable.', transcript: 'The local preview could not start. Try again or reset the session.', action: 'Try again', disabled: false }
+        };
+        const current = copy[state.audioState] || copy.idle;
+        audioDialog.dataset.audioState = state.audioState;
+        if (audioOrbIcon) audioOrbIcon.textContent = current.icon;
+        if (audioStatus) {
+          audioStatus.textContent = current.status;
+          audioStatus.classList.toggle('is-error', state.audioState === 'error');
+        }
+        if (audioTranscript) audioTranscript.textContent = current.transcript;
+        if (audioPrimaryLabel) audioPrimaryLabel.textContent = current.action;
+        if (audioPrimary) {
+          audioPrimary.disabled = current.disabled;
+          const iconElement = audioPrimary.querySelector('.material-symbols-outlined');
+          if (iconElement) iconElement.textContent = state.audioState === 'listening' ? 'stop' : state.audioState === 'playing' ? 'replay' : 'mic';
+        }
+      }
+
+      function openAudio(trigger) {
+        if (!audioModal) return;
+        state.audioFocusGuard = false;
+        state.audioOpen = true;
+        state.audioTrigger = trigger || document.querySelector('[data-action="audio-mode"]');
+        audioModal.hidden = false;
+        renderAudioState();
+        window.requestAnimationFrame(() => audioPrimary?.focus());
+      }
+
+      function closeAudio(restoreFocus) {
+        if (!state.audioOpen) return;
+        clearAudioTimer();
+        state.audioOpen = false;
+        if (audioModal) audioModal.hidden = true;
+        if (restoreFocus !== false && state.audioTrigger?.isConnected) {
+          state.audioFocusGuard = true;
+          state.audioTrigger.focus();
+          window.setTimeout(() => { state.audioFocusGuard = false; }, 0);
+        }
+        state.audioTrigger = null;
+      }
+
+      function startAudio() {
+        clearAudioTimer();
+        state.audioState = 'requesting';
+        renderAudioState();
+        state.audioTimer = window.setTimeout(() => {
+          state.audioTimer = null;
+          state.audioState = 'listening';
+          renderAudioState();
+        }, 420);
+      }
+
+      function stopAudio() {
+        clearAudioTimer();
+        state.audioState = 'processing';
+        renderAudioState();
+        state.audioTimer = window.setTimeout(() => {
+          state.audioTimer = null;
+          state.audioState = 'playing';
+          renderAudioState();
+          state.audioTimer = window.setTimeout(() => {
+            state.audioTimer = null;
+            state.audioState = 'idle';
+            renderAudioState();
+          }, 1800);
+        }, 620);
+      }
+
+      function handleAudioPrimary() {
+        if (state.audioState === 'idle' || state.audioState === 'error' || state.audioState === 'playing') startAudio();
+        else if (state.audioState === 'listening') stopAudio();
+        else if (state.audioState === 'requesting') {
+          clearAudioTimer();
+          state.audioState = 'idle';
+          renderAudioState();
+        }
+      }
+
+      function resetAudio() {
+        clearAudioTimer();
+        state.audioState = 'idle';
+        renderAudioState();
+      }
+
+      function simulateAudioError() {
+        clearAudioTimer();
+        state.audioState = 'error';
+        renderAudioState();
       }
 
       const slashCommands = [
@@ -5944,6 +6365,7 @@
         closeSearch(false);
         closeSettings(false);
         closeMcp(false);
+        closeAudio(false);
         if (promptInput) promptInput.value = '';
         if (chatInput) chatInput.value = '';
         renderStagedFiles();
@@ -6179,6 +6601,7 @@
         closeSearch(false);
         closeSettings(false);
         closeMcp(false);
+        closeAudio(false);
         closeCommandMenu();
       }
 
@@ -6188,8 +6611,6 @@
           attach: ['File attachments are disabled in preview mode.', 'attach_file'],
           'add-web-link': ['Web link references are ready for this local context.', 'link'],
           screenshot: ['Screen vision is available as a mock control in preview mode.', 'screenshot_monitor'],
-          audio: ['Voice sessions are not connected in preview mode.', 'graphic_eq'],
-          'audio-mode': ['Audio Mode is available in the full Aura workspace.', 'graphic_eq'],
           'view-sessions': ['Showing the five most recent Aura sessions.', 'history'],
           license: ['Team Pro License details are available in workspace settings.', 'verified_user'],
           'manage-plan': ['Plan management is outside this local prototype.', 'workspace_premium'],
@@ -6289,6 +6710,14 @@
           closeSettings(true);
         } else if (action === 'close-mcp') {
           closeMcp(true);
+        } else if (action === 'close-audio') {
+          closeAudio(true);
+        } else if (action === 'audio-primary') {
+          handleAudioPrimary();
+        } else if (action === 'audio-secondary') {
+          resetAudio();
+        } else if (action === 'audio-error') {
+          simulateAudioError();
         } else if (action === 'select-mcp-server') {
           state.mcpSelectedServer = target.closest('[data-action="select-mcp-server"]').dataset.server;
           renderMcp();
@@ -6331,6 +6760,8 @@
           openSettings(target.closest('[data-action="profile"]'));
         } else if (action === 'mcp' || action === 'nav-mcp') {
           openMcp(target.closest('[data-action]'));
+        } else if (action === 'audio' || action === 'audio-mode') {
+          openAudio(target.closest('[data-action]'));
         } else {
           handleFeedback(action);
         }
@@ -6339,6 +6770,7 @@
       document.addEventListener('click', (event) => {
         if (state.settingsOpen && !settingsModal.contains(event.target)) closeSettings(false);
         if (state.mcpOpen && !mcpModal.contains(event.target)) closeMcp(false);
+        if (state.audioOpen && !audioModal.contains(event.target)) closeAudio(false);
         if (!commandMenu.hidden && !commandMenu.contains(event.target) && event.target !== promptInput) closeCommandMenu();
         const clickedInsideSidebar = sidebar.contains(event.target);
         const clickedSidebarToggle = sidebarToggle.contains(event.target);
@@ -6474,6 +6906,7 @@
           if (state.searchOpen) closeSearch(true);
           else if (state.settingsOpen) closeSettings(true);
           else if (state.mcpOpen) closeMcp(true);
+          else if (state.audioOpen) closeAudio(true);
           else if (!commandMenu.hidden) closeCommandMenu();
           else if (state.sidebarOpen) closeSidebar();
           else if (!modelMenu.hidden) closeModelMenu(true);
@@ -6523,6 +6956,19 @@
             first.focus();
           }
         }
+        if (state.audioOpen && event.key === 'Tab') {
+          const focusable = Array.from(audioModal.querySelectorAll('.audio-dialog button:not([disabled])')).filter((item) => !item.hidden);
+          if (!focusable.length) return;
+          const first = focusable[0];
+          const last = focusable[focusable.length - 1];
+          if (event.shiftKey && document.activeElement === first) {
+            event.preventDefault();
+            last.focus();
+          } else if (!event.shiftKey && document.activeElement === last) {
+            event.preventDefault();
+            first.focus();
+          }
+        }
         if (state.sidebarOpen && event.key === 'Tab') {
           const focusable = Array.from(sidebar.querySelectorAll('button:not([disabled]), input:not([disabled])')).filter((item) => !item.hidden);
           if (!focusable.length) return;
@@ -6549,6 +6995,7 @@
       updateModelLabels();
       renderSettings();
       renderMcp();
+      renderAudioState();
       updateDraftState();
       updateChatDraftState();
       applySessionFilter();

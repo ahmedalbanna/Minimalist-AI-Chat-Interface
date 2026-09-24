@@ -19,6 +19,7 @@ Use Stitch project `5056153100982867775` and design system `assets/3811946a70054
 - `7fd0bc67009945059a740b88bc652fdf` — active conversation window.
 - `fb81a25568074c57b03db3bd190e6433` — assistant and model settings.
 - `dbb62bc62b3f45388da49829f360d30d` — MCP servers and tools.
+- `82e03fdb65a94c0281a6eba7838efe5c` and `10796b9357d349979f7c5dc636b66d46` — voice call and audio mode.
 
 Use MCP metadata, screenshots, and design-system tokens as references. Generated HTML download links may require authenticated browser access and are not local dependencies.
 
@@ -113,7 +114,16 @@ Completion criterion: settings remain usable at desktop and mobile widths withou
 
 Completion criterion: MCP browsing is useful, responsive, and clearly bounded to the current browser tab.
 
-### 7. Preserve prompt and chat flow
+### 7. Preview voice mode without device access
+
+- Open the voice drawer from the topbar Audio Mode control or the chat Audio action.
+- Represent idle, requesting, listening, processing, playing, error, and reset states explicitly.
+- Use deterministic timers and sample text; never request microphone or speaker permissions.
+- Trap focus, close with Escape, return focus, and respect reduced motion.
+
+Completion criterion: the audio flow is understandable and testable without implying real voice transport.
+
+### 8. Preserve prompt and chat flow
 
 The dashboard composer is a context prompt, not a persistence boundary. Keep the default staged prompt usable, update the send disabled state on input, and route submission through the existing mock chat flow. Staged files may remain in the active context when switching between dashboard and chat; a new chat clears the transcript without silently persisting anything.
 
@@ -121,7 +131,7 @@ Use delegated actions for cards, remove buttons, model selection, and feedback c
 
 Completion criterion: submitting a staged prompt opens chat, shows a typing state, produces a deterministic assistant response, and New Chat returns to a usable dashboard.
 
-### 8. Preserve the Aura visual system
+### 9. Preserve the Aura visual system
 
 Use the existing CSS tokens and component language:
 
@@ -153,8 +163,8 @@ Run the project’s available checks after every material change:
 1. Run `node validate-aura.mjs` for the static pass; run `node validate-aura.mjs --browser` with Playwright available.
 2. Compile each inline script with Node's `vm.Script` or the equivalent project command.
 3. Parse the HTML and check for duplicate ids and unnamed icon-only buttons.
-4. Exercise every state in the state matrix: ready, empty, loading, success, error, disabled, search-empty, and chat-loading.
-5. Exercise the initial dashboard, file removal, file picker, drag/drop, prompt insertion, global search, slash commands, model menu, settings preferences, MCP server/tool browsing, send/typing/response, and New Chat.
+4. Exercise every state in the state matrix: ready, empty, loading, success, error, disabled, search-empty, chat-loading, and audio preview states.
+5. Exercise the initial dashboard, file removal, file picker, drag/drop, prompt insertion, global search, slash commands, model menu, settings preferences, MCP server/tool browsing, voice preview states, send/typing/response, and New Chat.
 6. Check the mobile drawer, Escape close, composer submission, and viewport overflow.
 7. Open `code.html` directly with `file://` as well as through a temporary local server.
 8. Stop temporary servers and remove staging/reference folders only after the main file is verified.

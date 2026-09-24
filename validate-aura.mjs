@@ -100,6 +100,24 @@ try {
   await page.locator('[data-action="use-mcp-tool"]').first().click();
   assert(await page.locator('#mcp-modal').isHidden(), 'MCP tool action did not close drawer');
 
+  await page.locator('[data-action="audio-mode"]').click();
+  assert(await page.locator('#audio-modal').isVisible(), 'audio drawer did not open');
+  assert(await page.locator('.audio-dialog').getAttribute('data-audio-state') === 'idle', 'audio initial state');
+  await page.locator('#audio-primary').click();
+  assert(await page.locator('.audio-dialog').getAttribute('data-audio-state') === 'requesting', 'audio requesting state');
+  await page.waitForTimeout(500);
+  assert(await page.locator('.audio-dialog').getAttribute('data-audio-state') === 'listening', 'audio listening state');
+  await page.locator('#audio-primary').click();
+  assert(await page.locator('.audio-dialog').getAttribute('data-audio-state') === 'processing', 'audio processing state');
+  await page.waitForTimeout(700);
+  assert(await page.locator('.audio-dialog').getAttribute('data-audio-state') === 'playing', 'audio playing state');
+  await page.locator('[data-action="audio-error"]').click();
+  assert(await page.locator('.audio-dialog').getAttribute('data-audio-state') === 'error', 'audio error state');
+  await page.locator('[data-action="audio-secondary"]').click();
+  assert(await page.locator('.audio-dialog').getAttribute('data-audio-state') === 'idle', 'audio reset state');
+  await page.keyboard.press('Escape');
+  assert(await page.locator('#audio-modal').isHidden(), 'audio drawer did not close');
+
   await page.locator('#prompt-input').fill('browser validation');
   await page.locator('#send-prompt-btn').click();
   assert(await page.locator('.typing-bubble').count() === 1, 'chat typing state is missing');
@@ -127,10 +145,18 @@ try {
   assert(await mobile.locator('.mcp-dialog').evaluate((element) => element.getBoundingClientRect().width <= innerWidth), 'mobile MCP drawer exceeds viewport');
   await mobile.keyboard.press('Escape');
   assert(await mobile.locator('#mcp-modal').isHidden(), 'mobile MCP drawer did not close');
+  await mobile.keyboard.press('Escape');
+  await mobile.locator('#prompt-input').fill('mobile audio');
+  await mobile.locator('#send-prompt-btn').click();
+  await mobile.locator('[data-action="audio"]').click();
+  assert(await mobile.locator('#audio-modal').isVisible(), 'mobile audio drawer did not open');
+  assert(await mobile.locator('.audio-dialog').evaluate((element) => element.getBoundingClientRect().width <= innerWidth), 'mobile audio drawer exceeds viewport');
+  await mobile.keyboard.press('Escape');
+  assert(await mobile.locator('#audio-modal').isHidden(), 'mobile audio drawer did not close');
   assert(await mobile.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'mobile overflow after settings');
   assert(mobileErrors.length === 0, `mobile application errors: ${mobileErrors.join('; ')}`);
 
-  console.log('Browser checks passed: desktop, direct file, search, commands, staging, settings, MCP, chat, and mobile');
+  console.log('Browser checks passed: desktop, direct file, search, commands, staging, settings, MCP, audio, chat, and mobile');
 } finally {
   await browser.close();
 }
