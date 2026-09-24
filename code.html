@@ -3195,6 +3195,293 @@
       text-align: center;
     }
 
+    .settings-modal {
+      position: fixed;
+      z-index: 110;
+      inset: 0;
+      display: flex;
+      justify-content: flex-end;
+      padding: 16px;
+    }
+
+    .settings-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(11, 28, 48, .26);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+    }
+
+    .settings-dialog {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      width: min(430px, 100%);
+      max-height: calc(100vh - 32px);
+      flex-direction: column;
+      overflow: hidden;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: -20px 0 50px rgba(15, 23, 42, .16);
+    }
+
+    .settings-dialog-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 22px 22px 16px;
+      border-bottom: 1px solid var(--line-soft);
+    }
+
+    .settings-dialog-heading {
+      display: grid;
+      gap: 5px;
+    }
+
+    .settings-dialog-heading h2 {
+      margin: 0;
+      color: var(--text);
+      font-size: 19px;
+      font-weight: 600;
+      letter-spacing: -.03em;
+    }
+
+    .settings-dialog-heading p {
+      margin: 0;
+      color: var(--secondary);
+      font-size: 10px;
+      line-height: 1.5;
+    }
+
+    .settings-close {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      flex: 0 0 32px;
+      color: var(--muted);
+      background: var(--blue-soft);
+      border-radius: 8px;
+    }
+
+    .settings-close:hover {
+      color: var(--blue);
+      background: #dce9ff;
+    }
+
+    .settings-content {
+      display: grid;
+      gap: 24px;
+      min-height: 0;
+      padding: 20px 22px;
+      overflow-y: auto;
+    }
+
+    .settings-section {
+      display: grid;
+      gap: 10px;
+    }
+
+    .settings-section-heading {
+      display: grid;
+      gap: 4px;
+    }
+
+    .settings-section-heading h3 {
+      margin: 0;
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .settings-section-heading p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.5;
+    }
+
+    .settings-model-list {
+      display: grid;
+      gap: 6px;
+    }
+
+    .settings-model-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      min-height: 52px;
+      padding: 8px 10px;
+      color: var(--secondary);
+      background: #fff;
+      border: 1px solid var(--line-soft);
+      border-radius: 10px;
+      text-align: left;
+      transition: color .18s ease, background .18s ease, border-color .18s ease;
+    }
+
+    .settings-model-option:hover,
+    .settings-model-option.is-selected {
+      color: var(--blue);
+      background: var(--blue-soft);
+      border-color: #c8dafa;
+    }
+
+    .settings-model-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      flex: 0 0 30px;
+      color: var(--blue);
+      background: #e5eeff;
+      border-radius: 8px;
+    }
+
+    .settings-model-icon .material-symbols-outlined {
+      font-size: 17px;
+    }
+
+    .settings-model-copy {
+      display: grid;
+      flex: 1;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .settings-model-copy strong {
+      overflow: hidden;
+      color: var(--text);
+      font-size: 11px;
+      font-weight: 600;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .settings-model-option.is-selected .settings-model-copy strong {
+      color: var(--blue);
+    }
+
+    .settings-model-copy span {
+      color: var(--muted);
+      font-size: 9px;
+    }
+
+    .settings-model-option > .material-symbols-outlined {
+      color: var(--blue);
+      font-size: 16px;
+    }
+
+    .settings-preference-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .settings-preference {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      min-height: 52px;
+      padding: 9px 10px;
+      color: var(--secondary);
+      background: #fff;
+      border: 1px solid var(--line-soft);
+      border-radius: 10px;
+      text-align: left;
+    }
+
+    .settings-preference:hover {
+      border-color: #c8dafa;
+    }
+
+    .settings-preference-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      flex: 0 0 30px;
+      color: var(--blue);
+      background: var(--blue-soft);
+      border-radius: 8px;
+    }
+
+    .settings-preference-icon .material-symbols-outlined {
+      font-size: 17px;
+    }
+
+    .settings-preference-copy {
+      display: grid;
+      flex: 1;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .settings-preference-copy strong {
+      color: var(--text);
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .settings-preference-copy span {
+      color: var(--muted);
+      font-size: 9px;
+      line-height: 1.4;
+    }
+
+    .settings-switch {
+      position: relative;
+      width: 32px;
+      height: 20px;
+      flex: 0 0 32px;
+      background: #c3c6d7;
+      border-radius: 999px;
+      transition: background .18s ease;
+    }
+
+    .settings-switch::after {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 14px;
+      height: 14px;
+      content: '';
+      background: #fff;
+      border-radius: 50%;
+      box-shadow: 0 1px 3px rgba(15, 23, 42, .16);
+      transition: transform .18s ease;
+    }
+
+    .settings-preference[aria-pressed='true'] .settings-switch {
+      background: var(--blue);
+    }
+
+    .settings-preference[aria-pressed='true'] .settings-switch::after {
+      transform: translateX(12px);
+    }
+
+    .settings-dialog-footer {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 13px 22px max(18px, env(safe-area-inset-bottom));
+      color: var(--muted);
+      border-top: 1px solid var(--line-soft);
+      font-size: 10px;
+      line-height: 1.45;
+    }
+
+    .settings-dialog-footer .material-symbols-outlined {
+      color: var(--blue);
+      font-size: 16px;
+    }
+
     .model-menu {
       position: fixed;
       z-index: 90;
@@ -3587,6 +3874,29 @@
         padding: 10px 16px 14px;
       }
 
+      .settings-modal {
+        padding: 0;
+      }
+
+      .settings-dialog {
+        width: 100%;
+        max-height: 100vh;
+        border: 0;
+        border-radius: 0;
+      }
+
+      .settings-dialog-header {
+        padding: 18px 16px 14px;
+      }
+
+      .settings-content {
+        padding: 16px;
+      }
+
+      .settings-dialog-footer {
+        padding: 12px 16px max(16px, env(safe-area-inset-bottom));
+      }
+
       .staging-blueprints-section,
       .staging-resume-section {
         margin-top: 30px;
@@ -3866,7 +4176,7 @@
             <span class="material-symbols-outlined" aria-hidden="true">graphic_eq</span><span>Audio Mode</span>
           </button>
           <span class="pro-badge"><span class="material-symbols-outlined" aria-hidden="true">workspace_premium</span>Pro</span>
-          <button class="profile-button" type="button" data-action="profile" aria-label="Open Alex profile">A</button>
+          <button class="profile-button" type="button" data-action="profile" aria-label="Open assistant settings" title="Open assistant settings">A</button>
         </div>
       </div>
     </header>
@@ -3886,6 +4196,35 @@
         <div id="search-empty" class="search-empty" hidden>No matching blueprints or sessions. Try a broader phrase.</div>
         <footer class="search-dialog-footer"><span>Use ↑ ↓ to move · Enter to open</span><span>Esc to close</span></footer>
       </section>
+    </div>
+
+    <div id="settings-modal" class="settings-modal" hidden>
+      <button class="settings-backdrop" type="button" data-action="close-settings" aria-label="Close assistant settings"></button>
+      <aside class="settings-dialog" role="dialog" aria-modal="true" aria-labelledby="settings-title" aria-describedby="settings-description">
+        <header class="settings-dialog-header">
+          <div class="settings-dialog-heading"><h2 id="settings-title">Assistant &amp; model settings</h2><p id="settings-description">Tune this local Aura canvas for your current workspace.</p></div>
+          <button class="settings-close" type="button" data-action="close-settings" aria-label="Close assistant settings"><span class="material-symbols-outlined" aria-hidden="true">close</span></button>
+        </header>
+        <div class="settings-content">
+          <section class="settings-section" aria-labelledby="settings-model-heading">
+            <div class="settings-section-heading"><h3 id="settings-model-heading">Active model</h3><p>Choose the response personality used for this browser session.</p></div>
+            <div id="settings-model-list" class="settings-model-list" role="listbox" aria-label="Active model">
+              <button class="settings-model-option" type="button" role="option" aria-selected="true" data-action="select-settings-model" data-model="Claude 3.7 Sonnet Thinking"><span class="settings-model-icon"><span class="material-symbols-outlined" aria-hidden="true">memory</span></span><span class="settings-model-copy"><strong>Claude 3.7 Sonnet Thinking</strong><span>Balanced · 200k context</span></span><span class="material-symbols-outlined" aria-hidden="true">check</span></button>
+              <button class="settings-model-option" type="button" role="option" aria-selected="false" data-action="select-settings-model" data-model="Claude 3.7 Haiku"><span class="settings-model-icon"><span class="material-symbols-outlined" aria-hidden="true">bolt</span></span><span class="settings-model-copy"><strong>Claude 3.7 Haiku</strong><span>Fast · 200k context</span></span><span class="material-symbols-outlined" aria-hidden="true"></span></button>
+              <button class="settings-model-option" type="button" role="option" aria-selected="false" data-action="select-settings-model" data-model="Claude 3.7 Opus"><span class="settings-model-icon"><span class="material-symbols-outlined" aria-hidden="true">psychology</span></span><span class="settings-model-copy"><strong>Claude 3.7 Opus</strong><span>Deep reasoning · 200k context</span></span><span class="material-symbols-outlined" aria-hidden="true"></span></button>
+            </div>
+          </section>
+          <section class="settings-section" aria-labelledby="settings-preferences-heading">
+            <div class="settings-section-heading"><h3 id="settings-preferences-heading">Workspace preferences</h3><p>These controls describe the current local preview session.</p></div>
+            <div class="settings-preference-list">
+              <button class="settings-preference" type="button" data-action="toggle-setting" data-setting="streaming" aria-pressed="true"><span class="settings-preference-icon"><span class="material-symbols-outlined" aria-hidden="true">bolt</span></span><span class="settings-preference-copy"><strong>Streaming mode</strong><span>Show typing and response progress states</span></span><span class="settings-switch" aria-hidden="true"></span></button>
+              <button class="settings-preference" type="button" data-action="toggle-setting" data-setting="memoryOnly" aria-pressed="true"><span class="settings-preference-icon"><span class="material-symbols-outlined" aria-hidden="true">lock</span></span><span class="settings-preference-copy"><strong>Memory-only session</strong><span>Keep this conversation in the current tab</span></span><span class="settings-switch" aria-hidden="true"></span></button>
+              <button class="settings-preference" type="button" data-action="toggle-setting" data-setting="mcpSync" aria-pressed="true"><span class="settings-preference-icon"><span class="material-symbols-outlined" aria-hidden="true">hub</span></span><span class="settings-preference-copy"><strong>MCP context sync</strong><span>Show connected local tool status</span></span><span class="settings-switch" aria-hidden="true"></span></button>
+            </div>
+          </section>
+        </div>
+        <footer class="settings-dialog-footer"><span class="material-symbols-outlined" aria-hidden="true">info</span><span>Settings are local preview state and reset when the page is refreshed.</span></footer>
+      </aside>
     </div>
 
     <aside id="sidebar" class="sidebar" aria-label="Workspace navigation">
@@ -4109,7 +4448,15 @@
         searchOpen: false,
         searchTrigger: null,
         searchFocusGuard: false,
-        commandIndex: 0
+        commandIndex: 0,
+        settingsOpen: false,
+        settingsTrigger: null,
+        settingsFocusGuard: false,
+        preferences: {
+          streaming: true,
+          memoryOnly: true,
+          mcpSync: true
+        }
       };
 
       const app = document.getElementById('app');
@@ -4144,6 +4491,8 @@
       const searchResults = document.getElementById('search-results');
       const searchEmpty = document.getElementById('search-empty');
       const commandMenu = document.getElementById('command-menu');
+      const settingsModal = document.getElementById('settings-modal');
+      const settingsModelOptions = Array.from(document.querySelectorAll('[data-action="select-settings-model"]'));
       const modelOptions = Array.from(document.querySelectorAll('[data-action="select-model"]'));
 
       function createElement(tag, className, text) {
@@ -4157,6 +4506,53 @@
         const element = createElement('span', 'material-symbols-outlined', name);
         element.setAttribute('aria-hidden', 'true');
         return element;
+      }
+
+      function renderSettings() {
+        settingsModelOptions.forEach((option) => {
+          const selected = option.dataset.model === state.activeModel;
+          option.classList.toggle('is-selected', selected);
+          option.setAttribute('aria-selected', String(selected));
+          const check = option.lastElementChild;
+          if (check?.classList.contains('material-symbols-outlined')) check.textContent = selected ? 'check' : '';
+        });
+        document.querySelectorAll('[data-action="toggle-setting"]').forEach((button) => {
+          const key = button.dataset.setting;
+          if (key && Object.prototype.hasOwnProperty.call(state.preferences, key)) button.setAttribute('aria-pressed', String(state.preferences[key]));
+        });
+      }
+
+      function openSettings(trigger) {
+        if (!settingsModal) return;
+        state.settingsFocusGuard = false;
+        state.settingsOpen = true;
+        state.settingsTrigger = trigger || document.querySelector('[data-action="nav-settings"]');
+        settingsModal.hidden = false;
+        renderSettings();
+        window.requestAnimationFrame(() => {
+          const selected = settingsModelOptions.find((option) => option.classList.contains('is-selected')) || settingsModelOptions[0];
+          selected?.focus();
+        });
+      }
+
+      function closeSettings(restoreFocus) {
+        if (!state.settingsOpen) return;
+        state.settingsOpen = false;
+        if (settingsModal) settingsModal.hidden = true;
+        if (restoreFocus !== false && state.settingsTrigger?.isConnected) {
+          state.settingsFocusGuard = true;
+          state.settingsTrigger.focus();
+          window.setTimeout(() => { state.settingsFocusGuard = false; }, 0);
+        }
+        state.settingsTrigger = null;
+      }
+
+      function toggleSetting(key) {
+        if (!key || !Object.prototype.hasOwnProperty.call(state.preferences, key)) return;
+        state.preferences[key] = !state.preferences[key];
+        renderSettings();
+        const label = key === 'streaming' ? 'Streaming mode' : key === 'memoryOnly' ? 'Memory-only session' : 'MCP context sync';
+        showToast(`${label} ${state.preferences[key] ? 'enabled' : 'disabled'} for this preview.`, 'tune');
       }
 
       const slashCommands = [
@@ -4636,6 +5032,7 @@
         state.stagingError = '';
         closeCommandMenu();
         closeSearch(false);
+        closeSettings(false);
         if (promptInput) promptInput.value = '';
         if (chatInput) chatInput.value = '';
         renderStagedFiles();
@@ -4869,6 +5266,7 @@
       function closeMenus() {
         closeModelMenu(false);
         closeSearch(false);
+        closeSettings(false);
         closeCommandMenu();
       }
 
@@ -4884,12 +5282,10 @@
           'view-sessions': ['Showing the five most recent Aura sessions.', 'history'],
           license: ['Team Pro License details are available in workspace settings.', 'verified_user'],
           'manage-plan': ['Plan management is outside this local prototype.', 'workspace_premium'],
-          profile: ['Alex’s profile is synced for this workspace.', 'person'],
           'nav-chat': ['Chat is ready in this local canvas.', 'forum'],
           'nav-mcp': ['Explore & MCP tools are connected for this canvas.', 'hub'],
           'nav-canvas': ['Canvas is the active workspace view.', 'dashboard'],
-          'nav-analytics': ['Analytics snapshots are available from the workspace menu.', 'monitoring'],
-          'nav-settings': ['Settings are available in the full Aura workspace.', 'settings']
+          'nav-analytics': ['Analytics snapshots are available from the workspace menu.', 'monitoring']
         };
         const message = messages[action];
         if (message) showToast(message[0], message[1]);
@@ -4960,6 +5356,11 @@
           closeSidebar();
         } else if (action === 'toggle-model') {
           toggleModelMenu(target.closest('[data-model-trigger]'));
+        } else if (action === 'select-settings-model') {
+          state.activeModel = target.closest('[data-action="select-settings-model"]').dataset.model;
+          updateModelLabels();
+          renderSettings();
+          showToast(`${state.activeModel} is now active.`, 'auto_awesome');
         } else if (action === 'select-model') {
           const option = target.closest('[data-action="select-model"]');
           state.activeModel = option.dataset.model;
@@ -4974,6 +5375,10 @@
           openStagedFilePicker();
         } else if (action === 'close-search') {
           closeSearch(true);
+        } else if (action === 'close-settings') {
+          closeSettings(true);
+        } else if (action === 'toggle-setting') {
+          toggleSetting(target.closest('[data-action="toggle-setting"]').dataset.setting);
         } else if (action === 'use-search-prompt') {
           closeSearch(false);
           usePrompt(target.closest('[data-action="use-search-prompt"]').dataset.prompt);
@@ -5002,12 +5407,17 @@
         } else if (action === 'rate-message') {
           const button = target.closest('[data-action="rate-message"]');
           rateMessage(button.dataset.messageId, button.dataset.rating);
+        } else if (action === 'nav-settings') {
+          openSettings(target.closest('[data-action="nav-settings"]'));
+        } else if (action === 'profile') {
+          openSettings(target.closest('[data-action="profile"]'));
         } else {
           handleFeedback(action);
         }
       }
 
       document.addEventListener('click', (event) => {
+        if (state.settingsOpen && !settingsModal.contains(event.target)) closeSettings(false);
         if (!commandMenu.hidden && !commandMenu.contains(event.target) && event.target !== promptInput) closeCommandMenu();
         const clickedInsideSidebar = sidebar.contains(event.target);
         const clickedSidebarToggle = sidebarToggle.contains(event.target);
@@ -5136,6 +5546,7 @@
       document.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') {
           if (state.searchOpen) closeSearch(true);
+          else if (state.settingsOpen) closeSettings(true);
           else if (!commandMenu.hidden) closeCommandMenu();
           else if (state.sidebarOpen) closeSidebar();
           else if (!modelMenu.hidden) closeModelMenu(true);
@@ -5147,7 +5558,20 @@
           return;
         }
         if (state.searchOpen && event.key === 'Tab') {
-          const focusable = Array.from(searchModal.querySelectorAll('button:not([disabled]), input:not([disabled])')).filter((item) => !item.hidden);
+          const focusable = Array.from(searchModal.querySelectorAll('.search-dialog button:not([disabled]), .search-dialog input:not([disabled])')).filter((item) => !item.hidden);
+          if (!focusable.length) return;
+          const first = focusable[0];
+          const last = focusable[focusable.length - 1];
+          if (event.shiftKey && document.activeElement === first) {
+            event.preventDefault();
+            last.focus();
+          } else if (!event.shiftKey && document.activeElement === last) {
+            event.preventDefault();
+            first.focus();
+          }
+        }
+        if (state.settingsOpen && event.key === 'Tab') {
+          const focusable = Array.from(settingsModal.querySelectorAll('.settings-dialog button:not([disabled])')).filter((item) => !item.hidden);
           if (!focusable.length) return;
           const first = focusable[0];
           const last = focusable[focusable.length - 1];
@@ -5183,6 +5607,7 @@
       syncSidebarAccessibility();
       renderStagedFiles();
       updateModelLabels();
+      renderSettings();
       updateDraftState();
       updateChatDraftState();
       applySessionFilter();

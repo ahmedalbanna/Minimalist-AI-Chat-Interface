@@ -21,6 +21,7 @@ Completion criterion: the selected validation path is known and does not alter t
 - Parse the HTML and check for duplicate ids, missing required entry points, and malformed script boundaries.
 - Check that icon-only buttons have accessible names and that repeated dynamic rows have stable selectors.
 - Search for accidental persistence, secrets, debug logging, and references to removed staging folders.
+- For this no-build fixture, `node validate-aura.mjs` runs static checks and `node validate-aura.mjs --browser` adds the direct-file Playwright pass when available.
 
 Completion criterion: static checks pass before spending time on browser interaction.
 

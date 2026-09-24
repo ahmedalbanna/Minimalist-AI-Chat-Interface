@@ -71,7 +71,7 @@ Visual rules:
 | Slash Commands & Active Input (Desktop) | `c7cbaa57b3034a188d63f27ebdd0deba` | `#prompt-input` | Add a lightweight inline command surface for `/` input with keyboard selection and insertion. |
 | Active Conversation Window (Mobile) | `7fd0bc67009945059a740b88bc652fdf` | `#chat-view`, `.chat-messages`, `.chat-composer-dock` | Align message bubbles, transcript spacing, action toolbar, and bottom input dock with Stitch. |
 | Chat History Drawer | `791bde046271412ab536e05d0fb12fbc` | `#sidebar` and mobile drawer | Preserve focus trap/return behavior while matching the Stitch drawer hierarchy and metadata. |
-| Assistant & Model Settings | `fb81a25568074c57b03db3bd190e6433` | `#model-menu` | Keep model selection in a lightweight menu for now; defer a full settings screen unless scope expands. |
+| Assistant & Model Settings | `fb81a25568074c57b03db3bd190e6433` | `#settings-modal` and `#model-menu` | Add a responsive settings drawer with model selection and local preview preferences. |
 | Voice Call & Audio Mode | `82e03fdb65a94c0281a6eba7838efe5c` | audio toast controls | Defer functional voice/audio implementation; preserve the current clear preview limitation. |
 | Multimodal Camera Inspection | `eb5e7fe281144c8491fd386596ecc219` | screenshot/preview controls | Defer; do not imply camera capture in the metadata-only prototype. |
 
@@ -166,13 +166,15 @@ Acceptance criteria:
 
 - Reconcile the active conversation screen with Stitch message spacing, bubble tones, code treatment, action toolbar, and bottom input dock.
 - Keep the mock response lifecycle deterministic and memory-only.
-- Keep model selection synchronized across dashboard and chat labels and restore focus when the menu closes.
+- Keep model selection synchronized across dashboard, chat, and the responsive settings drawer.
+- Add local preview preferences for streaming mode, memory-only sessions, and MCP context status.
 - Preserve New Chat, regenerate, copy, and rating actions through delegated handlers.
 
 Acceptance criteria:
 
 - Prompt submission cannot duplicate while typing.
 - Assistant response actions work from keyboard and pointer input.
+- The settings drawer opens from navigation, traps focus, supports model/preference updates, and closes with Escape.
 - Back-to-dashboard, New Chat, and model selection all leave a consistent state.
 
 ### Phase 6 — Deferred product surfaces
@@ -192,6 +194,7 @@ Acceptance criteria:
 
 Static checks:
 
+- Run `node validate-aura.mjs` for the no-build static pass; run `node validate-aura.mjs --browser` with Playwright available for the direct-file browser pass.
 - Compile every inline script with Node `vm.Script`.
 - Parse the HTML and verify unique IDs, named controls, and semantic landmarks.
 - Check for user-content `innerHTML` regressions and accidental persistence code.

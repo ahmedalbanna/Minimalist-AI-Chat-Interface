@@ -17,6 +17,7 @@ Use Stitch project `5056153100982867775` and design system `assets/3811946a70054
 - `390679573b084dc5881bc20caa7c7e46` — global search.
 - `c7cbaa57b3034a188d63f27ebdd0deba` — slash commands and active input.
 - `7fd0bc67009945059a740b88bc652fdf` — active conversation window.
+- `fb81a25568074c57b03db3bd190e6433` — assistant and model settings.
 
 Use MCP metadata, screenshots, and design-system tokens as references. Generated HTML download links may require authenticated browser access and are not local dependencies.
 
@@ -93,7 +94,16 @@ Completion criterion: picker, drag/drop, and keyboard paths produce the same saf
 
 Completion criterion: both surfaces are reachable by keyboard, preserve prompt text, and return focus to a predictable control.
 
-### 5. Preserve prompt and chat flow
+### 5. Keep assistant settings local and accessible
+
+- Open the settings drawer from the primary navigation without replacing the dashboard.
+- Keep model selection synchronized across dashboard, chat, and settings.
+- Use native buttons for preferences, expose pressed state, and keep values in JavaScript memory only.
+- Trap focus inside the modal, close with Escape, and return focus to the navigation trigger.
+
+Completion criterion: settings remain usable at desktop and mobile widths without implying backend persistence.
+
+### 6. Preserve prompt and chat flow
 
 The dashboard composer is a context prompt, not a persistence boundary. Keep the default staged prompt usable, update the send disabled state on input, and route submission through the existing mock chat flow. Staged files may remain in the active context when switching between dashboard and chat; a new chat clears the transcript without silently persisting anything.
 
@@ -101,7 +111,7 @@ Use delegated actions for cards, remove buttons, model selection, and feedback c
 
 Completion criterion: submitting a staged prompt opens chat, shows a typing state, produces a deterministic assistant response, and New Chat returns to a usable dashboard.
 
-### 6. Preserve the Aura visual system
+### 7. Preserve the Aura visual system
 
 Use the existing CSS tokens and component language:
 
@@ -130,12 +140,13 @@ Completion criterion: the new state matches the reference hierarchy at desktop a
 
 Run the project’s available checks after every material change:
 
-1. Compile each inline script with Node's `vm.Script` or the equivalent project command.
-2. Parse the HTML and check for duplicate ids and unnamed icon-only buttons.
-3. Exercise every state in the state matrix: ready, empty, loading, success, error, disabled, search-empty, and chat-loading.
-4. Exercise the initial dashboard, file removal, file picker, drag/drop, prompt insertion, global search, slash commands, model menu, send/typing/response, and New Chat.
-5. Check the mobile drawer, Escape close, composer submission, and viewport overflow.
-6. Open `code.html` directly with `file://` as well as through a temporary local server.
-7. Stop temporary servers and remove staging/reference folders only after the main file is verified.
+1. Run `node validate-aura.mjs` for the static pass; run `node validate-aura.mjs --browser` with Playwright available.
+2. Compile each inline script with Node's `vm.Script` or the equivalent project command.
+3. Parse the HTML and check for duplicate ids and unnamed icon-only buttons.
+4. Exercise every state in the state matrix: ready, empty, loading, success, error, disabled, search-empty, and chat-loading.
+5. Exercise the initial dashboard, file removal, file picker, drag/drop, prompt insertion, global search, slash commands, model menu, settings preferences, send/typing/response, and New Chat.
+6. Check the mobile drawer, Escape close, composer submission, and viewport overflow.
+7. Open `code.html` directly with `file://` as well as through a temporary local server.
+8. Stop temporary servers and remove staging/reference folders only after the main file is verified.
 
 Completion criterion: the dashboard has no page errors, the staged-state assertions pass, and the requested reference folder is gone only when removal is part of the task.
