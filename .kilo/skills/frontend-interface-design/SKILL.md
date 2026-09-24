@@ -22,6 +22,7 @@ Completion criterion: the page structure, type scale, color roles, and responsiv
 - Use CSS grid for card families and flex only for local alignment or action rows.
 - Let wide content breathe; stack it at the narrow breakpoint where reading or touch targets degrade.
 - Keep fixed navigation, drawers, and composers inside a predictable stacking order.
+- Treat search, command, and settings surfaces as explicit dialogs or listboxes with owned focus and dismissal behavior.
 - Make icon glyphs, loading states, hover states, focus states, and disabled states part of the same visual language.
 - Prefer stable dimensions for cards, trays, and send controls; avoid layout shifts caused by icons or long labels.
 

@@ -63,8 +63,9 @@ Exercise the smallest meaningful path for the change:
 2. one primary submit or navigation action;
 3. one dynamic-data path such as remove/add/filter;
 4. one asynchronous path such as typing/loading/success;
-5. reset, cancel, Escape, and focus return where applicable;
-6. direct `file://` loading when the artifact is intended to be browser-openable.
+5. search or command open/select/dismiss behavior when those surfaces exist;
+6. reset, cancel, Escape, and focus return where applicable;
+7. direct `file://` loading when the artifact is intended to be browser-openable.
 
 Completion criterion: the interaction path completes without duplicate submits, stale state, or inaccessible focus.
 

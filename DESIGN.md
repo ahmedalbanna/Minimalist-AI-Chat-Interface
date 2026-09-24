@@ -116,6 +116,13 @@ spacing:
   space-xl: 2rem
 ---
 
+## Stitch source
+
+- Project: `5056153100982867775` — Minimalist AI Chat Interface.
+- Design system: `assets/3811946a7005480595c5888559dfa158` — Aura AI.
+- Primary references: `a262725eaaff4063b3a58f4ae0d7c924` (file attachment and staging), `a2968e6b2073452dbb23578cde3f8331` (empty onboarding), `f1781ddc1b8643219a5b34f6868d83e8` (dynamic greeting and suggestions), `390679573b084dc5881bc20caa7c7e46` (global search), and `c7cbaa57b3034a188d63f27ebdd0deba` (slash commands).
+- The Stitch screen set is the visual and behavioral reference for `code.html`; the local fixture remains browser-openable and memory-only.
+
 ## Brand & Style
 
 This design system embodies an ultra-focused, minimalist aesthetic crafted specifically for conversational AI interactions. The visual narrative balances rigorous utilitarian clarity with humane, approachable warmth. Interfaces are quiet, intentional, and void of decorative clutter, allowing the conversation itself to command focus.

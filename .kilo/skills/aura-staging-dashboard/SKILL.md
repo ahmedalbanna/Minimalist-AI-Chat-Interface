@@ -7,6 +7,19 @@ description: Build and maintain the Aura single-file dashboard in this workspace
 
 Aura is a browser-openable, no-build prototype whose primary source is `code.html`. Keep the design and behavior coherent when changing the shell, staged context, or chat flow.
 
+## Stitch reference
+
+Use Stitch project `5056153100982867775` and design system `assets/3811946a7005480595c5888559dfa158` as the visual source of truth. The primary screen references are:
+
+- `a262725eaaff4063b3a58f4ae0d7c924` — file attachment and staging state.
+- `a2968e6b2073452dbb23578cde3f8331` — empty and onboarding state.
+- `f1781ddc1b8643219a5b34f6868d83e8` — dynamic greeting and prompt suggestions.
+- `390679573b084dc5881bc20caa7c7e46` — global search.
+- `c7cbaa57b3034a188d63f27ebdd0deba` — slash commands and active input.
+- `7fd0bc67009945059a740b88bc652fdf` — active conversation window.
+
+Use MCP metadata, screenshots, and design-system tokens as references. Generated HTML download links may require authenticated browser access and are not local dependencies.
+
 ## Source of truth
 
 1. Read `code.html` before editing and preserve the existing shell, event delegation, and memory-only behavior.
@@ -71,7 +84,16 @@ Wire the file input, drop zone, and keyboard activation to the same staging func
 
 Completion criterion: picker, drag/drop, and keyboard paths produce the same safe metadata state.
 
-### 4. Preserve prompt and chat flow
+### 4. Add keyboard-first search and commands
+
+- Keep the topbar search synchronized with a modal search surface modeled on the Stitch Omni-Search screen.
+- Support `⌘K`/Control-K, arrow-key result navigation, Enter selection, Escape close, focus return, and a visible no-results state.
+- Detect a leading `/` in the dashboard prompt and render a small inline listbox with keyboard selection and insertion.
+- Keep search and command data sourced from existing blueprint/session metadata; do not introduce persistence.
+
+Completion criterion: both surfaces are reachable by keyboard, preserve prompt text, and return focus to a predictable control.
+
+### 5. Preserve prompt and chat flow
 
 The dashboard composer is a context prompt, not a persistence boundary. Keep the default staged prompt usable, update the send disabled state on input, and route submission through the existing mock chat flow. Staged files may remain in the active context when switching between dashboard and chat; a new chat clears the transcript without silently persisting anything.
 
@@ -79,7 +101,7 @@ Use delegated actions for cards, remove buttons, model selection, and feedback c
 
 Completion criterion: submitting a staged prompt opens chat, shows a typing state, produces a deterministic assistant response, and New Chat returns to a usable dashboard.
 
-### 5. Preserve the Aura visual system
+### 6. Preserve the Aura visual system
 
 Use the existing CSS tokens and component language:
 
@@ -111,7 +133,7 @@ Run the project’s available checks after every material change:
 1. Compile each inline script with Node's `vm.Script` or the equivalent project command.
 2. Parse the HTML and check for duplicate ids and unnamed icon-only buttons.
 3. Exercise every state in the state matrix: ready, empty, loading, success, error, disabled, search-empty, and chat-loading.
-4. Exercise the initial dashboard, file removal, file picker, drag/drop, prompt insertion, model menu, send/typing/response, and New Chat.
+4. Exercise the initial dashboard, file removal, file picker, drag/drop, prompt insertion, global search, slash commands, model menu, send/typing/response, and New Chat.
 5. Check the mobile drawer, Escape close, composer submission, and viewport overflow.
 6. Open `code.html` directly with `file://` as well as through a temporary local server.
 7. Stop temporary servers and remove staging/reference folders only after the main file is verified.

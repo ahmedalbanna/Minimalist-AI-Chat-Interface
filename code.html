@@ -50,22 +50,25 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     :root {
-      --canvas: #f1f6ff;
+      --canvas: #f8f9ff;
       --surface: #f8f9ff;
       --sidebar: #fbfdff;
       --card: #ffffff;
-      --card-blue: #f5f8ff;
-      --text: #0f172a;
-      --text-strong: #111827;
-      --secondary: #475569;
-      --muted: #94a3b8;
-      --line: #dbe5f2;
-      --line-soft: #e8eef6;
+      --card-blue: #eff4ff;
+      --text: #0b1c30;
+      --text-strong: #0b1c30;
+      --secondary: #434655;
+      --muted: #737686;
+      --line: #c3c6d7;
+      --line-soft: #e5e7f0;
       --blue: #2563eb;
       --blue-dark: #1d4ed8;
-      --blue-soft: #eff6ff;
-      --blue-container: #dbeafe;
+      --blue-soft: #eff4ff;
+      --blue-container: #dbe1ff;
+      --tertiary: #943700;
       --green: #15803d;
+      --error: #ba1a1a;
+      --error-container: #ffdad6;
       --shadow-card: 0 1px 2px rgba(15, 23, 42, .025), 0 3px 12px rgba(30, 64, 175, .035);
       --shadow-float: 0 14px 32px rgba(30, 64, 175, .08), 0 2px 6px rgba(15, 23, 42, .035);
       --topbar-height: 80px;
@@ -1836,6 +1839,14 @@
       border-color: #f2b8b5;
     }
 
+    .staging-composer-card[data-state='success'] {
+      border-color: #b8dec2;
+    }
+
+    .staging-composer-card[data-state='empty'] {
+      border-color: #c3c6d7;
+    }
+
     .staging-state-message {
       display: flex;
       align-items: center;
@@ -1874,6 +1885,354 @@
     @keyframes staging-pulse {
       0%, 100% { opacity: .45; transform: scale(.92); }
       50% { opacity: 1; transform: scale(1); }
+    }
+
+    .staging-onboarding {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      padding: 14px 16px;
+      background: linear-gradient(135deg, #eff4ff, #f8f9ff);
+      border: 1px dashed #b7c9e8;
+      border-radius: 13px;
+    }
+
+    .staging-onboarding-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      flex: 0 0 34px;
+      color: var(--blue);
+      background: #fff;
+      border: 1px solid #d5e2fb;
+      border-radius: 9px;
+    }
+
+    .staging-onboarding-icon .material-symbols-outlined {
+      font-size: 19px;
+    }
+
+    .staging-onboarding-copy {
+      display: grid;
+      flex: 1;
+      gap: 3px;
+      min-width: 0;
+    }
+
+    .staging-onboarding-copy strong {
+      color: var(--text);
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .staging-onboarding-copy p {
+      margin: 0;
+      color: var(--secondary);
+      font-size: 10px;
+      line-height: 1.45;
+    }
+
+    .staging-onboarding-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      min-height: 32px;
+      flex: 0 0 auto;
+      padding: 0 10px;
+      color: var(--blue);
+      background: #fff;
+      border: 1px solid #c8dafa;
+      border-radius: 8px;
+      font-size: 10px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .staging-onboarding-action:hover {
+      background: var(--blue-soft);
+      border-color: #a9c4f5;
+    }
+
+    .staging-onboarding-action .material-symbols-outlined {
+      font-size: 16px;
+    }
+
+    .command-menu {
+      display: grid;
+      gap: 3px;
+      max-height: 220px;
+      margin: 9px 0 0;
+      padding: 6px;
+      overflow-y: auto;
+      background: #fff;
+      border: 1px solid #c8dafa;
+      border-radius: 10px;
+      box-shadow: 0 8px 18px rgba(30, 64, 175, .1);
+    }
+
+    .command-menu-heading {
+      padding: 4px 7px 3px;
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .command-option {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      width: 100%;
+      min-height: 38px;
+      padding: 6px 8px;
+      color: var(--secondary);
+      background: transparent;
+      border-radius: 7px;
+      text-align: left;
+    }
+
+    .command-option:hover,
+    .command-option.is-selected {
+      color: var(--blue);
+      background: var(--blue-soft);
+    }
+
+    .command-option .material-symbols-outlined {
+      flex: 0 0 auto;
+      font-size: 18px;
+    }
+
+    .command-option-copy {
+      display: grid;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .command-option-copy strong {
+      color: var(--text);
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .command-option:hover .command-option-copy strong,
+    .command-option.is-selected .command-option-copy strong {
+      color: var(--blue);
+    }
+
+    .command-option-copy span {
+      color: var(--muted);
+      font-size: 9px;
+      line-height: 1.3;
+    }
+
+    .search-modal {
+      position: fixed;
+      z-index: 110;
+      inset: 0;
+      display: grid;
+      place-items: start center;
+      padding: clamp(88px, 14vh, 150px) 20px 32px;
+    }
+
+    .search-modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(11, 28, 48, .28);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+
+    .search-dialog {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      width: min(680px, 100%);
+      max-height: min(680px, calc(100vh - 120px));
+      flex-direction: column;
+      overflow: hidden;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      box-shadow: 0 24px 60px rgba(15, 23, 42, .2);
+    }
+
+    .search-dialog-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 22px 24px 14px;
+    }
+
+    .search-dialog-heading {
+      display: grid;
+      gap: 5px;
+    }
+
+    .search-dialog-heading h2 {
+      margin: 0;
+      color: var(--text);
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: -.03em;
+    }
+
+    .search-dialog-heading p {
+      margin: 0;
+      color: var(--secondary);
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .search-dialog-close {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      flex: 0 0 32px;
+      color: var(--muted);
+      background: var(--blue-soft);
+      border-radius: 8px;
+    }
+
+    .search-dialog-close:hover {
+      color: var(--blue);
+      background: #dce9ff;
+    }
+
+    .search-dialog-input-wrap {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin: 0 24px;
+      padding: 0 11px;
+      color: var(--muted);
+      background: #fff;
+      border: 1px solid #c8dafa;
+      border-radius: 10px;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, .06);
+    }
+
+    .search-dialog-input-wrap .material-symbols-outlined {
+      font-size: 19px;
+    }
+
+    .search-dialog-input-wrap input {
+      width: 100%;
+      min-width: 0;
+      min-height: 44px;
+      padding: 0;
+      color: var(--text);
+      background: transparent;
+      border: 0;
+      outline: 0;
+      font-size: 13px;
+    }
+
+    .search-results {
+      display: grid;
+      gap: 6px;
+      min-height: 0;
+      padding: 16px 24px 10px;
+      overflow-y: auto;
+    }
+
+    .search-result {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      min-height: 62px;
+      padding: 10px 11px;
+      color: var(--secondary);
+      background: #fff;
+      border: 1px solid var(--line-soft);
+      border-radius: 11px;
+      text-align: left;
+      transition: color .18s ease, background .18s ease, border-color .18s ease, transform .18s ease;
+    }
+
+    .search-result:hover,
+    .search-result:focus-visible {
+      color: var(--blue);
+      background: var(--blue-soft);
+      border-color: #c8dafa;
+      transform: translateY(-1px);
+    }
+
+    .search-result-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      flex: 0 0 34px;
+      color: var(--blue);
+      background: #e5eeff;
+      border-radius: 9px;
+    }
+
+    .search-result-icon .material-symbols-outlined {
+      font-size: 19px;
+    }
+
+    .search-result-copy {
+      display: grid;
+      flex: 1;
+      gap: 3px;
+      min-width: 0;
+    }
+
+    .search-result-copy strong {
+      overflow: hidden;
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 600;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .search-result-copy span {
+      overflow: hidden;
+      color: var(--secondary);
+      font-size: 10px;
+      line-height: 1.4;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .search-result > .material-symbols-outlined {
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .search-empty {
+      padding: 24px;
+      color: var(--secondary);
+      border: 1px dashed #c3c6d7;
+      border-radius: 12px;
+      font-size: 11px;
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    .search-dialog-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 12px 24px 18px;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .search-dialog-footer span:last-child {
+      color: var(--blue);
     }
 
     .staged-file-tray {
@@ -2776,7 +3135,7 @@
       z-index: 5;
       bottom: 0;
       padding: 0 0 max(12px, env(safe-area-inset-bottom));
-      background: linear-gradient(180deg, rgba(241, 246, 255, 0), var(--canvas) 22%);
+      background: linear-gradient(180deg, rgba(248, 249, 255, 0), var(--canvas) 22%);
     }
 
     .chat-composer-card {
@@ -3189,6 +3548,45 @@
         min-height: 48px;
       }
 
+      .staging-onboarding {
+        align-items: flex-start;
+        flex-wrap: wrap;
+        padding: 13px;
+      }
+
+      .staging-onboarding-action {
+        margin-left: 46px;
+      }
+
+      .command-menu {
+        margin-top: 7px;
+      }
+
+      .search-modal {
+        padding: 78px 12px 20px;
+      }
+
+      .search-dialog {
+        max-height: calc(100vh - 98px);
+        border-radius: 16px;
+      }
+
+      .search-dialog-header {
+        padding: 18px 16px 12px;
+      }
+
+      .search-dialog-input-wrap {
+        margin: 0 16px;
+      }
+
+      .search-results {
+        padding: 14px 16px 8px;
+      }
+
+      .search-dialog-footer {
+        padding: 10px 16px 14px;
+      }
+
       .staging-blueprints-section,
       .staging-resume-section {
         margin-top: 30px;
@@ -3453,7 +3851,7 @@
         <span class="staging-online-badge" aria-label="Workspace online"><span class="status-dot" aria-hidden="true"></span>Online <small>v3.5 Pro</small></span>
         <label class="topbar-search" for="global-search">
           <span class="material-symbols-outlined" aria-hidden="true">search</span>
-          <input id="global-search" type="search" placeholder="Search" autocomplete="off" data-action="global-search" aria-label="Search prompt blueprints">
+          <input id="global-search" type="search" placeholder="Search" autocomplete="off" data-action="global-search" aria-label="Search prompt blueprints" aria-controls="search-modal" aria-expanded="false">
           <span class="shortcut-key" aria-hidden="true">⌘K</span>
         </label>
         <nav class="top-nav" aria-label="Primary navigation">
@@ -3472,6 +3870,23 @@
         </div>
       </div>
     </header>
+
+    <div id="search-modal" class="search-modal" hidden>
+      <button class="search-modal-backdrop" type="button" data-action="close-search" aria-label="Close search"></button>
+      <section class="search-dialog" role="dialog" aria-modal="true" aria-labelledby="search-modal-title" aria-describedby="search-modal-description">
+        <header class="search-dialog-header">
+          <div class="search-dialog-heading"><h2 id="search-modal-title">Search your workspace</h2><p id="search-modal-description">Find a prompt blueprint or resume a conversation without leaving the canvas.</p></div>
+          <button class="search-dialog-close" type="button" data-action="close-search" aria-label="Close search"><span class="material-symbols-outlined" aria-hidden="true">close</span></button>
+        </header>
+        <label class="search-dialog-input-wrap" for="search-modal-input">
+          <span class="material-symbols-outlined" aria-hidden="true">search</span>
+          <input id="search-modal-input" type="search" autocomplete="off" placeholder="Search blueprints and sessions" aria-label="Search blueprints and sessions">
+        </label>
+        <div id="search-results" class="search-results" role="listbox" aria-label="Search results" aria-live="polite"></div>
+        <div id="search-empty" class="search-empty" hidden>No matching blueprints or sessions. Try a broader phrase.</div>
+        <footer class="search-dialog-footer"><span>Use ↑ ↓ to move · Enter to open</span><span>Esc to close</span></footer>
+      </section>
+    </div>
 
     <aside id="sidebar" class="sidebar" aria-label="Workspace navigation">
       <button class="icon-button mobile-sidebar-close" type="button" data-action="close-sidebar" aria-label="Close workspace navigation">
@@ -3551,8 +3966,14 @@
           <section class="staging-composer" aria-label="Ask Aura about staged files">
             <div id="staging-composer-card" class="staging-composer-card" data-state="ready">
               <div id="staged-file-tray" class="staged-file-tray" aria-label="Staged files" aria-live="polite"></div>
+              <div id="staging-onboarding" class="staging-onboarding" hidden>
+                <span class="staging-onboarding-icon"><span class="material-symbols-outlined" aria-hidden="true">layer</span></span>
+                <span class="staging-onboarding-copy"><strong>Start a context for Aura</strong><span>Drop code, data, docs, or images here to make your next question more useful.</span></span>
+                <button class="staging-onboarding-action" type="button" data-action="browse-staging"><span class="material-symbols-outlined" aria-hidden="true">upload_file</span>Browse files</button>
+              </div>
               <div class="staged-prompt-box">
-                <textarea id="prompt-input" class="composer-textarea" rows="3" maxlength="4000" placeholder="Ask questions about these staged files or write instructions..." aria-label="Message Aura">Review this deployment configuration against our Q3 metrics and check for security vulnerabilities.</textarea>
+                <textarea id="prompt-input" class="composer-textarea" rows="3" maxlength="4000" placeholder="Ask questions about these staged files or write instructions..." aria-label="Message Aura" aria-controls="command-menu" aria-expanded="false">Review this deployment configuration against our Q3 metrics and check for security vulnerabilities.</textarea>
+                <div id="command-menu" class="command-menu" role="listbox" aria-label="Slash commands" hidden></div>
               </div>
               <div id="staged-drop-zone" class="staged-drop-zone" tabindex="0" role="button" aria-label="Drop additional files here or browse files" aria-describedby="staged-drop-description">
                 <span class="staged-drop-icon"><span class="material-symbols-outlined" aria-hidden="true">cloud_upload</span></span>
@@ -3616,7 +4037,7 @@
         </div>
       </section>
 
-      <section id="chat-view" class="chat-view" aria-labelledby="chat-title" hidden>
+      <section id="chat-view" class="chat-view" aria-labelledby="chat-title" aria-busy="false" hidden>
         <div class="chat-inner">
           <header class="chat-header">
             <div class="chat-header-left">
@@ -3684,7 +4105,11 @@
         stagedFiles: initialStagedFiles.map((file) => ({ ...file })),
         stagingState: 'ready',
         stagingError: '',
-        stagingTimer: null
+        stagingTimer: null,
+        searchOpen: false,
+        searchTrigger: null,
+        searchFocusGuard: false,
+        commandIndex: 0
       };
 
       const app = document.getElementById('app');
@@ -3713,6 +4138,12 @@
       const stagedStateMessage = document.getElementById('staged-state-message');
       const stagedDropTitle = document.getElementById('staged-drop-title');
       const stagingComposerCard = document.getElementById('staging-composer-card');
+      const stagingOnboarding = document.getElementById('staging-onboarding');
+      const searchModal = document.getElementById('search-modal');
+      const searchModalInput = document.getElementById('search-modal-input');
+      const searchResults = document.getElementById('search-results');
+      const searchEmpty = document.getElementById('search-empty');
+      const commandMenu = document.getElementById('command-menu');
       const modelOptions = Array.from(document.querySelectorAll('[data-action="select-model"]'));
 
       function createElement(tag, className, text) {
@@ -3726,6 +4157,163 @@
         const element = createElement('span', 'material-symbols-outlined', name);
         element.setAttribute('aria-hidden', 'true');
         return element;
+      }
+
+      const slashCommands = [
+        { key: 'analyze', label: 'Analyze staged context', description: 'Surface patterns, risks, and useful signals.', icon: 'query_stats', prompt: 'Analyze the staged context and surface the most important patterns, risks, and useful signals.' },
+        { key: 'summarize', label: 'Summarize staged context', description: 'Create a concise, structured overview.', icon: 'summarize', prompt: 'Summarize the staged context into a concise, structured overview with the key decisions and open questions.' },
+        { key: 'security', label: 'Check security risks', description: 'Review the context for security exposure.', icon: 'security', prompt: 'Review the staged context for security risks, exposed secrets, and unsafe defaults. Return prioritized findings.' },
+        { key: 'compare', label: 'Compare staged files', description: 'Find differences and relationships across files.', icon: 'difference', prompt: 'Compare the staged files, identify meaningful differences and relationships, and call out anything that needs a decision.' }
+      ];
+
+      function getSearchEntries() {
+        const entries = [];
+        document.querySelectorAll('.prompt-starter-card[data-action="use-prompt"]').forEach((card) => {
+          const title = card.querySelector('h3')?.textContent || 'Prompt blueprint';
+          const category = card.querySelector('.staged-card-category')?.textContent || 'Blueprint';
+          const description = card.querySelector('p')?.textContent || 'Load this blueprint into the composer.';
+          entries.push({ type: 'Blueprint', title, category, description, icon: card.querySelector('.staged-card-footer .material-symbols-outlined')?.textContent || 'auto_awesome', prompt: card.dataset.prompt || '' });
+        });
+        document.querySelectorAll('[data-session-row]').forEach((row) => {
+          const title = row.dataset.sessionName || row.textContent.trim();
+          entries.push({ type: 'Session', title, category: row.dataset.sessionKind === 'pinned' ? 'Pinned' : 'Recent', description: 'Resume this conversation in the composer.', icon: 'chat_bubble_outline', prompt: row.dataset.sessionPrompt || `Continue the ${title} session.` });
+        });
+        return entries;
+      }
+
+      function renderSearchResults() {
+        if (!searchResults) return;
+        const query = state.searchQuery.trim().toLowerCase();
+        const entries = getSearchEntries().filter((entry) => `${entry.title} ${entry.category} ${entry.description} ${entry.type}`.toLowerCase().includes(query));
+        searchResults.replaceChildren();
+        entries.forEach((entry) => {
+          const result = createElement('button', 'search-result');
+          result.type = 'button';
+          result.setAttribute('role', 'option');
+          result.dataset.action = 'use-search-prompt';
+          result.dataset.prompt = entry.prompt;
+          const iconWrap = createElement('span', 'search-result-icon');
+          iconWrap.appendChild(icon(entry.icon));
+          result.appendChild(iconWrap);
+          const copy = createElement('span', 'search-result-copy');
+          copy.appendChild(createElement('strong', '', entry.title));
+          copy.appendChild(createElement('span', '', `${entry.category} · ${entry.description}`));
+          result.appendChild(copy);
+          result.appendChild(icon('arrow_outward'));
+          searchResults.appendChild(result);
+        });
+        if (searchEmpty) searchEmpty.hidden = entries.length !== 0;
+        searchResults.hidden = entries.length === 0;
+      }
+
+      function openSearch(trigger) {
+        if (!searchModal) return;
+        state.searchFocusGuard = false;
+        state.searchOpen = true;
+        state.searchTrigger = trigger || globalSearch;
+        searchModal.hidden = false;
+        globalSearch?.setAttribute('aria-expanded', 'true');
+        if (searchModalInput) {
+          searchModalInput.value = state.searchQuery;
+          searchModalInput.focus();
+          searchModalInput.select();
+        }
+        renderSearchResults();
+      }
+
+      function closeSearch(restoreFocus) {
+        if (!state.searchOpen) return;
+        state.searchOpen = false;
+        if (searchModal) searchModal.hidden = true;
+        globalSearch?.setAttribute('aria-expanded', 'false');
+        if (restoreFocus !== false && state.searchTrigger?.isConnected) {
+          state.searchFocusGuard = true;
+          state.searchTrigger.focus();
+          window.setTimeout(() => { state.searchFocusGuard = false; }, 0);
+        }
+        state.searchTrigger = null;
+      }
+
+      function getVisibleCommands() {
+        const value = promptInput?.value || '';
+        if (!value.startsWith('/') || value.slice(1).includes(' ')) return [];
+        const query = value.slice(1).toLowerCase();
+        return slashCommands.filter((command) => command.key.startsWith(query));
+      }
+
+      function closeCommandMenu() {
+        if (!commandMenu || !promptInput) return;
+        commandMenu.hidden = true;
+        promptInput.setAttribute('aria-expanded', 'false');
+        promptInput.removeAttribute('aria-activedescendant');
+        state.commandIndex = 0;
+      }
+
+      function renderCommandMenu() {
+        if (!commandMenu || !promptInput) return;
+        const commands = getVisibleCommands();
+        if (!commands.length) {
+          closeCommandMenu();
+          return;
+        }
+        state.commandIndex = Math.min(state.commandIndex, commands.length - 1);
+        commandMenu.replaceChildren();
+        commandMenu.appendChild(createElement('span', 'command-menu-heading', 'Slash commands'));
+        commands.forEach((command, index) => {
+          const option = createElement('button', `command-option${index === state.commandIndex ? ' is-selected' : ''}`);
+          option.type = 'button';
+          option.id = `command-option-${command.key}`;
+          option.setAttribute('role', 'option');
+          option.setAttribute('aria-selected', String(index === state.commandIndex));
+          option.dataset.action = 'select-command';
+          option.dataset.command = command.key;
+          option.appendChild(icon(command.icon));
+          const copy = createElement('span', 'command-option-copy');
+          copy.appendChild(createElement('strong', '', `/${command.key}`));
+          copy.appendChild(createElement('span', '', command.description));
+          option.appendChild(copy);
+          commandMenu.appendChild(option);
+        });
+        commandMenu.hidden = false;
+        promptInput.setAttribute('aria-expanded', 'true');
+        promptInput.setAttribute('aria-activedescendant', `command-option-${commands[state.commandIndex].key}`);
+      }
+
+      function moveCommandSelection(direction) {
+        const commands = getVisibleCommands();
+        if (!commands.length) return;
+        state.commandIndex = (state.commandIndex + direction + commands.length) % commands.length;
+        renderCommandMenu();
+      }
+
+      function selectCommand(key) {
+        const command = slashCommands.find((item) => item.key === key);
+        if (!command || !promptInput) return;
+        promptInput.value = `${command.prompt} `;
+        closeCommandMenu();
+        autoResize(promptInput);
+        updateDraftState();
+        promptInput.focus();
+      }
+
+      function handleCommandKeydown(event) {
+        if (commandMenu?.hidden) return;
+        if (event.key === 'ArrowDown') {
+          event.preventDefault();
+          moveCommandSelection(1);
+        } else if (event.key === 'ArrowUp') {
+          event.preventDefault();
+          moveCommandSelection(-1);
+        } else if (event.key === 'Enter') {
+          const command = getVisibleCommands()[state.commandIndex];
+          if (command) {
+            event.preventDefault();
+            selectCommand(command.key);
+          }
+        } else if (event.key === 'Escape') {
+          event.preventDefault();
+          closeCommandMenu();
+        }
       }
 
       function formatBytes(bytes) {
@@ -3760,6 +4348,7 @@
           empty: 'Add a file to start'
         };
         if (stagingComposerCard) stagingComposerCard.dataset.state = state.stagingState;
+        if (stagingOnboarding) stagingOnboarding.hidden = state.stagingState !== 'empty';
         if (stagedDropZone) stagedDropZone.setAttribute('aria-busy', String(state.stagingState === 'loading'));
         if (stagedDropTitle) stagedDropTitle.textContent = hasFiles ? 'Drop additional files here' : 'Drop files to start a context';
         if (stagedStateLabel) stagedStateLabel.textContent = labels[state.stagingState] || labels.ready;
@@ -4045,6 +4634,8 @@
         state.draft = '';
         state.stagingState = state.stagedFiles.length ? 'ready' : 'empty';
         state.stagingError = '';
+        closeCommandMenu();
+        closeSearch(false);
         if (promptInput) promptInput.value = '';
         if (chatInput) chatInput.value = '';
         renderStagedFiles();
@@ -4143,6 +4734,8 @@
 
       function renderChatMessages() {
         if (!chatMessages) return;
+        chatView?.setAttribute('aria-busy', String(state.busy));
+        chatView?.setAttribute('data-state', state.busy ? 'typing' : state.messages.length ? 'response' : 'idle');
         chatMessages.replaceChildren();
         state.messages.forEach((message) => {
           chatMessages.appendChild(message.role === 'user' ? renderUserMessage(message) : renderAssistantMessage(message));
@@ -4175,6 +4768,7 @@
         const textarea = source === 'chat' ? chatInput : promptInput;
         const text = textarea ? textarea.value.trim() : '';
         if (!text || state.busy) return;
+        if (source === 'dashboard') closeCommandMenu();
         if (textarea) textarea.value = '';
         state.draft = source === 'dashboard' ? '' : state.draft;
         if (source === 'dashboard') {
@@ -4197,6 +4791,7 @@
           promptInput.focus();
           autoResize(promptInput);
           updateDraftState();
+          renderCommandMenu();
           promptInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
         showToast('Blueprint loaded into the composer.', 'auto_awesome');
@@ -4273,6 +4868,8 @@
 
       function closeMenus() {
         closeModelMenu(false);
+        closeSearch(false);
+        closeCommandMenu();
       }
 
       function handleFeedback(action) {
@@ -4373,6 +4970,15 @@
           usePrompt(target.closest('[data-action="use-prompt"]').dataset.prompt);
         } else if (action === 'remove-staged-file') {
           removeStagedFile(target.closest('[data-action="remove-staged-file"]').dataset.fileId);
+        } else if (action === 'browse-staging') {
+          openStagedFilePicker();
+        } else if (action === 'close-search') {
+          closeSearch(true);
+        } else if (action === 'use-search-prompt') {
+          closeSearch(false);
+          usePrompt(target.closest('[data-action="use-search-prompt"]').dataset.prompt);
+        } else if (action === 'select-command') {
+          selectCommand(target.closest('[data-action="select-command"]').dataset.command);
         } else if (action === 'resume-session') {
           const prompt = target.closest('[data-session-prompt]')?.dataset.sessionPrompt || `Continue the ${target.closest('[data-session-name]')?.dataset.sessionName || 'selected'} session.`;
           usePrompt(prompt);
@@ -4402,6 +5008,7 @@
       }
 
       document.addEventListener('click', (event) => {
+        if (!commandMenu.hidden && !commandMenu.contains(event.target) && event.target !== promptInput) closeCommandMenu();
         const clickedInsideSidebar = sidebar.contains(event.target);
         const clickedSidebarToggle = sidebarToggle.contains(event.target);
         if (state.sidebarOpen && !clickedInsideSidebar && !clickedSidebarToggle) {
@@ -4445,7 +5052,10 @@
       promptInput.addEventListener('input', () => {
         autoResize(promptInput);
         updateDraftState();
+        renderCommandMenu();
       });
+
+      promptInput.addEventListener('keydown', handleCommandKeydown);
 
       chatInput.addEventListener('input', updateChatDraftState);
 
@@ -4460,16 +5070,54 @@
 
       sessionFilter.addEventListener('input', applySessionFilter);
 
+      globalSearch.addEventListener('focus', () => {
+        if (!state.searchFocusGuard) openSearch(globalSearch);
+      });
+
       globalSearch.addEventListener('input', () => {
         state.searchQuery = globalSearch.value;
         applyBlueprintFilters();
+        if (state.searchOpen) {
+          searchModalInput.value = state.searchQuery;
+          renderSearchResults();
+        }
       });
 
       globalSearch.addEventListener('keydown', (event) => {
         if (event.key === 'Enter') {
           event.preventDefault();
-          document.getElementById('blueprints')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          openSearch(globalSearch);
         }
+      });
+
+      searchModalInput.addEventListener('input', () => {
+        state.searchQuery = searchModalInput.value;
+        globalSearch.value = state.searchQuery;
+        applyBlueprintFilters();
+        renderSearchResults();
+      });
+
+      searchModalInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+          event.preventDefault();
+          closeSearch(true);
+          return;
+        }
+        if (event.key === 'Enter') {
+          const firstResult = searchResults.querySelector('[role="option"]');
+          if (firstResult) {
+            event.preventDefault();
+            firstResult.click();
+          }
+          return;
+        }
+        if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
+        const results = Array.from(searchResults.querySelectorAll('[role="option"]'));
+        if (!results.length) return;
+        event.preventDefault();
+        const current = results.indexOf(document.activeElement);
+        const direction = event.key === 'ArrowDown' ? 1 : -1;
+        results[(current + direction + results.length) % results.length].focus();
       });
 
       modelMenu.addEventListener('keydown', (event) => {
@@ -4487,14 +5135,29 @@
 
       document.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') {
-          if (state.sidebarOpen) closeSidebar();
+          if (state.searchOpen) closeSearch(true);
+          else if (!commandMenu.hidden) closeCommandMenu();
+          else if (state.sidebarOpen) closeSidebar();
           else if (!modelMenu.hidden) closeModelMenu(true);
           return;
         }
         if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
           event.preventDefault();
-          globalSearch.focus();
-          globalSearch.select();
+          openSearch(globalSearch);
+          return;
+        }
+        if (state.searchOpen && event.key === 'Tab') {
+          const focusable = Array.from(searchModal.querySelectorAll('button:not([disabled]), input:not([disabled])')).filter((item) => !item.hidden);
+          if (!focusable.length) return;
+          const first = focusable[0];
+          const last = focusable[focusable.length - 1];
+          if (event.shiftKey && document.activeElement === first) {
+            event.preventDefault();
+            last.focus();
+          } else if (!event.shiftKey && document.activeElement === last) {
+            event.preventDefault();
+            first.focus();
+          }
         }
         if (state.sidebarOpen && event.key === 'Tab') {
           const focusable = Array.from(sidebar.querySelectorAll('button:not([disabled]), input:not([disabled])')).filter((item) => !item.hidden);
