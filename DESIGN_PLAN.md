@@ -72,6 +72,7 @@ Visual rules:
 | Active Conversation Window (Mobile) | `7fd0bc67009945059a740b88bc652fdf` | `#chat-view`, `.chat-messages`, `.chat-composer-dock` | Align message bubbles, transcript spacing, action toolbar, and bottom input dock with Stitch. |
 | Chat History Drawer | `791bde046271412ab536e05d0fb12fbc` | `#sidebar` and mobile drawer | Preserve focus trap/return behavior while matching the Stitch drawer hierarchy and metadata. |
 | Assistant & Model Settings | `fb81a25568074c57b03db3bd190e6433` | `#settings-modal` and `#model-menu` | Add a responsive settings drawer with model selection and local preview preferences. |
+| MCP Servers & Tools | `dbb62bc62b3f45388da49829f360d30d` | `#mcp-modal` and sidebar integration row | Add a searchable, responsive preview drawer for connected servers and tools. |
 | Voice Call & Audio Mode | `82e03fdb65a94c0281a6eba7838efe5c` | audio toast controls | Defer functional voice/audio implementation; preserve the current clear preview limitation. |
 | Multimodal Camera Inspection | `eb5e7fe281144c8491fd386596ecc219` | screenshot/preview controls | Defer; do not imply camera capture in the metadata-only prototype. |
 
@@ -168,6 +169,7 @@ Acceptance criteria:
 - Keep the mock response lifecycle deterministic and memory-only.
 - Keep model selection synchronized across dashboard, chat, and the responsive settings drawer.
 - Add local preview preferences for streaming mode, memory-only sessions, and MCP context status.
+- Add a searchable MCP drawer that presents connected servers, tool metadata, and preview invocation feedback without transport.
 - Preserve New Chat, regenerate, copy, and rating actions through delegated handlers.
 
 Acceptance criteria:
@@ -175,6 +177,7 @@ Acceptance criteria:
 - Prompt submission cannot duplicate while typing.
 - Assistant response actions work from keyboard and pointer input.
 - The settings drawer opens from navigation, traps focus, supports model/preference updates, and closes with Escape.
+- The MCP drawer supports server/tool search, selection, focus return, and a non-transport preview action.
 - Back-to-dashboard, New Chat, and model selection all leave a consistent state.
 
 ### Phase 6 — Deferred product surfaces
@@ -205,6 +208,7 @@ Browser checks at 1600×1000, 1024×900, 390×844, and 320×800:
 - Initial dashboard and clear-context onboarding.
 - Search open, results, empty results, Escape, and focus return.
 - Slash command open, keyboard selection, insertion, and Escape.
+- Settings drawer model/preferences, MCP server/tool browsing, search, selection, preview activation, and focus return.
 - File picker, drag/drop, pending/loading, success, duplicate/oversize error, recovery, and remove-last-file.
 - Send disabled, chat typing, response, action toolbar, New Chat, and model menu.
 - Mobile drawer open/close, focus return, safe-area composer, no horizontal overflow, and reduced motion.

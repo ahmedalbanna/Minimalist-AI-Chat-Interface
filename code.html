@@ -3195,6 +3195,372 @@
       text-align: center;
     }
 
+    .mcp-modal {
+      position: fixed;
+      z-index: 110;
+      inset: 0;
+      display: flex;
+      justify-content: flex-end;
+      padding: 16px;
+    }
+
+    .mcp-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(11, 28, 48, .26);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+    }
+
+    .mcp-dialog {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      width: min(720px, 100%);
+      max-height: calc(100vh - 32px);
+      flex-direction: column;
+      overflow: hidden;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: -20px 0 50px rgba(15, 23, 42, .16);
+    }
+
+    .mcp-dialog-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 22px 22px 16px;
+      border-bottom: 1px solid var(--line-soft);
+    }
+
+    .mcp-dialog-heading {
+      display: grid;
+      gap: 5px;
+    }
+
+    .mcp-dialog-heading h2 {
+      margin: 0;
+      color: var(--text);
+      font-size: 19px;
+      font-weight: 600;
+      letter-spacing: -.03em;
+    }
+
+    .mcp-dialog-heading p {
+      margin: 0;
+      color: var(--secondary);
+      font-size: 10px;
+      line-height: 1.5;
+    }
+
+    .mcp-close {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      flex: 0 0 32px;
+      color: var(--muted);
+      background: var(--blue-soft);
+      border-radius: 8px;
+    }
+
+    .mcp-close:hover {
+      color: var(--blue);
+      background: #dce9ff;
+    }
+
+    .mcp-overview {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 22px 0;
+    }
+
+    .mcp-overview-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      flex: 0 0 30px;
+      color: var(--blue);
+      background: var(--blue-soft);
+      border-radius: 8px;
+    }
+
+    .mcp-overview-icon .material-symbols-outlined {
+      font-size: 17px;
+    }
+
+    .mcp-overview-copy {
+      display: grid;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .mcp-overview-copy strong {
+      color: var(--text);
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .mcp-overview-copy span {
+      color: var(--muted);
+      font-size: 9px;
+    }
+
+    .mcp-live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      min-height: 24px;
+      margin-left: auto;
+      padding: 0 8px;
+      color: var(--green);
+      background: #e8f5ec;
+      border-radius: 999px;
+      font-size: 9px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .mcp-live-badge .status-dot {
+      width: 5px;
+      height: 5px;
+      flex-basis: 5px;
+      box-shadow: none;
+    }
+
+    .mcp-search {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 16px 22px 0;
+      padding: 0 10px;
+      color: var(--muted);
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+    }
+
+    .mcp-search:focus-within {
+      border-color: #b8d0fa;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, .08);
+    }
+
+    .mcp-search .material-symbols-outlined {
+      font-size: 17px;
+    }
+
+    .mcp-search input {
+      width: 100%;
+      min-width: 0;
+      min-height: 38px;
+      padding: 0;
+      color: var(--text);
+      background: transparent;
+      border: 0;
+      outline: 0;
+      font-size: 11px;
+    }
+
+    .mcp-layout {
+      display: grid;
+      grid-template-columns: 210px minmax(0, 1fr);
+      gap: 14px;
+      min-height: 0;
+      padding: 16px 22px 20px;
+      overflow-y: auto;
+    }
+
+    .mcp-server-list {
+      display: grid;
+      align-content: start;
+      gap: 5px;
+      min-width: 0;
+    }
+
+    .mcp-server-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      min-height: 48px;
+      padding: 7px 8px;
+      color: var(--secondary);
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 9px;
+      text-align: left;
+    }
+
+    .mcp-server-option:hover,
+    .mcp-server-option.is-selected {
+      color: var(--blue);
+      background: var(--blue-soft);
+      border-color: #d5e2fb;
+    }
+
+    .mcp-server-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      flex: 0 0 28px;
+      color: var(--blue);
+      background: #e5eeff;
+      border-radius: 7px;
+    }
+
+    .mcp-server-icon .material-symbols-outlined {
+      font-size: 16px;
+    }
+
+    .mcp-server-copy {
+      display: grid;
+      flex: 1;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .mcp-server-copy strong {
+      overflow: hidden;
+      color: var(--text);
+      font-size: 10px;
+      font-weight: 600;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .mcp-server-option.is-selected .mcp-server-copy strong {
+      color: var(--blue);
+    }
+
+    .mcp-server-copy span {
+      color: var(--muted);
+      font-size: 9px;
+    }
+
+    .mcp-server-status {
+      width: 6px;
+      height: 6px;
+      flex: 0 0 6px;
+      background: var(--green);
+      border-radius: 50%;
+    }
+
+    .mcp-tool-panel {
+      display: flex;
+      min-width: 0;
+      flex-direction: column;
+      gap: 10px;
+      padding: 14px;
+      background: #f7f9ff;
+      border: 1px solid var(--line-soft);
+      border-radius: 13px;
+    }
+
+    .mcp-tool-heading {
+      display: grid;
+      gap: 4px;
+    }
+
+    .mcp-tool-heading h3 {
+      margin: 0;
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .mcp-tool-heading p {
+      margin: 0;
+      color: var(--secondary);
+      font-size: 10px;
+      line-height: 1.5;
+    }
+
+    .mcp-tool-list {
+      display: grid;
+      gap: 6px;
+    }
+
+    .mcp-tool-option {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      width: 100%;
+      min-height: 46px;
+      padding: 7px 9px;
+      color: var(--secondary);
+      background: #fff;
+      border: 1px solid var(--line-soft);
+      border-radius: 8px;
+      text-align: left;
+    }
+
+    .mcp-tool-option:hover,
+    .mcp-tool-option:focus-visible {
+      color: var(--blue);
+      background: var(--blue-soft);
+      border-color: #c8dafa;
+    }
+
+    .mcp-tool-option > .material-symbols-outlined {
+      color: var(--blue);
+      font-size: 17px;
+    }
+
+    .mcp-tool-copy {
+      display: grid;
+      flex: 1;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .mcp-tool-copy strong {
+      color: var(--text);
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .mcp-tool-copy span {
+      overflow: hidden;
+      color: var(--muted);
+      font-size: 9px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .mcp-empty {
+      padding: 20px 12px;
+      color: var(--muted);
+      border: 1px dashed #c3c6d7;
+      border-radius: 9px;
+      font-size: 10px;
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    .mcp-dialog-footer {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 13px 22px max(18px, env(safe-area-inset-bottom));
+      color: var(--muted);
+      border-top: 1px solid var(--line-soft);
+      font-size: 10px;
+      line-height: 1.45;
+    }
+
+    .mcp-dialog-footer .material-symbols-outlined {
+      color: var(--blue);
+      font-size: 16px;
+    }
+
     .settings-modal {
       position: fixed;
       z-index: 110;
@@ -3874,7 +4240,373 @@
         padding: 10px 16px 14px;
       }
 
-      .settings-modal {
+    .mcp-modal {
+      position: fixed;
+      z-index: 110;
+      inset: 0;
+      display: flex;
+      justify-content: flex-end;
+      padding: 16px;
+    }
+
+    .mcp-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(11, 28, 48, .26);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+    }
+
+    .mcp-dialog {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      width: min(720px, 100%);
+      max-height: calc(100vh - 32px);
+      flex-direction: column;
+      overflow: hidden;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: -20px 0 50px rgba(15, 23, 42, .16);
+    }
+
+    .mcp-dialog-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 22px 22px 16px;
+      border-bottom: 1px solid var(--line-soft);
+    }
+
+    .mcp-dialog-heading {
+      display: grid;
+      gap: 5px;
+    }
+
+    .mcp-dialog-heading h2 {
+      margin: 0;
+      color: var(--text);
+      font-size: 19px;
+      font-weight: 600;
+      letter-spacing: -.03em;
+    }
+
+    .mcp-dialog-heading p {
+      margin: 0;
+      color: var(--secondary);
+      font-size: 10px;
+      line-height: 1.5;
+    }
+
+    .mcp-close {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      flex: 0 0 32px;
+      color: var(--muted);
+      background: var(--blue-soft);
+      border-radius: 8px;
+    }
+
+    .mcp-close:hover {
+      color: var(--blue);
+      background: #dce9ff;
+    }
+
+    .mcp-overview {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 22px 0;
+    }
+
+    .mcp-overview-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      flex: 0 0 30px;
+      color: var(--blue);
+      background: var(--blue-soft);
+      border-radius: 8px;
+    }
+
+    .mcp-overview-icon .material-symbols-outlined {
+      font-size: 17px;
+    }
+
+    .mcp-overview-copy {
+      display: grid;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .mcp-overview-copy strong {
+      color: var(--text);
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .mcp-overview-copy span {
+      color: var(--muted);
+      font-size: 9px;
+    }
+
+    .mcp-live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      min-height: 24px;
+      margin-left: auto;
+      padding: 0 8px;
+      color: var(--green);
+      background: #e8f5ec;
+      border-radius: 999px;
+      font-size: 9px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .mcp-live-badge .status-dot {
+      width: 5px;
+      height: 5px;
+      flex-basis: 5px;
+      box-shadow: none;
+    }
+
+    .mcp-search {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 16px 22px 0;
+      padding: 0 10px;
+      color: var(--muted);
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+    }
+
+    .mcp-search:focus-within {
+      border-color: #b8d0fa;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, .08);
+    }
+
+    .mcp-search .material-symbols-outlined {
+      font-size: 17px;
+    }
+
+    .mcp-search input {
+      width: 100%;
+      min-width: 0;
+      min-height: 38px;
+      padding: 0;
+      color: var(--text);
+      background: transparent;
+      border: 0;
+      outline: 0;
+      font-size: 11px;
+    }
+
+    .mcp-layout {
+      display: grid;
+      grid-template-columns: 210px minmax(0, 1fr);
+      gap: 14px;
+      min-height: 0;
+      padding: 16px 22px 20px;
+      overflow-y: auto;
+    }
+
+    .mcp-server-list {
+      display: grid;
+      align-content: start;
+      gap: 5px;
+      min-width: 0;
+    }
+
+    .mcp-server-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      min-height: 48px;
+      padding: 7px 8px;
+      color: var(--secondary);
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 9px;
+      text-align: left;
+    }
+
+    .mcp-server-option:hover,
+    .mcp-server-option.is-selected {
+      color: var(--blue);
+      background: var(--blue-soft);
+      border-color: #d5e2fb;
+    }
+
+    .mcp-server-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      flex: 0 0 28px;
+      color: var(--blue);
+      background: #e5eeff;
+      border-radius: 7px;
+    }
+
+    .mcp-server-icon .material-symbols-outlined {
+      font-size: 16px;
+    }
+
+    .mcp-server-copy {
+      display: grid;
+      flex: 1;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .mcp-server-copy strong {
+      overflow: hidden;
+      color: var(--text);
+      font-size: 10px;
+      font-weight: 600;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .mcp-server-option.is-selected .mcp-server-copy strong {
+      color: var(--blue);
+    }
+
+    .mcp-server-copy span {
+      color: var(--muted);
+      font-size: 9px;
+    }
+
+    .mcp-server-status {
+      width: 6px;
+      height: 6px;
+      flex: 0 0 6px;
+      background: var(--green);
+      border-radius: 50%;
+    }
+
+    .mcp-tool-panel {
+      display: flex;
+      min-width: 0;
+      flex-direction: column;
+      gap: 10px;
+      padding: 14px;
+      background: #f7f9ff;
+      border: 1px solid var(--line-soft);
+      border-radius: 13px;
+    }
+
+    .mcp-tool-heading {
+      display: grid;
+      gap: 4px;
+    }
+
+    .mcp-tool-heading h3 {
+      margin: 0;
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .mcp-tool-heading p {
+      margin: 0;
+      color: var(--secondary);
+      font-size: 10px;
+      line-height: 1.5;
+    }
+
+    .mcp-tool-list {
+      display: grid;
+      gap: 6px;
+    }
+
+    .mcp-tool-option {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      width: 100%;
+      min-height: 46px;
+      padding: 7px 9px;
+      color: var(--secondary);
+      background: #fff;
+      border: 1px solid var(--line-soft);
+      border-radius: 8px;
+      text-align: left;
+    }
+
+    .mcp-tool-option:hover,
+    .mcp-tool-option:focus-visible {
+      color: var(--blue);
+      background: var(--blue-soft);
+      border-color: #c8dafa;
+    }
+
+    .mcp-tool-option > .material-symbols-outlined {
+      color: var(--blue);
+      font-size: 17px;
+    }
+
+    .mcp-tool-copy {
+      display: grid;
+      flex: 1;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .mcp-tool-copy strong {
+      color: var(--text);
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .mcp-tool-copy span {
+      overflow: hidden;
+      color: var(--muted);
+      font-size: 9px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .mcp-empty {
+      padding: 20px 12px;
+      color: var(--muted);
+      border: 1px dashed #c3c6d7;
+      border-radius: 9px;
+      font-size: 10px;
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    .mcp-dialog-footer {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 13px 22px max(18px, env(safe-area-inset-bottom));
+      color: var(--muted);
+      border-top: 1px solid var(--line-soft);
+      font-size: 10px;
+      line-height: 1.45;
+    }
+
+    .mcp-dialog-footer .material-symbols-outlined {
+      color: var(--blue);
+      font-size: 16px;
+    }
+
+    .settings-modal {
         padding: 0;
       }
 
@@ -3894,6 +4626,49 @@
       }
 
       .settings-dialog-footer {
+        padding: 12px 16px max(16px, env(safe-area-inset-bottom));
+      }
+
+      .mcp-modal {
+        padding: 0;
+      }
+
+      .mcp-dialog {
+        width: 100%;
+        max-height: 100vh;
+        border: 0;
+        border-radius: 0;
+      }
+
+      .mcp-dialog-header {
+        padding: 18px 16px 14px;
+      }
+
+      .mcp-overview,
+      .mcp-search,
+      .mcp-layout {
+        margin-left: 16px;
+        margin-right: 16px;
+      }
+
+      .mcp-overview {
+        padding-top: 14px;
+      }
+
+      .mcp-layout {
+        grid-template-columns: 1fr;
+        padding: 14px 0 18px;
+      }
+
+      .mcp-server-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .mcp-tool-panel {
+        min-height: 190px;
+      }
+
+      .mcp-dialog-footer {
         padding: 12px 16px max(16px, env(safe-area-inset-bottom));
       }
 
@@ -4227,6 +5002,23 @@
       </aside>
     </div>
 
+    <div id="mcp-modal" class="mcp-modal" hidden>
+      <button class="mcp-backdrop" type="button" data-action="close-mcp" aria-label="Close MCP servers and tools"></button>
+      <aside class="mcp-dialog" role="dialog" aria-modal="true" aria-labelledby="mcp-title" aria-describedby="mcp-description">
+        <header class="mcp-dialog-header">
+          <div class="mcp-dialog-heading"><h2 id="mcp-title">MCP servers &amp; tools</h2><p id="mcp-description">Browse connected context sources and preview available tools.</p></div>
+          <button class="mcp-close" type="button" data-action="close-mcp" aria-label="Close MCP servers and tools"><span class="material-symbols-outlined" aria-hidden="true">close</span></button>
+        </header>
+        <div class="mcp-overview"><span class="mcp-overview-icon"><span class="material-symbols-outlined" aria-hidden="true">hub</span></span><span class="mcp-overview-copy"><strong>4 local connections</strong><span>Preview state · last synced just now</span></span><span class="mcp-live-badge"><span class="status-dot" aria-hidden="true"></span>Live</span></div>
+        <label class="mcp-search" for="mcp-search-input"><span class="material-symbols-outlined" aria-hidden="true">search</span><input id="mcp-search-input" type="search" autocomplete="off" placeholder="Filter servers or tools" aria-label="Filter MCP servers or tools"></label>
+        <div class="mcp-layout">
+          <div id="mcp-server-list" class="mcp-server-list" role="listbox" aria-label="MCP servers"></div>
+          <section class="mcp-tool-panel" aria-labelledby="mcp-server-heading"><div class="mcp-tool-heading"><h3 id="mcp-server-heading">Filesystem</h3><p id="mcp-server-description">Read-only workspace context for local documents.</p></div><div id="mcp-tool-list" class="mcp-tool-list"></div></section>
+        </div>
+        <footer class="mcp-dialog-footer"><span class="material-symbols-outlined" aria-hidden="true">info</span><span>MCP connections and tool invocations are preview controls in this browser tab.</span></footer>
+      </aside>
+    </div>
+
     <aside id="sidebar" class="sidebar" aria-label="Workspace navigation">
       <button class="icon-button mobile-sidebar-close" type="button" data-action="close-sidebar" aria-label="Close workspace navigation">
         <span class="material-symbols-outlined" aria-hidden="true">close</span>
@@ -4452,6 +5244,11 @@
         settingsOpen: false,
         settingsTrigger: null,
         settingsFocusGuard: false,
+        mcpOpen: false,
+        mcpTrigger: null,
+        mcpFocusGuard: false,
+        mcpQuery: '',
+        mcpSelectedServer: 'filesystem',
         preferences: {
           streaming: true,
           memoryOnly: true,
@@ -4493,6 +5290,12 @@
       const commandMenu = document.getElementById('command-menu');
       const settingsModal = document.getElementById('settings-modal');
       const settingsModelOptions = Array.from(document.querySelectorAll('[data-action="select-settings-model"]'));
+      const mcpModal = document.getElementById('mcp-modal');
+      const mcpSearchInput = document.getElementById('mcp-search-input');
+      const mcpServerList = document.getElementById('mcp-server-list');
+      const mcpServerHeading = document.getElementById('mcp-server-heading');
+      const mcpServerDescription = document.getElementById('mcp-server-description');
+      const mcpToolList = document.getElementById('mcp-tool-list');
       const modelOptions = Array.from(document.querySelectorAll('[data-action="select-model"]'));
 
       function createElement(tag, className, text) {
@@ -4553,6 +5356,113 @@
         renderSettings();
         const label = key === 'streaming' ? 'Streaming mode' : key === 'memoryOnly' ? 'Memory-only session' : 'MCP context sync';
         showToast(`${label} ${state.preferences[key] ? 'enabled' : 'disabled'} for this preview.`, 'tune');
+      }
+
+      const mcpServerCatalog = [
+        { id: 'filesystem', name: 'Filesystem', description: 'Read-only workspace context', icon: 'folder', status: 'Connected', tools: [{ name: 'read_file', label: 'Read a staged file', description: 'Inspect a local file already added to context.', icon: 'description' }, { name: 'list_workspace', label: 'List workspace context', description: 'Browse available local context resources.', icon: 'folder_open' }] },
+        { id: 'github', name: 'GitHub', description: 'Repository and issue context', icon: 'code', status: 'Connected', tools: [{ name: 'search_repository', label: 'Search repository', description: 'Find code and documentation in the preview index.', icon: 'search' }, { name: 'create_issue', label: 'Create an issue draft', description: 'Prepare a local issue draft for review.', icon: 'add_task' }] },
+        { id: 'postgres', name: 'Postgres', description: 'Read-only analytics warehouse', icon: 'storage', status: 'Connected', tools: [{ name: 'run_read_query', label: 'Run a read query', description: 'Preview a safe read-only analytics query.', icon: 'query_stats' }] },
+        { id: 'browser', name: 'Browser preview', description: 'Visual context and snapshots', icon: 'travel_explore', status: 'Connected', tools: [{ name: 'open_preview', label: 'Open a preview', description: 'Open a local visual context preview.', icon: 'open_in_new' }, { name: 'capture_view', label: 'Capture the current view', description: 'Prepare a local screenshot reference.', icon: 'photo_camera' }] }
+      ];
+
+      function getVisibleMcpServers() {
+        const query = state.mcpQuery.trim().toLowerCase();
+        if (!query) return mcpServerCatalog;
+        return mcpServerCatalog.filter((server) => `${server.name} ${server.description} ${server.tools.map((tool) => `${tool.name} ${tool.label} ${tool.description}`).join(' ')}`.toLowerCase().includes(query));
+      }
+
+      function renderMcpServers() {
+        if (!mcpServerList) return;
+        const servers = getVisibleMcpServers();
+        mcpServerList.replaceChildren();
+        if (!servers.length) {
+          mcpServerList.appendChild(createElement('span', 'mcp-empty', 'No servers or tools match that search.'));
+          return;
+        }
+        servers.forEach((server) => {
+          const selected = server.id === state.mcpSelectedServer;
+          const option = createElement('button', `mcp-server-option${selected ? ' is-selected' : ''}`);
+          option.type = 'button';
+          option.setAttribute('role', 'option');
+          option.setAttribute('aria-selected', String(selected));
+          option.dataset.action = 'select-mcp-server';
+          option.dataset.server = server.id;
+          const serverIcon = createElement('span', 'mcp-server-icon');
+          serverIcon.appendChild(icon(server.icon));
+          option.appendChild(serverIcon);
+          const copy = createElement('span', 'mcp-server-copy');
+          copy.appendChild(createElement('strong', '', server.name));
+          copy.appendChild(createElement('span', '', `${server.tools.length} tools · ${server.status}`));
+          option.appendChild(copy);
+          option.appendChild(createElement('span', 'mcp-server-status'));
+          mcpServerList.appendChild(option);
+        });
+      }
+
+      function renderMcpTools() {
+        const server = mcpServerCatalog.find((item) => item.id === state.mcpSelectedServer) || mcpServerCatalog[0];
+        if (!server || !mcpToolList) return;
+        if (mcpServerHeading) mcpServerHeading.textContent = server.name;
+        if (mcpServerDescription) mcpServerDescription.textContent = server.description;
+        const query = state.mcpQuery.trim().toLowerCase();
+        const serverMatchesQuery = !query || `${server.name} ${server.description}`.toLowerCase().includes(query);
+        const tools = serverMatchesQuery ? server.tools : server.tools.filter((tool) => `${tool.name} ${tool.label} ${tool.description}`.toLowerCase().includes(query));
+        mcpToolList.replaceChildren();
+        if (!tools.length) {
+          mcpToolList.appendChild(createElement('span', 'mcp-empty', 'No tools match that search.'));
+          return;
+        }
+        tools.forEach((tool) => {
+          const option = createElement('button', 'mcp-tool-option');
+          option.type = 'button';
+          option.dataset.action = 'use-mcp-tool';
+          option.dataset.server = server.id;
+          option.dataset.tool = tool.name;
+          option.appendChild(icon(tool.icon));
+          const copy = createElement('span', 'mcp-tool-copy');
+          copy.appendChild(createElement('strong', '', tool.label));
+          copy.appendChild(createElement('span', '', tool.description));
+          option.appendChild(copy);
+          option.appendChild(icon('arrow_outward'));
+          mcpToolList.appendChild(option);
+        });
+      }
+
+      function renderMcp() {
+        const visibleServers = getVisibleMcpServers();
+        if (visibleServers.length && !visibleServers.some((server) => server.id === state.mcpSelectedServer)) state.mcpSelectedServer = visibleServers[0].id;
+        renderMcpServers();
+        renderMcpTools();
+      }
+
+      function openMcp(trigger) {
+        if (!mcpModal) return;
+        state.mcpFocusGuard = false;
+        state.mcpOpen = true;
+        state.mcpTrigger = trigger || document.querySelector('[data-action="mcp"]');
+        mcpModal.hidden = false;
+        renderMcp();
+        window.requestAnimationFrame(() => mcpSearchInput?.focus());
+      }
+
+      function closeMcp(restoreFocus) {
+        if (!state.mcpOpen) return;
+        state.mcpOpen = false;
+        if (mcpModal) mcpModal.hidden = true;
+        if (restoreFocus !== false && state.mcpTrigger?.isConnected) {
+          state.mcpFocusGuard = true;
+          state.mcpTrigger.focus();
+          window.setTimeout(() => { state.mcpFocusGuard = false; }, 0);
+        }
+        state.mcpTrigger = null;
+      }
+
+      function useMcpTool(serverId, toolName) {
+        const server = mcpServerCatalog.find((item) => item.id === serverId);
+        const tool = server?.tools.find((item) => item.name === toolName);
+        if (!tool) return;
+        closeMcp(false);
+        showToast(`${tool.label} is ready in this local context.`, 'extension');
       }
 
       const slashCommands = [
@@ -5033,6 +5943,7 @@
         closeCommandMenu();
         closeSearch(false);
         closeSettings(false);
+        closeMcp(false);
         if (promptInput) promptInput.value = '';
         if (chatInput) chatInput.value = '';
         renderStagedFiles();
@@ -5267,6 +6178,7 @@
         closeModelMenu(false);
         closeSearch(false);
         closeSettings(false);
+        closeMcp(false);
         closeCommandMenu();
       }
 
@@ -5276,14 +6188,12 @@
           attach: ['File attachments are disabled in preview mode.', 'attach_file'],
           'add-web-link': ['Web link references are ready for this local context.', 'link'],
           screenshot: ['Screen vision is available as a mock control in preview mode.', 'screenshot_monitor'],
-          mcp: ['4 MCP servers are connected to this local canvas.', 'hub'],
           audio: ['Voice sessions are not connected in preview mode.', 'graphic_eq'],
           'audio-mode': ['Audio Mode is available in the full Aura workspace.', 'graphic_eq'],
           'view-sessions': ['Showing the five most recent Aura sessions.', 'history'],
           license: ['Team Pro License details are available in workspace settings.', 'verified_user'],
           'manage-plan': ['Plan management is outside this local prototype.', 'workspace_premium'],
           'nav-chat': ['Chat is ready in this local canvas.', 'forum'],
-          'nav-mcp': ['Explore & MCP tools are connected for this canvas.', 'hub'],
           'nav-canvas': ['Canvas is the active workspace view.', 'dashboard'],
           'nav-analytics': ['Analytics snapshots are available from the workspace menu.', 'monitoring']
         };
@@ -5377,6 +6287,14 @@
           closeSearch(true);
         } else if (action === 'close-settings') {
           closeSettings(true);
+        } else if (action === 'close-mcp') {
+          closeMcp(true);
+        } else if (action === 'select-mcp-server') {
+          state.mcpSelectedServer = target.closest('[data-action="select-mcp-server"]').dataset.server;
+          renderMcp();
+        } else if (action === 'use-mcp-tool') {
+          const tool = target.closest('[data-action="use-mcp-tool"]');
+          useMcpTool(tool.dataset.server, tool.dataset.tool);
         } else if (action === 'toggle-setting') {
           toggleSetting(target.closest('[data-action="toggle-setting"]').dataset.setting);
         } else if (action === 'use-search-prompt') {
@@ -5411,6 +6329,8 @@
           openSettings(target.closest('[data-action="nav-settings"]'));
         } else if (action === 'profile') {
           openSettings(target.closest('[data-action="profile"]'));
+        } else if (action === 'mcp' || action === 'nav-mcp') {
+          openMcp(target.closest('[data-action]'));
         } else {
           handleFeedback(action);
         }
@@ -5418,6 +6338,7 @@
 
       document.addEventListener('click', (event) => {
         if (state.settingsOpen && !settingsModal.contains(event.target)) closeSettings(false);
+        if (state.mcpOpen && !mcpModal.contains(event.target)) closeMcp(false);
         if (!commandMenu.hidden && !commandMenu.contains(event.target) && event.target !== promptInput) closeCommandMenu();
         const clickedInsideSidebar = sidebar.contains(event.target);
         const clickedSidebarToggle = sidebarToggle.contains(event.target);
@@ -5530,6 +6451,11 @@
         results[(current + direction + results.length) % results.length].focus();
       });
 
+      mcpSearchInput.addEventListener('input', () => {
+        state.mcpQuery = mcpSearchInput.value;
+        renderMcp();
+      });
+
       modelMenu.addEventListener('keydown', (event) => {
         const options = modelOptions;
         const current = options.indexOf(document.activeElement);
@@ -5547,6 +6473,7 @@
         if (event.key === 'Escape') {
           if (state.searchOpen) closeSearch(true);
           else if (state.settingsOpen) closeSettings(true);
+          else if (state.mcpOpen) closeMcp(true);
           else if (!commandMenu.hidden) closeCommandMenu();
           else if (state.sidebarOpen) closeSidebar();
           else if (!modelMenu.hidden) closeModelMenu(true);
@@ -5583,6 +6510,19 @@
             first.focus();
           }
         }
+        if (state.mcpOpen && event.key === 'Tab') {
+          const focusable = Array.from(mcpModal.querySelectorAll('.mcp-dialog button:not([disabled]), .mcp-dialog input:not([disabled])')).filter((item) => !item.hidden);
+          if (!focusable.length) return;
+          const first = focusable[0];
+          const last = focusable[focusable.length - 1];
+          if (event.shiftKey && document.activeElement === first) {
+            event.preventDefault();
+            last.focus();
+          } else if (!event.shiftKey && document.activeElement === last) {
+            event.preventDefault();
+            first.focus();
+          }
+        }
         if (state.sidebarOpen && event.key === 'Tab') {
           const focusable = Array.from(sidebar.querySelectorAll('button:not([disabled]), input:not([disabled])')).filter((item) => !item.hidden);
           if (!focusable.length) return;
@@ -5608,6 +6548,7 @@
       renderStagedFiles();
       updateModelLabels();
       renderSettings();
+      renderMcp();
       updateDraftState();
       updateChatDraftState();
       applySessionFilter();

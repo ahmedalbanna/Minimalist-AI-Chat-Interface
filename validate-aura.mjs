@@ -77,6 +77,12 @@ try {
   assert(await page.locator('#staging-composer-card').getAttribute('data-state') === 'loading', 'loading staging state is missing');
   await page.waitForTimeout(650);
   assert(await page.locator('#staging-composer-card').getAttribute('data-state') === 'success', 'success staging state is missing');
+  const dataTransfer = await page.evaluateHandle(() => new DataTransfer());
+  await dataTransfer.evaluate((transfer) => transfer.items.add(new File(['drag content'], 'drag.md', { type: 'text/markdown' })));
+  await page.locator('#staged-drop-zone').dispatchEvent('dragenter', { dataTransfer });
+  await page.locator('#staged-drop-zone').dispatchEvent('drop', { dataTransfer });
+  await page.waitForTimeout(650);
+  assert((await page.locator('.staged-file-name').allTextContents()).includes('drag.md'), 'drag/drop did not stage metadata');
 
   await page.locator('[data-action="nav-settings"]').click();
   assert(await page.locator('#settings-modal').isVisible(), 'settings drawer did not open');
@@ -84,6 +90,15 @@ try {
   assert((await page.locator('[data-model-label]').first().textContent()).includes('Opus'), 'settings model did not synchronize');
   await page.keyboard.press('Escape');
   assert(await page.locator('#settings-modal').isHidden(), 'settings drawer did not close');
+
+  await page.locator('[data-action="nav-mcp"]').click();
+  assert(await page.locator('#mcp-modal').isVisible(), 'MCP drawer did not open');
+  assert(await page.locator('.mcp-server-option').count() === 4, 'MCP server list is incomplete');
+  assert(await page.locator('.mcp-tool-option').count() === 2, 'MCP tool list is incomplete');
+  await page.locator('#mcp-search-input').fill('github');
+  assert((await page.locator('#mcp-server-heading').textContent()) === 'GitHub', 'MCP search did not select matching server');
+  await page.locator('[data-action="use-mcp-tool"]').first().click();
+  assert(await page.locator('#mcp-modal').isHidden(), 'MCP tool action did not close drawer');
 
   await page.locator('#prompt-input').fill('browser validation');
   await page.locator('#send-prompt-btn').click();
@@ -106,10 +121,16 @@ try {
   assert(await mobile.locator('.settings-dialog').evaluate((element) => element.getBoundingClientRect().width <= innerWidth), 'mobile settings exceed viewport');
   await mobile.keyboard.press('Escape');
   assert(await mobile.locator('#settings-modal').isHidden(), 'mobile settings did not close');
+  await mobile.locator('#sidebar-toggle').click();
+  await mobile.locator('.integration-row[data-action="mcp"]').click();
+  assert(await mobile.locator('#mcp-modal').isVisible(), 'mobile MCP drawer did not open');
+  assert(await mobile.locator('.mcp-dialog').evaluate((element) => element.getBoundingClientRect().width <= innerWidth), 'mobile MCP drawer exceeds viewport');
+  await mobile.keyboard.press('Escape');
+  assert(await mobile.locator('#mcp-modal').isHidden(), 'mobile MCP drawer did not close');
   assert(await mobile.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'mobile overflow after settings');
   assert(mobileErrors.length === 0, `mobile application errors: ${mobileErrors.join('; ')}`);
 
-  console.log('Browser checks passed: desktop, direct file, search, commands, staging, settings, chat, and mobile');
+  console.log('Browser checks passed: desktop, direct file, search, commands, staging, settings, MCP, chat, and mobile');
 } finally {
   await browser.close();
 }
