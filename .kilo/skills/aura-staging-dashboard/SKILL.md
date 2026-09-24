@@ -1,0 +1,119 @@
+---
+name: aura-staging-dashboard
+description: Build and maintain the Aura single-file dashboard in this workspace, especially Multimodal Context Engine states, staged file attachments, prompt context, file picker and drag-drop behavior, and the responsive Aura shell. Trigger when a task mentions Aura, File_Attachment, staging state, staged files, context composer, or a dashboard reference image.
+---
+
+# Aura Staging Dashboard
+
+Aura is a browser-openable, no-build prototype whose primary source is `code.html`. Keep the design and behavior coherent when changing the shell, staged context, or chat flow.
+
+## Source of truth
+
+1. Read `code.html` before editing and preserve the existing shell, event delegation, and memory-only behavior.
+2. Treat the supplied design image and design notes as visual references, not as permission to add a backend.
+3. Keep one browser session authoritative: state lives in JavaScript memory and resets on refresh.
+
+## Implement workflow
+
+### 1. Map the state
+
+Use the existing state object and keep staged data separate from transcript data:
+
+- `stagedFiles`: id, name, type, size label/bytes, icon, tone, status, and status icon.
+- `stagingState`: `ready`, `empty`, `loading`, `success`, or `error`.
+- `stagingError`: the recoverable explanation shown by the error state.
+- `messages`, `busy`, and the response timer: chat lifecycle only.
+- `draft`, model, filters, search, sidebar, and drawer focus: UI state only.
+
+Completion criterion: every new control has one state owner, one update path, and a defined reset or persistence policy.
+
+### State coverage
+
+| State | Entry | Required UI |
+| --- | --- | --- |
+| `ready` | Initial load or completed context | Three-file reference tray, active prompt, enabled send when text exists |
+| `empty` | Every staged file is removed | Empty tray, inviting drop copy, context summary at zero |
+| `loading` | Picker or drop accepts new metadata | Pending file chips, busy composer/drop zone, status message |
+| `success` | Metadata processing completes | Ready status on new chips, success status pill, toast |
+| `error` | Duplicate, oversized, or invalid selection | Recoverable inline message, error styling, reset path |
+| `disabled` | Prompt is empty or chat is busy | Disabled send control with unchanged readable label |
+| `search-empty` | Blueprint or session query has no match | Focused empty result with a recovery hint |
+| `chat-loading` | Prompt is submitted | Typing indicator and guarded duplicate submit |
+
+State transitions are one-way until the user changes the input: `ready → loading → success`, `ready → error → ready`, or `success → empty`. New Chat cancels timers and returns to `ready` when context remains or `empty` when it does not.
+
+Completion criterion: each state has a visible or accessible representation, a deterministic transition, and a browser assertion.
+
+### 2. Render staged context safely
+
+Render file chips from state with DOM creation and `textContent`. Keep the file tray, count, context-size label, linter pill, and empty state synchronized through one render function.
+
+Each chip needs:
+
+- file name and type badge;
+- size and inspection status;
+- icon/tone that communicates the file kind;
+- a named remove button;
+- truncation that does not break the card layout.
+
+Completion criterion: initial state matches the reference, removal updates the count and size immediately, and zero files produces a useful empty state.
+
+### 3. Support staging interactions
+
+Wire the file input, drop zone, and keyboard activation to the same staging function.
+
+- Accept multiple files and names with common code, data, document, and image extensions.
+- Enforce the displayed 50 MB per-file limit.
+- Skip duplicate names and explain skips through the toast region.
+- Show a transient drag state for `dragenter`/`dragover` and clear it on leave/drop.
+- Do not read or upload file contents; the prototype stores metadata only.
+- Keep the input accessible and expose a descriptive label.
+
+Completion criterion: picker, drag/drop, and keyboard paths produce the same safe metadata state.
+
+### 4. Preserve prompt and chat flow
+
+The dashboard composer is a context prompt, not a persistence boundary. Keep the default staged prompt usable, update the send disabled state on input, and route submission through the existing mock chat flow. Staged files may remain in the active context when switching between dashboard and chat; a new chat clears the transcript without silently persisting anything.
+
+Use delegated actions for cards, remove buttons, model selection, and feedback controls. Use `textContent` for user-authored messages and filenames.
+
+Completion criterion: submitting a staged prompt opens chat, shows a typing state, produces a deterministic assistant response, and New Chat returns to a usable dashboard.
+
+### 5. Preserve the Aura visual system
+
+Use the existing CSS tokens and component language:
+
+- calm off-white/blue canvas;
+- royal-blue primary actions;
+- low-contrast borders and small ambient shadows;
+- Plus Jakarta Sans with system fallbacks;
+- Material Symbols with a text/icon fallback;
+- fixed topbar, 360px desktop sidebar at wide widths, and drawer navigation at 900px and below;
+- safe-area padding for mobile composers;
+- reduced-motion behavior.
+
+Do not introduce a second framework, build step, upload service, or persistence layer into this fixture.
+
+Completion criterion: the new state matches the reference hierarchy at desktop and remains usable at 320px through 1600px without viewport horizontal scrolling.
+
+## Accessibility and resilience
+
+- Give every icon-only control an accessible name and title where helpful.
+- Keep native buttons, labels, landmarks, and live regions.
+- Preserve Escape, focus return, and drawer containment behavior.
+- Keep CDN failures non-fatal; the shell and controls must remain usable.
+- Avoid a favicon request that produces a console 404 in direct-file checks.
+
+## Validation checklist
+
+Run the project’s available checks after every material change:
+
+1. Compile each inline script with Node's `vm.Script` or the equivalent project command.
+2. Parse the HTML and check for duplicate ids and unnamed icon-only buttons.
+3. Exercise every state in the state matrix: ready, empty, loading, success, error, disabled, search-empty, and chat-loading.
+4. Exercise the initial dashboard, file removal, file picker, drag/drop, prompt insertion, model menu, send/typing/response, and New Chat.
+5. Check the mobile drawer, Escape close, composer submission, and viewport overflow.
+6. Open `code.html` directly with `file://` as well as through a temporary local server.
+7. Stop temporary servers and remove staging/reference folders only after the main file is verified.
+
+Completion criterion: the dashboard has no page errors, the staged-state assertions pass, and the requested reference folder is gone only when removal is part of the task.

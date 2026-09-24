@@ -1,0 +1,4530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#f8f9ff">
+  <meta name="web_dashboard" name="shell-type">
+  <title>Aura — Intelligent workspace</title>
+  <link rel="icon" href="data:,">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+  <script>
+    window.tailwind = window.tailwind || {};
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            background: '#f8f9ff',
+            surface: '#f8f9ff',
+            'surface-container-lowest': '#ffffff',
+            'surface-container-low': '#eff4ff',
+            'surface-container': '#e5eeff',
+            'surface-container-high': '#dce9ff',
+            'on-surface': '#0b1c30',
+            'on-surface-variant': '#434655',
+            outline: '#737686',
+            'outline-variant': '#c3c6d7',
+            primary: '#2563eb',
+            'primary-container': '#2563eb',
+            'on-primary': '#ffffff',
+            secondary: '#565e74',
+            'surface-tint': '#2563eb'
+          },
+          borderRadius: {
+            sm: '0.25rem',
+            DEFAULT: '0.5rem',
+            md: '0.75rem',
+            lg: '1rem',
+            xl: '1.5rem',
+            full: '9999px'
+          }
+        }
+      }
+    };
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --canvas: #f1f6ff;
+      --surface: #f8f9ff;
+      --sidebar: #fbfdff;
+      --card: #ffffff;
+      --card-blue: #f5f8ff;
+      --text: #0f172a;
+      --text-strong: #111827;
+      --secondary: #475569;
+      --muted: #94a3b8;
+      --line: #dbe5f2;
+      --line-soft: #e8eef6;
+      --blue: #2563eb;
+      --blue-dark: #1d4ed8;
+      --blue-soft: #eff6ff;
+      --blue-container: #dbeafe;
+      --green: #15803d;
+      --shadow-card: 0 1px 2px rgba(15, 23, 42, .025), 0 3px 12px rgba(30, 64, 175, .035);
+      --shadow-float: 0 14px 32px rgba(30, 64, 175, .08), 0 2px 6px rgba(15, 23, 42, .035);
+      --topbar-height: 80px;
+      --sidebar-width: 360px;
+      --content-width: 1200px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-width: 320px;
+      background: var(--canvas);
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-width: 320px;
+      min-height: 100vh;
+      margin: 0;
+      overflow-x: hidden;
+      color: var(--text);
+      background: var(--canvas);
+      font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    button,
+    input,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    :focus-visible {
+      outline: 3px solid rgba(37, 99, 235, .34);
+      outline-offset: 2px;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .material-symbols-outlined {
+      display: inline-block;
+      font-family: 'Material Symbols Outlined', 'Segoe UI Symbol', sans-serif;
+      font-size: 20px;
+      font-style: normal;
+      font-weight: normal;
+      line-height: 1;
+      letter-spacing: normal;
+      text-transform: none;
+      white-space: nowrap;
+      word-wrap: normal;
+      direction: ltr;
+      -webkit-font-feature-settings: 'liga';
+      -webkit-font-smoothing: antialiased;
+      font-feature-settings: 'liga';
+      font-variation-settings: 'FILL' 0, 'wght' 450, 'GRAD' 0, 'opsz' 24;
+    }
+
+    .app-shell {
+      min-height: 100vh;
+    }
+
+    .topbar {
+      position: fixed;
+      z-index: 60;
+      inset: 0 0 auto;
+      height: var(--topbar-height);
+      background: rgba(255, 255, 255, .96);
+      border-bottom: 1px solid var(--line-soft);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      width: 100%;
+      height: 100%;
+      padding: 0 15px;
+    }
+
+    .brand-region {
+      display: flex;
+      flex: 0 0 var(--sidebar-width);
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      color: var(--text-strong);
+      text-decoration: none;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      flex: 0 0 28px;
+      color: var(--blue);
+      background: var(--blue-soft);
+      border: 1px solid #d8e7ff;
+      border-radius: 9px;
+    }
+
+    .brand-mark .material-symbols-outlined {
+      font-size: 18px;
+      font-variation-settings: 'FILL' 1, 'wght' 600, 'GRAD' 0, 'opsz' 20;
+    }
+
+    .brand-copy {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.05;
+      letter-spacing: -.02em;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .brand-copy small {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .mobile-menu-button {
+      display: none !important;
+    }
+
+    .icon-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      flex: 0 0 36px;
+      color: var(--secondary);
+      background: transparent;
+      border-radius: 10px;
+      transition: color .18s ease, background .18s ease, transform .18s ease;
+    }
+
+    .icon-button:hover {
+      color: var(--blue);
+      background: var(--blue-soft);
+    }
+
+    .icon-button:active {
+      transform: scale(.96);
+    }
+
+    .topbar-search {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 188px;
+      height: 36px;
+      padding: 0 10px;
+      color: var(--muted);
+      background: #f3f6fb;
+      border: 1px solid #edf1f6;
+      border-radius: 9px;
+      transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+
+    .topbar-search:focus-within {
+      background: #fff;
+      border-color: #b8d0fa;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, .1);
+    }
+
+    .topbar-search .material-symbols-outlined {
+      font-size: 18px;
+    }
+
+    .topbar-search input {
+      width: 100%;
+      min-width: 0;
+      padding: 0;
+      color: var(--text);
+      background: transparent;
+      border: 0;
+      outline: 0;
+      font-size: 12px;
+    }
+
+    .topbar-search input::placeholder {
+      color: var(--muted);
+    }
+
+    .shortcut-key {
+      padding: 2px 5px;
+      color: var(--muted);
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      font-size: 10px;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    .top-nav {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-left: 2px;
+    }
+
+    .nav-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 36px;
+      padding: 0 11px;
+      color: var(--secondary);
+      background: transparent;
+      border-radius: 9px;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: color .18s ease, background .18s ease;
+    }
+
+    .nav-button:hover,
+    .nav-button.is-active {
+      color: var(--blue);
+      background: var(--blue-soft);
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-left: auto;
+    }
+
+    .audio-mode {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      min-height: 36px;
+      padding: 0 11px;
+      color: var(--secondary);
+      background: #f2f6ff;
+      border: 1px solid #e4ecff;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: color .18s ease, background .18s ease, border-color .18s ease;
+    }
+
+    .audio-mode:hover {
+      color: var(--blue);
+      background: var(--blue-soft);
+      border-color: #cfe0ff;
+    }
+
+    .audio-mode .material-symbols-outlined {
+      color: var(--blue);
+      font-size: 18px;
+    }
+
+    .pro-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 7px 9px;
+      color: #1d4ed8;
+      background: #e5edff;
+      border: 1px solid #d5e1ff;
+      border-radius: 8px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+
+    .pro-badge .material-symbols-outlined {
+      font-size: 15px;
+    }
+
+    .profile-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      color: #fff;
+      background: linear-gradient(145deg, #426de6, #173eaa);
+      border: 2px solid #d7e5ff;
+      border-radius: 50%;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .sidebar {
+      position: fixed;
+      z-index: 50;
+      top: var(--topbar-height);
+      bottom: 0;
+      left: 0;
+      display: flex;
+      flex-direction: column;
+      width: var(--sidebar-width);
+      height: calc(100vh - var(--topbar-height));
+      background: var(--sidebar);
+      border-right: 1px solid var(--line-soft);
+      transform: translateX(0);
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .sidebar-scroll {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      min-height: 0;
+      padding: 18px 15px 14px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #d8e3f3 transparent;
+    }
+
+    .sidebar-scroll::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .sidebar-scroll::-webkit-scrollbar-thumb {
+      background: #d8e3f3;
+      border-radius: 99px;
+    }
+
+    .new-chat-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      min-height: 42px;
+      padding: 0 14px;
+      color: #fff;
+      background: var(--blue);
+      border-radius: 11px;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, .16);
+      font-size: 12px;
+      font-weight: 600;
+      transition: background .18s ease, transform .18s ease, box-shadow .18s ease;
+    }
+
+    .new-chat-button:hover {
+      background: var(--blue-dark);
+      box-shadow: 0 6px 16px rgba(37, 99, 235, .21);
+    }
+
+    .new-chat-button:active {
+      transform: scale(.985);
+    }
+
+    .new-chat-button .material-symbols-outlined {
+      font-size: 19px;
+    }
+
+    .sidebar-filter {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      height: 38px;
+      margin: 15px 0 21px;
+      padding: 0 10px;
+      color: var(--muted);
+      background: #f0f4fb;
+      border: 1px solid #e9eff7;
+      border-radius: 9px;
+      transition: background .18s ease, border-color .18s ease, box-shadow .18s ease;
+    }
+
+    .sidebar-filter:focus-within {
+      background: #fff;
+      border-color: #b8d0fa;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, .1);
+    }
+
+    .sidebar-filter .material-symbols-outlined {
+      font-size: 18px;
+    }
+
+    .sidebar-filter input {
+      width: 100%;
+      min-width: 0;
+      padding: 0;
+      color: var(--text);
+      background: transparent;
+      border: 0;
+      outline: 0;
+      font-size: 12px;
+    }
+
+    .sidebar-filter input::placeholder {
+      color: var(--muted);
+    }
+
+    .sidebar-section {
+      margin-top: 2px;
+    }
+
+    .sidebar-section + .sidebar-section {
+      margin-top: 24px;
+    }
+
+    .sidebar-section-title {
+      margin: 0 8px 9px;
+      color: #7c8ba0;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .1em;
+      line-height: 1.2;
+      text-transform: uppercase;
+    }
+
+    .session-list {
+      display: grid;
+      gap: 2px;
+    }
+
+    .session-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      min-height: 37px;
+      padding: 0 9px;
+      color: var(--secondary);
+      background: transparent;
+      border-radius: 8px;
+      text-align: left;
+      transition: color .18s ease, background .18s ease, transform .18s ease;
+    }
+
+    .session-row:hover {
+      color: var(--blue);
+      background: var(--blue-soft);
+    }
+
+    .session-row:active {
+      transform: translateX(1px);
+    }
+
+    .session-row .material-symbols-outlined {
+      width: 19px;
+      flex: 0 0 19px;
+      color: #63758e;
+      font-size: 18px;
+    }
+
+    .session-row span:last-child {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .session-row[data-session-kind='pinned'] .material-symbols-outlined {
+      color: var(--blue);
+    }
+
+    .session-empty,
+    .blueprint-empty {
+      padding: 13px 10px;
+      color: var(--muted);
+      border: 1px dashed var(--line);
+      border-radius: 9px;
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .integration-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 8px 9px;
+      color: var(--secondary);
+      background: transparent;
+      border-radius: 9px;
+      text-align: left;
+      transition: color .18s ease, background .18s ease;
+    }
+
+    .integration-row:hover {
+      color: var(--blue);
+      background: var(--blue-soft);
+    }
+
+    .integration-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      color: var(--blue);
+      background: var(--blue-soft);
+      border-radius: 8px;
+    }
+
+    .integration-icon .material-symbols-outlined {
+      font-size: 18px;
+    }
+
+    .integration-copy {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .integration-copy strong {
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .integration-copy span {
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .live-count {
+      padding: 4px 7px;
+      color: var(--blue);
+      background: #e4edff;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .sidebar-spacer {
+      flex: 1 1 auto;
+      min-height: 36px;
+    }
+
+    .sidebar-footer {
+      padding: 15px 8px 0;
+      border-top: 1px solid var(--line-soft);
+    }
+
+    .storage-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--secondary);
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .storage-label strong {
+      color: var(--text);
+      font-size: 10px;
+    }
+
+    .storage-track {
+      height: 5px;
+      margin: 8px 0 13px;
+      overflow: hidden;
+      background: #e2eaf6;
+      border-radius: 99px;
+    }
+
+    .storage-track span {
+      display: block;
+      width: 84%;
+      height: 100%;
+      background: var(--blue);
+      border-radius: inherit;
+    }
+
+    .license-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      color: var(--secondary);
+      font-size: 10px;
+    }
+
+    .license-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      color: var(--blue);
+      background: transparent;
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .license-link .material-symbols-outlined {
+      font-size: 15px;
+    }
+
+    .sidebar-scrim {
+      display: none;
+    }
+
+    .main-content {
+      min-height: 100vh;
+      margin-left: var(--sidebar-width);
+      padding-top: var(--topbar-height);
+    }
+
+    .content-wrap {
+      position: relative;
+      width: min(100%, var(--content-width));
+      margin: 0 auto;
+      padding: 34px 24px 28px;
+    }
+
+    .content-wrap::before {
+      position: absolute;
+      z-index: -1;
+      top: -125px;
+      left: 50%;
+      width: 720px;
+      height: 280px;
+      content: '';
+      background: radial-gradient(ellipse at center, rgba(219, 234, 254, .45), rgba(241, 246, 255, 0) 72%);
+      transform: translateX(-50%);
+      pointer-events: none;
+    }
+
+    .welcome-header {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .status-row {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      min-height: 25px;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 27px;
+      padding: 0 10px;
+      color: var(--blue);
+      background: #e9f0ff;
+      border-radius: 99px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      flex: 0 0 7px;
+      background: var(--blue);
+      border-radius: 50%;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, .1);
+    }
+
+    .status-separator {
+      color: #a4b1c3;
+      font-size: 12px;
+    }
+
+    .status-copy {
+      color: var(--secondary);
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .status-model-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      min-height: 28px;
+      padding: 0 4px;
+      color: var(--muted);
+      background: transparent;
+      border-radius: 6px;
+      font-size: 12px;
+      transition: color .18s ease, background .18s ease;
+    }
+
+    .status-model-button:hover {
+      color: var(--blue);
+      background: var(--blue-soft);
+    }
+
+    .status-model-button .material-symbols-outlined {
+      font-size: 17px;
+    }
+
+    .welcome-main {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .welcome-copy {
+      min-width: 0;
+    }
+
+    .welcome-copy h1 {
+      margin: 0;
+      color: var(--text-strong);
+      font-size: clamp(26px, 3vw, 31px);
+      font-weight: 700;
+      letter-spacing: -.045em;
+      line-height: 1.2;
+    }
+
+    .welcome-copy p {
+      margin: 8px 0 0;
+      color: #52627a;
+      font-size: 15px;
+      line-height: 1.55;
+    }
+
+    .welcome-tools {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      flex: 0 0 auto;
+      padding-bottom: 1px;
+    }
+
+    .date-pill,
+    .presets-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 38px;
+      padding: 0 12px;
+      color: var(--secondary);
+      background: rgba(255, 255, 255, .72);
+      border: 1px solid rgba(219, 229, 242, .9);
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .date-pill .material-symbols-outlined,
+    .presets-button .material-symbols-outlined {
+      color: var(--blue);
+      font-size: 17px;
+    }
+
+    .date-divider {
+      width: 1px;
+      height: 16px;
+      margin: 0 2px;
+      background: #cbd7e7;
+    }
+
+    .presets-button {
+      background: #fff;
+      font-weight: 600;
+      transition: color .18s ease, border-color .18s ease, background .18s ease;
+    }
+
+    .presets-button:hover {
+      color: var(--blue);
+      background: var(--blue-soft);
+      border-color: #c9dcff;
+    }
+
+    .composer-section {
+      width: 100%;
+      margin-top: 42px;
+    }
+
+    .composer-card {
+      overflow: hidden;
+      background: #fff;
+      border: 1px solid rgba(209, 222, 240, .9);
+      border-radius: 17px;
+      box-shadow: var(--shadow-float);
+      transition: box-shadow .2s ease, border-color .2s ease;
+    }
+
+    .composer-card:focus-within {
+      border-color: #b9d1ff;
+      box-shadow: 0 16px 38px rgba(30, 64, 175, .1), 0 0 0 3px rgba(37, 99, 235, .08);
+    }
+
+    .composer-context {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 18px 7px;
+    }
+
+    .composer-context-left,
+    .composer-context-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .context-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 25px;
+      padding: 0 9px;
+      color: var(--blue);
+      background: #eaf1ff;
+      border-radius: 7px;
+      font-size: 10px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .context-badge .material-symbols-outlined {
+      font-size: 15px;
+    }
+
+    .context-meta {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      color: var(--muted);
+      font-size: 10px;
+      white-space: nowrap;
+    }
+
+    .context-meta .material-symbols-outlined {
+      font-size: 15px;
+    }
+
+    .model-trigger {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      min-height: 30px;
+      padding: 0 9px;
+      color: var(--secondary);
+      background: #edf4ff;
+      border: 1px solid #dbe8ff;
+      border-radius: 8px;
+      font-size: 10px;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: color .18s ease, background .18s ease, border-color .18s ease;
+    }
+
+    .model-trigger:hover,
+    .model-trigger[aria-expanded='true'] {
+      color: var(--blue);
+      background: #e3edff;
+      border-color: #c7dafa;
+    }
+
+    .model-trigger .model-status-dot {
+      width: 6px;
+      height: 6px;
+      flex: 0 0 6px;
+      background: var(--blue);
+      border-radius: 50%;
+    }
+
+    .model-trigger .material-symbols-outlined {
+      color: #8190a5;
+      font-size: 16px;
+    }
+
+    .composer-textarea-wrap {
+      padding: 5px 18px 0;
+    }
+
+    .composer-textarea,
+    .chat-textarea {
+      display: block;
+      width: 100%;
+      min-height: 94px;
+      max-height: 120px;
+      padding: 6px 0;
+      color: var(--text);
+      background: transparent;
+      border: 0;
+      outline: 0;
+      resize: none;
+      font-size: 14px;
+      line-height: 1.7;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #cbd8ea transparent;
+    }
+
+    .composer-textarea::placeholder,
+    .chat-textarea::placeholder {
+      color: #7e8da5;
+      opacity: 1;
+    }
+
+    .composer-shelf {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 6px 13px 13px;
+    }
+
+    .shelf-tools,
+    .shelf-submit {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .shelf-tools {
+      min-width: 0;
+      color: var(--secondary);
+    }
+
+    .shelf-tool {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-height: 32px;
+      padding: 0 8px;
+      color: var(--secondary);
+      background: transparent;
+      border-radius: 8px;
+      font-size: 10px;
+      font-weight: 500;
+      transition: color .18s ease, background .18s ease;
+    }
+
+    .shelf-tool:hover {
+      color: var(--blue);
+      background: var(--blue-soft);
+    }
+
+    .shelf-tool .material-symbols-outlined {
+      color: var(--secondary);
+      font-size: 18px;
+    }
+
+    .shelf-tool:hover .material-symbols-outlined {
+      color: var(--blue);
+    }
+
+    .shelf-tool span:last-child {
+      white-space: nowrap;
+    }
+
+    .shelf-divider {
+      width: 1px;
+      height: 18px;
+      margin: 0 5px;
+      background: var(--line);
+    }
+
+    .shortcut-hint {
+      color: var(--muted);
+      font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 10px;
+      white-space: nowrap;
+    }
+
+    .send-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      flex: 0 0 40px;
+      color: #fff;
+      background: var(--blue);
+      border-radius: 50%;
+      box-shadow: 0 5px 12px rgba(37, 99, 235, .2);
+      transition: background .18s ease, box-shadow .18s ease, transform .18s ease, opacity .18s ease;
+    }
+
+    .send-button:hover:not(:disabled) {
+      background: var(--blue-dark);
+      box-shadow: 0 7px 15px rgba(37, 99, 235, .27);
+    }
+
+    .send-button:active:not(:disabled) {
+      transform: scale(.94);
+    }
+
+    .send-button:disabled {
+      color: #a7b4c8;
+      background: #e3eaf4;
+      box-shadow: none;
+      opacity: .88;
+    }
+
+    .send-button .material-symbols-outlined {
+      font-size: 20px;
+    }
+
+    .quick-ideas {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      min-width: 0;
+      margin-top: 14px;
+      padding: 0 2px 2px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .quick-ideas::-webkit-scrollbar,
+    .category-pills::-webkit-scrollbar {
+      display: none;
+    }
+
+    .quick-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      flex: 0 0 auto;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .quick-label .material-symbols-outlined {
+      font-size: 15px;
+    }
+
+    .prompt-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 29px;
+      flex: 0 0 auto;
+      padding: 0 10px;
+      color: var(--secondary);
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 99px;
+      font-size: 10px;
+      font-weight: 500;
+      white-space: nowrap;
+      transition: color .18s ease, background .18s ease, border-color .18s ease, transform .18s ease;
+    }
+
+    .prompt-chip:hover,
+    .prompt-chip:focus-visible {
+      color: var(--blue);
+      background: var(--blue-soft);
+      border-color: #bfd5ff;
+    }
+
+    .prompt-chip:active {
+      transform: translateY(1px);
+    }
+
+    .prompt-chip .material-symbols-outlined {
+      color: #d49b17;
+      font-size: 15px;
+    }
+
+    .prompt-chip:nth-of-type(3) .material-symbols-outlined {
+      color: #e26d4d;
+    }
+
+    .prompt-chip:nth-of-type(4) .material-symbols-outlined {
+      color: #3b82f6;
+    }
+
+    .prompt-chip:nth-of-type(5) .material-symbols-outlined {
+      color: #14b8a6;
+    }
+
+    .section-block {
+      margin-top: 37px;
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 15px;
+    }
+
+    .section-title-group {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      min-width: 0;
+    }
+
+    .section-title-group .material-symbols-outlined {
+      color: var(--blue);
+      font-size: 21px;
+    }
+
+    .section-heading h2 {
+      margin: 0;
+      color: var(--text-strong);
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: -.025em;
+      line-height: 1.35;
+      white-space: nowrap;
+    }
+
+    .section-heading p {
+      margin: 4px 0 0;
+      color: var(--secondary);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .view-all-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      flex: 0 0 auto;
+      padding: 4px 0;
+      color: var(--blue);
+      background: transparent;
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .view-all-button:hover {
+      text-decoration: underline;
+    }
+
+    .view-all-button .material-symbols-outlined {
+      font-size: 16px;
+    }
+
+    .resume-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .resume-card {
+      position: relative;
+      display: flex;
+      min-height: 232px;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 18px;
+      overflow: hidden;
+      color: var(--text);
+      background: var(--card);
+      border: 1px solid rgba(216, 227, 241, .95);
+      border-radius: 16px;
+      box-shadow: var(--shadow-card);
+      text-align: left;
+      transition: border-color .2s ease, background .2s ease, box-shadow .2s ease, transform .2s ease;
+    }
+
+    .resume-card:hover {
+      background: #fbfdff;
+      border-color: #c7d9f5;
+      box-shadow: 0 8px 22px rgba(30, 64, 175, .08);
+      transform: translateY(-2px);
+    }
+
+    .resume-card:active {
+      transform: translateY(0);
+    }
+
+    .resume-card.primary {
+      background: linear-gradient(135deg, #fff 48%, #f3f7ff);
+    }
+
+    .resume-card::after {
+      position: absolute;
+      top: -60px;
+      right: -54px;
+      width: 142px;
+      height: 142px;
+      content: '';
+      background: rgba(219, 234, 254, .38);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .resume-card-content,
+    .resume-card-footer {
+      position: relative;
+      z-index: 1;
+    }
+
+    .resume-card-content {
+      display: grid;
+      gap: 12px;
+    }
+
+    .resume-card-top,
+    .resume-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .resume-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 22px;
+      padding: 0 8px;
+      color: var(--secondary);
+      background: #edf3ff;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .resume-badge.active {
+      color: var(--blue);
+      background: #e3edff;
+    }
+
+    .resume-badge .status-dot {
+      width: 6px;
+      height: 6px;
+      flex-basis: 6px;
+      box-shadow: none;
+    }
+
+    .resume-time {
+      color: var(--muted);
+      font-size: 10px;
+      white-space: nowrap;
+    }
+
+    .resume-card h3 {
+      margin: 0;
+      color: var(--text-strong);
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: -.025em;
+      line-height: 1.3;
+    }
+
+    .resume-card p {
+      display: -webkit-box;
+      margin: 0;
+      overflow: hidden;
+      color: var(--secondary);
+      font-size: 12px;
+      line-height: 1.6;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+    }
+
+    .resume-card-footer {
+      color: var(--muted);
+      font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 10px;
+    }
+
+    .resume-card-footer span:first-child {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .resume-card-footer .material-symbols-outlined {
+      color: #75869e;
+      font-size: 16px;
+    }
+
+    .card-arrow {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 31px;
+      height: 31px;
+      flex: 0 0 31px;
+      color: #6680a2;
+      background: #e6effd;
+      border-radius: 50%;
+      transition: color .18s ease, background .18s ease, transform .18s ease;
+    }
+
+    .card-arrow .material-symbols-outlined {
+      font-size: 17px;
+    }
+
+    .resume-card:hover .card-arrow {
+      color: #fff;
+      background: var(--blue);
+      transform: translateX(2px);
+    }
+
+    .blueprint-section {
+      margin-top: 48px;
+    }
+
+    .blueprint-heading {
+      align-items: flex-end;
+      margin-bottom: 21px;
+    }
+
+    .blueprint-heading-left {
+      width: 42%;
+      min-width: 0;
+    }
+
+    .category-pills {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      max-width: 61%;
+      padding-bottom: 1px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .category-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 34px;
+      flex: 0 0 auto;
+      padding: 0 12px;
+      color: var(--secondary);
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 99px;
+      font-size: 10px;
+      font-weight: 600;
+      line-height: 1.15;
+      white-space: nowrap;
+      transition: color .18s ease, background .18s ease, border-color .18s ease, transform .18s ease;
+    }
+
+    .category-pill:hover {
+      color: var(--blue);
+      background: var(--blue-soft);
+      border-color: #c8dbfa;
+    }
+
+    .category-pill.is-active {
+      color: #fff;
+      background: var(--blue);
+      border-color: var(--blue);
+      box-shadow: 0 4px 10px rgba(37, 99, 235, .14);
+    }
+
+    .blueprint-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .prompt-starter-card {
+      display: flex;
+      min-height: 227px;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 18px;
+      color: var(--text);
+      background: #fff;
+      border: 1px solid rgba(216, 227, 241, .95);
+      border-radius: 16px;
+      box-shadow: var(--shadow-card);
+      text-align: left;
+      transition: background .2s ease, border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+    }
+
+    .prompt-starter-card:hover {
+      background: #fbfdff;
+      border-color: #c7d9f5;
+      box-shadow: 0 8px 22px rgba(30, 64, 175, .08);
+      transform: translateY(-2px);
+    }
+
+    .prompt-starter-card:active {
+      transform: translateY(0);
+    }
+
+    .starter-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .starter-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 35px;
+      height: 35px;
+      flex: 0 0 35px;
+      color: var(--blue);
+      background: #eaf1ff;
+      border-radius: 10px;
+      transition: transform .2s ease, background .2s ease;
+    }
+
+    .starter-icon .material-symbols-outlined {
+      font-size: 20px;
+    }
+
+    .prompt-starter-card:hover .starter-icon {
+      background: #dbeafe;
+      transform: scale(1.05);
+    }
+
+    .category-label {
+      display: inline-flex;
+      align-items: center;
+      min-height: 23px;
+      padding: 0 8px;
+      color: var(--secondary);
+      background: #edf3ff;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .category-label.blue {
+      color: var(--blue);
+      background: #e3edff;
+    }
+
+    .starter-card-copy {
+      display: grid;
+      gap: 6px;
+    }
+
+    .starter-card-copy h3 {
+      margin: 0;
+      color: var(--text-strong);
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: -.025em;
+      line-height: 1.3;
+    }
+
+    .starter-card-copy p {
+      display: -webkit-box;
+      margin: 0;
+      overflow: hidden;
+      color: var(--secondary);
+      font-size: 12px;
+      line-height: 1.6;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+    }
+
+    .starter-card-action {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 500;
+    }
+
+    .starter-card-action .material-symbols-outlined {
+      color: #7890ad;
+      font-size: 17px;
+      transition: color .18s ease, transform .18s ease;
+    }
+
+    .prompt-starter-card:hover .starter-card-action,
+    .prompt-starter-card:hover .starter-card-action .material-symbols-outlined {
+      color: var(--blue);
+    }
+
+    .prompt-starter-card:hover .starter-card-action .material-symbols-outlined {
+      transform: translateX(2px);
+    }
+
+    .blueprint-empty {
+      grid-column: 1 / -1;
+      min-height: 108px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .metrics-section {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 36px;
+      padding-bottom: 6px;
+    }
+
+    .metric-card {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      min-height: 74px;
+      padding: 13px 15px;
+      background: #fff;
+      border: 1px solid rgba(216, 227, 241, .95);
+      border-radius: 13px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .metric-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      flex: 0 0 38px;
+      color: var(--blue);
+      background: #e8f0ff;
+      border-radius: 9px;
+    }
+
+    .metric-icon .material-symbols-outlined {
+      font-size: 20px;
+    }
+
+    .metric-copy {
+      min-width: 0;
+    }
+
+    .metric-label {
+      display: block;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.4;
+    }
+
+    .metric-value {
+      display: block;
+      margin-top: 3px;
+      overflow: hidden;
+      color: var(--text-strong);
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: -.02em;
+      line-height: 1.4;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .metric-value small {
+      color: var(--secondary);
+      font-size: 10px;
+      font-weight: 500;
+    }
+
+    .staging-online-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 34px;
+      padding: 0 10px;
+      color: var(--blue);
+      background: #eaf1ff;
+      border: 1px solid #d8e6ff;
+      border-radius: 10px;
+      font-size: 10px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .staging-online-badge .status-dot {
+      width: 6px;
+      height: 6px;
+      flex-basis: 6px;
+      box-shadow: none;
+    }
+
+    .staging-online-badge small {
+      color: #59709b;
+      font-size: 9px;
+      font-weight: 600;
+    }
+
+    .staging-welcome-header {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .staging-status-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      min-height: 27px;
+    }
+
+    .staging-engine-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      min-height: 27px;
+      padding: 0 10px;
+      color: var(--blue);
+      background: #e9f0ff;
+      border-radius: 99px;
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .staging-engine-pill .status-dot {
+      width: 7px;
+      height: 7px;
+      flex-basis: 7px;
+      box-shadow: none;
+    }
+
+    .staging-workspace {
+      color: #60718a;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .staging-welcome-main {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .staging-welcome-main h1 {
+      margin: 0;
+      color: var(--text-strong);
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -.05em;
+      line-height: 1.2;
+    }
+
+    .staging-welcome-meta {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 12px;
+      color: var(--secondary);
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    .staging-model-summary {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 28px;
+      padding: 0 5px;
+      color: var(--secondary);
+      background: transparent;
+      border-radius: 7px;
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: color .18s ease, background .18s ease;
+    }
+
+    .staging-model-summary:hover,
+    .staging-model-summary[aria-expanded='true'] {
+      color: var(--blue);
+      background: var(--blue-soft);
+    }
+
+    .staging-model-summary .material-symbols-outlined {
+      color: var(--blue);
+      font-size: 17px;
+    }
+
+    .staging-sync-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .staging-sync-status .material-symbols-outlined {
+      color: var(--tertiary, #943700);
+      font-size: 17px;
+    }
+
+    .staging-composer {
+      width: 100%;
+      margin-top: 44px;
+    }
+
+    .staging-composer-card {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 18px 20px 20px;
+      background: #fff;
+      border: 1px solid rgba(209, 222, 240, .92);
+      border-radius: 18px;
+      box-shadow: var(--shadow-float);
+      transition: border-color .2s ease, box-shadow .2s ease;
+    }
+
+    .staging-composer-card:focus-within {
+      border-color: #b9d1ff;
+      box-shadow: 0 16px 38px rgba(30, 64, 175, .1), 0 0 0 3px rgba(37, 99, 235, .08);
+    }
+
+    .staging-composer-card[data-state='loading'] {
+      border-color: #c7dafa;
+    }
+
+    .staging-composer-card[data-state='error'] {
+      border-color: #f2b8b5;
+    }
+
+    .staging-state-message {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      min-height: 30px;
+      padding: 7px 10px;
+      color: #365486;
+      background: #eff4ff;
+      border: 1px solid #dbe8ff;
+      border-radius: 8px;
+      font-size: 10px;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+
+    .staging-state-message.is-error {
+      color: #93000a;
+      background: #fff1f0;
+      border-color: #ffd7d4;
+    }
+
+    .staging-state-message .material-symbols-outlined {
+      flex: 0 0 auto;
+      color: var(--blue);
+      font-size: 16px;
+    }
+
+    .staging-state-message.is-error .material-symbols-outlined {
+      color: #ba1a1a;
+    }
+
+    .staged-file.is-pending .staged-file-icon .material-symbols-outlined {
+      animation: staging-pulse 1.1s ease-in-out infinite;
+    }
+
+    @keyframes staging-pulse {
+      0%, 100% { opacity: .45; transform: scale(.92); }
+      50% { opacity: 1; transform: scale(1); }
+    }
+
+    .staged-file-tray {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: stretch;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .staged-file {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      width: 380px;
+      max-width: 100%;
+      min-height: 64px;
+      padding: 8px 10px 8px 12px;
+      background: #eff4ff;
+      border: 1px solid transparent;
+      border-radius: 13px;
+      transition: background .18s ease, border-color .18s ease, transform .18s ease;
+    }
+
+    .staged-file:hover {
+      background: #e5eeff;
+      border-color: #c7dafa;
+    }
+
+    .staged-file.is-removing {
+      opacity: 0;
+      transform: scale(.95);
+    }
+
+    .staged-file-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      flex: 0 0 34px;
+      color: var(--blue);
+      background: #d3e4fe;
+      border-radius: 9px;
+    }
+
+    .staged-file-icon.is-orange {
+      color: #943700;
+      background: #ffdbcd;
+    }
+
+    .staged-file-icon.is-violet {
+      color: #5c647a;
+      background: #dae2fd;
+    }
+
+    .staged-file-icon .material-symbols-outlined {
+      font-size: 20px;
+    }
+
+    .staged-file-copy {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .staged-file-name-row {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      min-width: 0;
+    }
+
+    .staged-file-name {
+      min-width: 0;
+      overflow: hidden;
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1.3;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .staged-file-tag {
+      flex: 0 0 auto;
+      padding: 3px 5px;
+      color: var(--blue);
+      background: #d3e4fe;
+      border-radius: 4px;
+      font-size: 9px;
+      font-weight: 600;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .staged-file-tag.is-orange {
+      color: #943700;
+      background: #ffdbcd;
+    }
+
+    .staged-file-tag.is-violet {
+      color: #5c647a;
+      background: #dae2fd;
+    }
+
+    .staged-file-meta {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      min-width: 0;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.3;
+    }
+
+    .staged-file-meta strong {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      min-width: 0;
+      overflow: hidden;
+      color: var(--blue);
+      font-size: 10px;
+      font-weight: 600;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .staged-file-meta strong.is-orange {
+      color: #943700;
+    }
+
+    .staged-file-meta .material-symbols-outlined {
+      flex: 0 0 auto;
+      font-size: 14px;
+    }
+
+    .staged-file-meta-dot {
+      width: 4px;
+      height: 4px;
+      flex: 0 0 4px;
+      background: #b8c5d8;
+      border-radius: 50%;
+    }
+
+    .staged-file-remove {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      flex: 0 0 30px;
+      color: var(--muted);
+      background: transparent;
+      border-radius: 50%;
+      transition: color .18s ease, background .18s ease;
+    }
+
+    .staged-file-remove:hover {
+      color: var(--text);
+      background: #d3e4fe;
+    }
+
+    .staged-file-remove .material-symbols-outlined {
+      font-size: 18px;
+    }
+
+    .staged-file-empty {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      min-height: 58px;
+      padding: 0 14px;
+      color: var(--secondary);
+      background: #f7faff;
+      border: 1px dashed #c7dafa;
+      border-radius: 13px;
+      font-size: 11px;
+    }
+
+    .staged-prompt-box {
+      padding: 17px 19px 18px;
+      background: #eff4ff;
+      border-radius: 14px;
+    }
+
+    .staged-prompt-box .composer-textarea {
+      min-height: 76px;
+      max-height: 120px;
+      padding: 0;
+      color: var(--text);
+      font-size: 16px;
+      line-height: 1.65;
+    }
+
+    .staged-drop-zone {
+      position: relative;
+      display: flex;
+      min-height: 158px;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      padding: 20px;
+      color: var(--secondary);
+      background: #e5eeff;
+      border: 1px solid transparent;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: background .18s ease, border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+    }
+
+    .staged-drop-zone:hover,
+    .staged-drop-zone:focus-visible,
+    .staged-drop-zone.is-dragging {
+      background: #dce9ff;
+      border-color: #b7cef9;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, .06);
+    }
+
+    .staged-drop-zone.is-dragging {
+      transform: scale(1.01);
+    }
+
+    .staged-drop-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      color: var(--blue);
+      background: #fff;
+      border-radius: 50%;
+      box-shadow: 0 2px 5px rgba(30, 64, 175, .08);
+    }
+
+    .staged-drop-icon .material-symbols-outlined {
+      font-size: 25px;
+    }
+
+    .staged-drop-copy {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      gap: 4px;
+      text-align: center;
+    }
+
+    .staged-drop-title {
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .staged-drop-description {
+      color: var(--secondary);
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .staged-file-input {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .staging-composer-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding-top: 2px;
+    }
+
+    .staging-footer-left {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .staging-status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 30px;
+      padding: 0 10px;
+      color: var(--secondary);
+      background: #eff4ff;
+      border-radius: 8px;
+      font-size: 10px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .staging-status-pill strong {
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .staging-status-pill .material-symbols-outlined {
+      color: var(--blue);
+      font-size: 17px;
+    }
+
+    .staging-status-pill.is-muted {
+      color: var(--muted);
+      background: transparent;
+      padding-left: 0;
+    }
+
+    .staging-status-pill.is-muted .material-symbols-outlined {
+      color: var(--muted);
+    }
+
+    .staging-footer-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 0 0 auto;
+    }
+
+    .staging-icon-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      color: var(--secondary);
+      background: transparent;
+      border-radius: 10px;
+      transition: color .18s ease, background .18s ease;
+    }
+
+    .staging-icon-button:hover {
+      color: var(--blue);
+      background: var(--blue-soft);
+    }
+
+    .staging-icon-button .material-symbols-outlined {
+      font-size: 21px;
+    }
+
+    .staging-send-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-width: 184px;
+      min-height: 54px;
+      padding: 0 20px;
+      color: #fff;
+      background: var(--blue);
+      border-radius: 13px;
+      box-shadow: 0 7px 15px rgba(37, 99, 235, .2);
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+      transition: background .18s ease, box-shadow .18s ease, transform .18s ease, opacity .18s ease;
+    }
+
+    .staging-send-button:hover:not(:disabled) {
+      background: var(--blue-dark);
+      box-shadow: 0 9px 18px rgba(37, 99, 235, .27);
+    }
+
+    .staging-send-button:active:not(:disabled) {
+      transform: scale(.97);
+    }
+
+    .staging-send-button:disabled {
+      color: #a7b4c8;
+      background: #e3eaf4;
+      box-shadow: none;
+    }
+
+    .staging-send-button .material-symbols-outlined {
+      font-size: 18px;
+    }
+
+    .staging-blueprints-section {
+      margin-top: 40px;
+    }
+
+    .staging-section-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .staging-section-heading h2 {
+      margin: 0;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .1em;
+      line-height: 1.3;
+      text-transform: uppercase;
+    }
+
+    .staging-section-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 0;
+      color: var(--blue);
+      background: transparent;
+      font-size: 10px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .staging-section-link:hover {
+      text-decoration: underline;
+    }
+
+    .staging-section-link .material-symbols-outlined {
+      font-size: 16px;
+    }
+
+    .staging-blueprint-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .prompt-starter-card.staged-blueprint-card {
+      min-height: 220px;
+      padding: 18px;
+      border-radius: 14px;
+    }
+
+    .staged-blueprint-card .staged-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .staged-card-category {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 0 9px;
+      color: var(--blue);
+      background: #e3edff;
+      border-radius: 99px;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .05em;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .staged-card-category.is-orange {
+      color: #943700;
+      background: #ffdbcd;
+    }
+
+    .staged-card-category.is-violet {
+      color: #5c647a;
+      background: #dae2fd;
+    }
+
+    .staged-card-outbound {
+      color: var(--muted);
+    }
+
+    .staged-card-outbound .material-symbols-outlined {
+      font-size: 19px;
+    }
+
+    .staged-card-copy {
+      display: grid;
+      gap: 7px;
+    }
+
+    .staged-card-copy h3 {
+      margin: 0;
+      color: var(--text-strong);
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -.025em;
+      line-height: 1.3;
+    }
+
+    .staged-card-copy p {
+      display: -webkit-box;
+      margin: 0;
+      overflow: hidden;
+      color: var(--secondary);
+      font-size: 12px;
+      line-height: 1.6;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+    }
+
+    .staged-card-footer {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 500;
+    }
+
+    .staged-card-footer .material-symbols-outlined {
+      font-size: 16px;
+    }
+
+    .staging-resume-section {
+      margin-top: 40px;
+    }
+
+    .staging-resume-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      gap: 18px;
+      min-height: 96px;
+      padding: 16px 18px;
+      color: var(--text);
+      background: #fff;
+      border: 1px solid rgba(216, 227, 241, .95);
+      border-radius: 14px;
+      box-shadow: var(--shadow-card);
+      text-align: left;
+      transition: background .18s ease, border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+    }
+
+    .staging-resume-card:hover {
+      background: #fbfdff;
+      border-color: #c7d9f5;
+      box-shadow: 0 8px 22px rgba(30, 64, 175, .08);
+      transform: translateY(-2px);
+    }
+
+    .staging-resume-main {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .staging-resume-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      flex: 0 0 42px;
+      color: var(--blue);
+      background: #e8f0ff;
+      border-radius: 12px;
+    }
+
+    .staging-resume-icon .material-symbols-outlined {
+      font-size: 23px;
+    }
+
+    .staging-resume-copy {
+      min-width: 0;
+    }
+
+    .staging-resume-title-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .staging-resume-title {
+      margin: 0;
+      color: var(--text-strong);
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: -.02em;
+      line-height: 1.35;
+    }
+
+    .staging-resume-badge {
+      padding: 4px 7px;
+      color: var(--blue);
+      background: #e3edff;
+      border-radius: 99px;
+      font-size: 9px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .staging-resume-description {
+      margin: 5px 0 0;
+      overflow: hidden;
+      color: var(--secondary);
+      font-size: 11px;
+      line-height: 1.5;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .staging-resume-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 0 0 auto;
+    }
+
+    .staging-resume-time {
+      color: var(--muted);
+      font-size: 10px;
+      white-space: nowrap;
+    }
+
+    .staging-reopen-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 34px;
+      padding: 0 12px;
+      color: var(--secondary);
+      background: #eff4ff;
+      border: 1px solid #e2ebfc;
+      border-radius: 9px;
+      font-size: 10px;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: color .18s ease, background .18s ease, border-color .18s ease;
+    }
+
+    .staging-reopen-button:hover {
+      color: var(--blue);
+      background: #e3edff;
+      border-color: #c7dafa;
+    }
+
+    .staging-reopen-button .material-symbols-outlined {
+      font-size: 17px;
+    }
+
+    .staging-blueprints-section .blueprint-empty {
+      min-height: 120px;
+    }
+
+    .chat-view {
+      min-height: calc(100vh - var(--topbar-height));
+    }
+
+    .chat-inner {
+      display: flex;
+      width: min(100%, 820px);
+      min-height: calc(100vh - var(--topbar-height));
+      flex-direction: column;
+      margin: 0 auto;
+      padding: 30px 24px 0;
+    }
+
+    .chat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 0 0 20px;
+      border-bottom: 1px solid rgba(219, 229, 242, .82);
+    }
+
+    .chat-header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .chat-header-copy {
+      min-width: 0;
+    }
+
+    .chat-header-copy h1 {
+      margin: 0;
+      overflow: hidden;
+      color: var(--text-strong);
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: -.03em;
+      line-height: 1.3;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .chat-header-copy p {
+      margin: 3px 0 0;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .chat-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex: 0 0 auto;
+    }
+
+    .chat-new-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 34px;
+      padding: 0 10px;
+      color: var(--blue);
+      background: #eaf1ff;
+      border: 1px solid #d8e6ff;
+      border-radius: 8px;
+      font-size: 10px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .chat-new-button:hover {
+      background: #dfeaff;
+    }
+
+    .chat-new-button .material-symbols-outlined {
+      font-size: 16px;
+    }
+
+    .chat-messages {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      gap: 18px;
+      min-height: 0;
+      padding: 25px 0 30px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #cad8ea transparent;
+    }
+
+    .message-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      max-width: 100%;
+      min-width: 0;
+    }
+
+    .message-wrapper {
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    .message-row.user {
+      justify-content: flex-end;
+    }
+
+    .message-avatar {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      flex: 0 0 28px;
+      color: var(--blue);
+      background: #e8f0ff;
+      border: 1px solid #d8e6ff;
+      border-radius: 9px;
+    }
+
+    .message-avatar .material-symbols-outlined {
+      font-size: 16px;
+    }
+
+    .message-bubble {
+      max-width: min(680px, calc(100% - 40px));
+      min-width: 0;
+      padding: 14px 16px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 5px 16px 16px 16px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .message-row.user .message-bubble {
+      color: #fff;
+      background: var(--blue);
+      border-color: var(--blue);
+      border-radius: 16px 5px 16px 16px;
+      box-shadow: 0 6px 15px rgba(37, 99, 235, .14);
+    }
+
+    .message-text {
+      margin: 0;
+      font-size: 13px;
+      line-height: 1.75;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .message-text + .message-text {
+      margin-top: 12px;
+    }
+
+    .message-code {
+      display: block;
+      margin: 14px 0 2px;
+      padding: 11px 13px;
+      overflow-x: auto;
+      color: #1e3a8a;
+      background: #f1f5f9;
+      border: 1px solid #e5eaf1;
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 11px;
+      line-height: 1.6;
+      white-space: pre;
+    }
+
+    .message-actions {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      margin-top: 11px;
+    }
+
+    .message-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 27px;
+      height: 27px;
+      color: var(--muted);
+      background: transparent;
+      border-radius: 6px;
+      transition: color .18s ease, background .18s ease;
+    }
+
+    .message-action:hover,
+    .message-action.is-active {
+      color: var(--blue);
+      background: var(--blue-soft);
+    }
+
+    .message-action .material-symbols-outlined {
+      font-size: 16px;
+    }
+
+    .message-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-left: 3px;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .message-status .material-symbols-outlined {
+      font-size: 14px;
+    }
+
+    .typing-bubble {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      min-width: 58px;
+      min-height: 44px;
+    }
+
+    .typing-dot {
+      width: 6px;
+      height: 6px;
+      background: #8fa2bd;
+      border-radius: 50%;
+      animation: typing 1.2s ease-in-out infinite;
+    }
+
+    .typing-dot:nth-child(2) {
+      animation-delay: .16s;
+    }
+
+    .typing-dot:nth-child(3) {
+      animation-delay: .32s;
+    }
+
+    @keyframes typing {
+      0%, 60%, 100% { opacity: .35; transform: translateY(0); }
+      30% { opacity: 1; transform: translateY(-3px); }
+    }
+
+    .chat-composer-dock {
+      position: sticky;
+      z-index: 5;
+      bottom: 0;
+      padding: 0 0 max(12px, env(safe-area-inset-bottom));
+      background: linear-gradient(180deg, rgba(241, 246, 255, 0), var(--canvas) 22%);
+    }
+
+    .chat-composer-card {
+      overflow: hidden;
+      background: #fff;
+      border: 1px solid rgba(209, 222, 240, .95);
+      border-radius: 16px;
+      box-shadow: 0 12px 28px rgba(30, 64, 175, .08);
+      transition: border-color .2s ease, box-shadow .2s ease;
+    }
+
+    .chat-composer-card:focus-within {
+      border-color: #b9d1ff;
+      box-shadow: 0 12px 30px rgba(30, 64, 175, .11), 0 0 0 3px rgba(37, 99, 235, .08);
+    }
+
+    .chat-composer-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 13px 0;
+    }
+
+    .chat-composer-top .model-trigger {
+      min-height: 27px;
+    }
+
+    .chat-composer-input {
+      padding: 3px 15px 0;
+    }
+
+    .chat-textarea {
+      min-height: 55px;
+      max-height: 120px;
+      padding: 7px 0 4px;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .chat-composer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 5px 10px 10px 13px;
+    }
+
+    .chat-composer-bottom .shelf-tool {
+      min-height: 29px;
+    }
+
+    .chat-helper {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 10px;
+      text-align: center;
+    }
+
+    .model-menu {
+      position: fixed;
+      z-index: 90;
+      width: 230px;
+      padding: 6px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      box-shadow: 0 16px 36px rgba(15, 23, 42, .14);
+    }
+
+    .model-menu-heading {
+      padding: 7px 9px 6px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .model-option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      width: 100%;
+      min-height: 40px;
+      padding: 0 9px;
+      color: var(--secondary);
+      background: transparent;
+      border-radius: 8px;
+      text-align: left;
+      transition: color .18s ease, background .18s ease;
+    }
+
+    .model-option:hover,
+    .model-option:focus-visible,
+    .model-option.is-selected {
+      color: var(--blue);
+      background: var(--blue-soft);
+    }
+
+    .model-option-copy {
+      display: grid;
+      gap: 2px;
+    }
+
+    .model-option-copy strong {
+      color: var(--text);
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .model-option:hover .model-option-copy strong,
+    .model-option.is-selected .model-option-copy strong {
+      color: var(--blue);
+    }
+
+    .model-option-copy span {
+      color: var(--muted);
+      font-size: 9px;
+    }
+
+    .model-option > .material-symbols-outlined {
+      color: var(--blue);
+      font-size: 16px;
+    }
+
+    .toast-region {
+      position: fixed;
+      z-index: 120;
+      right: 20px;
+      bottom: 20px;
+      display: grid;
+      gap: 8px;
+      width: min(340px, calc(100vw - 32px));
+      pointer-events: none;
+    }
+
+    .toast {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      padding: 11px 13px;
+      color: #fff;
+      background: #172554;
+      border: 1px solid rgba(147, 197, 253, .25);
+      border-radius: 11px;
+      box-shadow: 0 12px 28px rgba(15, 23, 42, .2);
+      font-size: 11px;
+      line-height: 1.45;
+      animation: toast-in .2s ease both;
+    }
+
+    .toast .material-symbols-outlined {
+      flex: 0 0 auto;
+      color: #93c5fd;
+      font-size: 17px;
+    }
+
+    .toast.is-leaving {
+      animation: toast-out .2s ease both;
+    }
+
+    @keyframes toast-in {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes toast-out {
+      from { opacity: 1; transform: translateY(0); }
+      to { opacity: 0; transform: translateY(8px); }
+    }
+
+    .mobile-sidebar-close {
+      display: none;
+    }
+
+    @media (max-width: 1500px) {
+      .staging-online-badge {
+        display: none;
+      }
+    }
+
+    @media (min-width: 901px) and (max-width: 1160px) {
+      .staging-online-badge {
+        display: none;
+      }
+
+      .staging-blueprint-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .resume-grid,
+      .blueprint-grid,
+      .metrics-section {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .metrics-section .metric-card:last-child {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (max-width: 1160px) {
+      .top-nav .nav-button {
+        padding: 0 8px;
+      }
+
+      .top-nav .nav-button > span:not(.material-symbols-outlined) {
+        display: none;
+      }
+
+      .top-nav .nav-button .material-symbols-outlined {
+        font-size: 19px;
+      }
+
+      .topbar-search {
+        width: 155px;
+      }
+    }
+
+    @media (max-width: 900px) {
+      :root {
+        --topbar-height: 64px;
+      }
+
+      .topbar-inner {
+        gap: 10px;
+        padding: 0 16px;
+      }
+
+      .brand-region {
+        flex: 0 0 auto;
+        gap: 7px;
+      }
+
+      .mobile-menu-button {
+        display: inline-flex !important;
+      }
+
+      .topbar-search,
+      .top-nav {
+        display: none;
+      }
+
+      .top-actions {
+        gap: 7px;
+      }
+
+      .audio-mode {
+        min-height: 34px;
+        padding: 0 9px;
+      }
+
+      .audio-mode span:not(.material-symbols-outlined) {
+        display: none;
+      }
+
+      .sidebar {
+        z-index: 80;
+        top: 0;
+        width: min(310px, calc(100vw - 44px));
+        height: 100vh;
+        box-shadow: 14px 0 36px rgba(15, 23, 42, .13);
+        transform: translateX(-102%);
+      }
+
+      .sidebar-scroll {
+        padding-top: 68px;
+      }
+
+      .mobile-sidebar-close {
+        position: absolute;
+        top: 14px;
+        right: 12px;
+        display: inline-flex;
+      }
+
+      .sidebar-scrim {
+        position: fixed;
+        z-index: 70;
+        inset: 0;
+        display: block;
+        background: rgba(15, 23, 42, .28);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity .25s ease;
+      }
+
+      .app-shell.sidebar-open .sidebar {
+        transform: translateX(0);
+      }
+
+      .app-shell.sidebar-open .sidebar-scrim {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .app-shell.sidebar-open {
+        overflow: hidden;
+      }
+
+      .main-content {
+        margin-left: 0;
+      }
+
+      .content-wrap {
+        padding-top: 34px;
+      }
+
+      .staging-welcome-main {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .staging-welcome-meta {
+        width: 100%;
+        justify-content: flex-start;
+      }
+
+      .staging-composer {
+        margin-top: 30px;
+      }
+
+      .staging-blueprint-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .chat-inner {
+        min-height: calc(100vh - var(--topbar-height));
+        padding-top: 24px;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .brand-copy small,
+      .pro-badge {
+        display: none;
+      }
+
+      .brand-copy {
+        font-size: 14px;
+      }
+
+      .top-actions {
+        margin-left: auto;
+      }
+
+      .profile-button {
+        width: 32px;
+        height: 32px;
+      }
+
+      .content-wrap {
+        padding: 28px 16px 24px;
+      }
+
+      .staging-welcome-main h1 {
+        font-size: 27px;
+      }
+
+      .staging-workspace {
+        font-size: 10px;
+      }
+
+      .staging-welcome-meta {
+        gap: 8px;
+        font-size: 10px;
+      }
+
+      .staging-composer {
+        margin-top: 26px;
+      }
+
+      .staging-composer-card {
+        gap: 12px;
+        padding: 14px;
+        border-radius: 15px;
+      }
+
+      .staged-file {
+        width: 100%;
+      }
+
+      .staged-prompt-box {
+        padding: 14px;
+      }
+
+      .staged-prompt-box .composer-textarea {
+        font-size: 14px;
+      }
+
+      .staged-drop-zone {
+        min-height: 140px;
+      }
+
+      .staging-composer-footer {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .staging-footer-actions {
+        justify-content: flex-end;
+      }
+
+      .staging-send-button {
+        flex: 1;
+        min-width: 0;
+        min-height: 48px;
+      }
+
+      .staging-blueprints-section,
+      .staging-resume-section {
+        margin-top: 30px;
+      }
+
+      .staging-blueprint-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .staging-resume-card {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 15px;
+      }
+
+      .staging-resume-actions {
+        width: 100%;
+        justify-content: space-between;
+        padding-left: 56px;
+      }
+
+      .staging-resume-description {
+        white-space: normal;
+      }
+
+      .welcome-main {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .welcome-copy h1 {
+        font-size: 27px;
+      }
+
+      .welcome-copy p {
+        font-size: 13px;
+      }
+
+      .welcome-tools {
+        width: 100%;
+        justify-content: space-between;
+        gap: 8px;
+      }
+
+      .date-pill,
+      .presets-button {
+        min-height: 35px;
+        padding: 0 9px;
+        font-size: 10px;
+      }
+
+      .date-pill {
+        flex: 1;
+        justify-content: center;
+      }
+
+      .presets-button {
+        flex: 0 0 auto;
+      }
+
+      .composer-section {
+        margin-top: 28px;
+      }
+
+      .composer-context {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+        padding: 12px 14px 5px;
+      }
+
+      .composer-context-left,
+      .composer-context-right {
+        width: 100%;
+      }
+
+      .composer-context-right {
+        justify-content: space-between;
+      }
+
+      .composer-textarea-wrap {
+        padding: 5px 14px 0;
+      }
+
+      .composer-shelf {
+        align-items: flex-end;
+        padding: 5px 9px 10px;
+      }
+
+      .shelf-tools {
+        max-width: calc(100% - 54px);
+        overflow: hidden;
+      }
+
+      .shelf-tool {
+        padding: 0 6px;
+      }
+
+      .shelf-tool span:last-child {
+        display: none;
+      }
+
+      .shelf-divider {
+        margin: 0 2px;
+      }
+
+      .shortcut-hint {
+        display: none;
+      }
+
+      .quick-ideas {
+        margin-top: 12px;
+      }
+
+      .section-block,
+      .blueprint-section {
+        margin-top: 30px;
+      }
+
+      .section-heading {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 9px;
+      }
+
+      .section-heading .view-all-button {
+        align-self: flex-end;
+        margin-top: -27px;
+      }
+
+      .blueprint-heading {
+        align-items: flex-start;
+        margin-bottom: 14px;
+      }
+
+      .blueprint-heading-left {
+        width: 100%;
+      }
+
+      .category-pills {
+        max-width: 100%;
+        width: 100%;
+      }
+
+      .resume-grid,
+      .blueprint-grid,
+      .metrics-section {
+        grid-template-columns: 1fr;
+      }
+
+      .resume-card,
+      .prompt-starter-card {
+        min-height: 0;
+      }
+
+      .metrics-section {
+        gap: 10px;
+      }
+
+      .chat-inner {
+        width: 100%;
+        padding: 19px 16px 0;
+      }
+
+      .chat-header {
+        padding-bottom: 15px;
+      }
+
+      .chat-header-copy h1 {
+        font-size: 16px;
+      }
+
+      .chat-header-copy p {
+        font-size: 10px;
+      }
+
+      .chat-new-button span:not(.material-symbols-outlined) {
+        display: none;
+      }
+
+      .chat-new-button {
+        width: 34px;
+        justify-content: center;
+        padding: 0;
+      }
+
+      .message-bubble {
+        max-width: calc(100% - 36px);
+        padding: 12px 13px;
+      }
+
+      .message-text {
+        font-size: 12px;
+      }
+
+      .toast-region {
+        right: 16px;
+        bottom: 16px;
+      }
+    }
+
+    @media (max-width: 430px) {
+      .date-pill {
+        justify-content: flex-start;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+
+      .date-pill .date-divider,
+      .date-pill .date-time {
+        display: none;
+      }
+
+      .welcome-tools {
+        align-items: center;
+      }
+
+      .presets-button {
+        padding: 0 10px;
+      }
+
+      .composer-context-left {
+        overflow: hidden;
+      }
+
+      .context-meta {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .chat-header-actions {
+        gap: 2px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="app" class="app-shell">
+    <header class="topbar" aria-label="Application header">
+      <div class="topbar-inner">
+        <div class="brand-region">
+          <button id="sidebar-toggle" class="icon-button mobile-menu-button" type="button" data-action="toggle-sidebar" aria-label="Open workspace navigation" aria-controls="sidebar" aria-expanded="false">
+            <span class="material-symbols-outlined" aria-hidden="true">menu</span>
+          </button>
+          <a class="brand" href="#dashboard-view" data-action="go-dashboard" aria-label="Aura home">
+            <span class="brand-mark" aria-hidden="true"><span class="material-symbols-outlined">flare</span></span>
+            <span class="brand-copy">Aura AI<small>intelligence</small></span>
+          </a>
+        </div>
+        <span class="staging-online-badge" aria-label="Workspace online"><span class="status-dot" aria-hidden="true"></span>Online <small>v3.5 Pro</small></span>
+        <label class="topbar-search" for="global-search">
+          <span class="material-symbols-outlined" aria-hidden="true">search</span>
+          <input id="global-search" type="search" placeholder="Search" autocomplete="off" data-action="global-search" aria-label="Search prompt blueprints">
+          <span class="shortcut-key" aria-hidden="true">⌘K</span>
+        </label>
+        <nav class="top-nav" aria-label="Primary navigation">
+          <button class="nav-button" type="button" data-action="nav-chat"><span class="material-symbols-outlined" aria-hidden="true">forum</span><span>Chat</span></button>
+          <button class="nav-button" type="button" data-action="nav-mcp"><span class="material-symbols-outlined" aria-hidden="true">hub</span><span>Explore &amp; MCP</span></button>
+          <button class="nav-button" type="button" data-action="nav-canvas"><span class="material-symbols-outlined" aria-hidden="true">dashboard</span><span>Canvas</span></button>
+          <button class="nav-button" type="button" data-action="nav-analytics"><span class="material-symbols-outlined" aria-hidden="true">monitoring</span><span>Analytics</span></button>
+          <button class="nav-button" type="button" data-action="nav-settings"><span class="material-symbols-outlined" aria-hidden="true">settings</span><span>Settings</span></button>
+        </nav>
+        <div class="top-actions">
+          <button class="audio-mode" type="button" data-action="audio-mode" aria-label="Open audio mode">
+            <span class="material-symbols-outlined" aria-hidden="true">graphic_eq</span><span>Audio Mode</span>
+          </button>
+          <span class="pro-badge"><span class="material-symbols-outlined" aria-hidden="true">workspace_premium</span>Pro</span>
+          <button class="profile-button" type="button" data-action="profile" aria-label="Open Alex profile">A</button>
+        </div>
+      </div>
+    </header>
+
+    <aside id="sidebar" class="sidebar" aria-label="Workspace navigation">
+      <button class="icon-button mobile-sidebar-close" type="button" data-action="close-sidebar" aria-label="Close workspace navigation">
+        <span class="material-symbols-outlined" aria-hidden="true">close</span>
+      </button>
+      <div class="sidebar-scroll">
+        <button class="new-chat-button" type="button" data-action="new-chat">
+          <span class="material-symbols-outlined" aria-hidden="true">add</span><span>New Chat</span>
+        </button>
+        <label class="sidebar-filter" for="session-filter">
+          <span class="material-symbols-outlined" aria-hidden="true">tune</span>
+          <input id="session-filter" type="search" placeholder="Filter chats..." autocomplete="off" aria-label="Filter chats">
+        </label>
+        <div class="sidebar-section">
+          <h2 class="sidebar-section-title">Pinned</h2>
+          <div class="session-list" data-session-list="pinned">
+            <button class="session-row" type="button" data-action="resume-session" data-session-row data-session-kind="pinned" data-session-name="Product Roadmap Q3 2025">
+              <span class="material-symbols-outlined" aria-hidden="true">push_pin</span><span>Product Roadmap Q3 2025</span>
+            </button>
+            <button class="session-row" type="button" data-action="resume-session" data-session-row data-session-kind="pinned" data-session-name="System Architecture Refactor">
+              <span class="material-symbols-outlined" aria-hidden="true">push_pin</span><span>System Architecture Refactor</span>
+            </button>
+          </div>
+        </div>
+        <div class="sidebar-section">
+          <h2 class="sidebar-section-title">Recent sessions</h2>
+          <div class="session-list" data-session-list="recent">
+            <button class="session-row" type="button" data-action="resume-session" data-session-row data-session-kind="recent" data-session-name="FastAPI MCP Integration">
+              <span class="material-symbols-outlined" aria-hidden="true">chat_bubble_outline</span><span>FastAPI MCP Integration</span>
+            </button>
+            <button class="session-row" type="button" data-action="resume-session" data-session-row data-session-kind="recent" data-session-name="Landing Page Copy Audit">
+              <span class="material-symbols-outlined" aria-hidden="true">chat_bubble_outline</span><span>Landing Page Copy Audit</span>
+            </button>
+            <button class="session-row" type="button" data-action="resume-session" data-session-row data-session-kind="recent" data-session-name="Quarterly Budget Modeling">
+              <span class="material-symbols-outlined" aria-hidden="true">chat_bubble_outline</span><span>Quarterly Budget Modeling</span>
+            </button>
+          </div>
+          <p id="session-empty" class="session-empty" hidden>No matching conversations.</p>
+        </div>
+        <div class="sidebar-section">
+          <h2 class="sidebar-section-title">Integrations</h2>
+          <button class="integration-row" type="button" data-action="mcp">
+            <span class="integration-icon"><span class="material-symbols-outlined" aria-hidden="true">hub</span></span>
+            <span class="integration-copy"><strong>MCP Servers</strong><span>4 live connections</span></span>
+            <span class="live-count">4 live</span>
+          </button>
+        </div>
+        <div class="sidebar-spacer"></div>
+        <footer class="sidebar-footer">
+          <div class="storage-label"><span>Workspace Storage</span><strong>8.4 / 10 GB</strong></div>
+          <div class="storage-track" aria-label="84 percent of workspace storage used"><span></span></div>
+          <div class="license-row"><button class="license-link" type="button" data-action="license"><span class="material-symbols-outlined" aria-hidden="true">verified_user</span>Team Pro License</button><button class="license-link" type="button" data-action="manage-plan">Manage</button></div>
+        </footer>
+      </div>
+    </aside>
+    <button id="sidebar-scrim" class="sidebar-scrim" type="button" data-action="close-sidebar" aria-label="Close navigation overlay" tabindex="-1"></button>
+
+    <main id="main-content" class="main-content" tabindex="-1">
+      <section id="dashboard-view" class="dashboard-view" aria-labelledby="dashboard-title">
+        <div class="content-wrap">
+          <header class="staging-welcome-header">
+            <div class="staging-status-row">
+              <span class="staging-engine-pill"><span class="status-dot" aria-hidden="true"></span>Multimodal Context Engine</span>
+              <span class="staging-workspace">Workspace: Infrastructure &amp; BI</span>
+            </div>
+            <div class="staging-welcome-main">
+              <h1 id="dashboard-title">Good evening, Alex</h1>
+              <div class="staging-welcome-meta">
+                <button class="staging-model-summary" type="button" data-action="toggle-model" data-model-trigger aria-label="Change active model" aria-haspopup="listbox" aria-controls="model-menu" aria-expanded="false">
+                  <span class="material-symbols-outlined" aria-hidden="true">memory</span><span data-model-label>Claude 3.7 Sonnet Thinking</span>
+                </button>
+                <span class="staging-sync-status"><span class="material-symbols-outlined" aria-hidden="true">offline_bolt</span>MCP Synced (4 Active)</span>
+              </div>
+            </div>
+          </header>
+
+          <section class="staging-composer" aria-label="Ask Aura about staged files">
+            <div id="staging-composer-card" class="staging-composer-card" data-state="ready">
+              <div id="staged-file-tray" class="staged-file-tray" aria-label="Staged files" aria-live="polite"></div>
+              <div class="staged-prompt-box">
+                <textarea id="prompt-input" class="composer-textarea" rows="3" maxlength="4000" placeholder="Ask questions about these staged files or write instructions..." aria-label="Message Aura">Review this deployment configuration against our Q3 metrics and check for security vulnerabilities.</textarea>
+              </div>
+              <div id="staged-drop-zone" class="staged-drop-zone" tabindex="0" role="button" aria-label="Drop additional files here or browse files" aria-describedby="staged-drop-description">
+                <span class="staged-drop-icon"><span class="material-symbols-outlined" aria-hidden="true">cloud_upload</span></span>
+                <span class="staged-drop-copy"><span id="staged-drop-title" class="staged-drop-title">Drop additional files here</span><span id="staged-drop-description" class="staged-drop-description">Code, CSV, Docs, or Images up to 50MB • Multi-file drag enabled</span></span>
+                <input id="staged-file-input" class="staged-file-input" type="file" multiple aria-label="Choose files to stage">
+              </div>
+              <div id="staged-state-message" class="staging-state-message" role="status" aria-live="polite" hidden></div>
+              <div class="staging-composer-footer">
+                <div class="staging-footer-left">
+                  <span class="staging-status-pill"><span class="material-symbols-outlined" aria-hidden="true">inventory_2</span><strong id="staged-count-text">3 files attached</strong><span id="staged-context-text">(2.3 MB / 100 MB context)</span></span>
+                  <span id="staged-linter-pill" class="staging-status-pill"><span class="material-symbols-outlined" aria-hidden="true">shield</span><span id="staged-state-label">Docker &amp; Security linter ready</span></span>
+                  <span class="staging-status-pill is-muted"><span class="material-symbols-outlined" aria-hidden="true">bolt</span>Streaming Mode</span>
+                </div>
+                <div class="staging-footer-actions">
+                  <button class="staging-icon-button" type="button" data-action="add-web-link" aria-label="Add web link reference" title="Add web link reference"><span class="material-symbols-outlined" aria-hidden="true">link</span></button>
+                  <button class="staging-icon-button" type="button" data-action="mcp" aria-label="MCP Tools picker" title="MCP Tools picker"><span class="material-symbols-outlined" aria-hidden="true">extension</span></button>
+                  <button id="send-prompt-btn" class="staging-send-button" type="button" data-action="send-prompt" aria-label="Send prompt"><span>Send Prompt</span><span class="material-symbols-outlined" aria-hidden="true">keyboard_return</span></button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section id="blueprints" class="staging-blueprints-section" aria-labelledby="blueprints-title">
+            <div class="staging-section-heading">
+              <h2 id="blueprints-title">Context Blueprints</h2>
+              <button class="staging-section-link" type="button" data-action="view-sessions">View all 28 sessions <span class="material-symbols-outlined" aria-hidden="true">chevron_right</span></button>
+            </div>
+            <div class="staging-blueprint-grid">
+              <button class="prompt-starter-card staged-blueprint-card" type="button" data-action="use-prompt" data-category="code" data-search="infrastructure kubernetes compose deployment ports secrets replicas" data-prompt="Cross-check container ports, environment secret mappings, and replica failovers for this deployment configuration.">
+                <span class="staged-card-top"><span class="staged-card-category">Infrastructure</span><span class="staged-card-outbound"><span class="material-symbols-outlined" aria-hidden="true">arrow_outward</span></span></span>
+                <span class="staged-card-copy"><h3>Kubernetes vs Compose Audit</h3><p>Cross-check container ports, environment secret mappings, and replica failovers.</p></span>
+                <span class="staged-card-footer"><span class="material-symbols-outlined" aria-hidden="true">auto_fix_high</span>1-click Blueprint</span>
+              </button>
+              <button class="prompt-starter-card staged-blueprint-card" type="button" data-action="use-prompt" data-category="analysis" data-search="data synthesis predictive churn cohort regression canvas charts" data-prompt="Generate multi-variable cohort regression charts directly in an interactive Canvas artifact.">
+                <span class="staged-card-top"><span class="staged-card-category is-orange">Data Synthesis</span><span class="staged-card-outbound"><span class="material-symbols-outlined" aria-hidden="true">arrow_outward</span></span></span>
+                <span class="staged-card-copy"><h3>Predictive Churn Correlations</h3><p>Generate multi-variable cohort regression charts directly in an interactive Canvas artifact.</p></span>
+                <span class="staged-card-footer"><span class="material-symbols-outlined" aria-hidden="true">query_stats</span>Auto-generates Charts</span>
+              </button>
+              <button class="prompt-starter-card staged-blueprint-card" type="button" data-action="use-prompt" data-category="mcp" data-search="security threat surface png authentication architecture owasp linter" data-prompt="Simulate attack vectors from the PNG auth diagram against OWASP Top 10 vulnerabilities.">
+                <span class="staged-card-top"><span class="staged-card-category is-violet">Security</span><span class="staged-card-outbound"><span class="material-symbols-outlined" aria-hidden="true">arrow_outward</span></span></span>
+                <span class="staged-card-copy"><h3>Threat Surface Modeling</h3><p>Simulate attack vectors from the PNG auth diagram against OWASP Top 10 vulnerabilities.</p></span>
+                <span class="staged-card-footer"><span class="material-symbols-outlined" aria-hidden="true">security</span>MCP Linter Hook</span>
+              </button>
+              <p id="blueprint-empty" class="blueprint-empty" hidden>No blueprints match that search. Try another phrase or category.</p>
+            </div>
+          </section>
+
+          <section class="staging-resume-section" aria-labelledby="resume-title">
+            <div class="staging-section-heading">
+              <h2 id="resume-title">Resume Recent Session</h2>
+              <button class="staging-section-link" type="button" data-action="view-sessions">View all 28 sessions <span class="material-symbols-outlined" aria-hidden="true">chevron_right</span></button>
+            </div>
+            <button class="staging-resume-card" type="button" data-action="resume-session" data-session-prompt="Continue the production telemetry and Redis cluster outage analysis.">
+              <span class="staging-resume-main">
+                <span class="staging-resume-icon"><span class="material-symbols-outlined" aria-hidden="true">account_tree</span></span>
+                <span class="staging-resume-copy"><span class="staging-resume-title-row"><h3 class="staging-resume-title">Production Telemetry &amp; Redis Cluster Outage</h3><span class="staging-resume-badge">Canvas v2</span></span><span class="staging-resume-description">Last response analyzed latency spike down to connection pool starvation at 14:02 UTC.</span></span>
+              </span>
+              <span class="staging-resume-actions"><span class="staging-resume-time">18m ago</span><span class="staging-reopen-button">Reopen <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span></span></span>
+            </button>
+          </section>
+        </div>
+      </section>
+
+      <section id="chat-view" class="chat-view" aria-labelledby="chat-title" hidden>
+        <div class="chat-inner">
+          <header class="chat-header">
+            <div class="chat-header-left">
+              <button class="icon-button" type="button" data-action="back-dashboard" aria-label="Back to dashboard"><span class="material-symbols-outlined" aria-hidden="true">arrow_back</span></button>
+              <div class="chat-header-copy"><h1 id="chat-title">New conversation</h1><p><span data-model-label>Claude 3.7 Sonnet Thinking</span> · Local mock session</p></div>
+            </div>
+            <div class="chat-header-actions">
+              <button class="model-trigger" type="button" data-action="toggle-model" data-model-trigger aria-haspopup="listbox" aria-controls="model-menu" aria-expanded="false"><span class="model-status-dot" aria-hidden="true"></span><span data-model-label>Claude 3.7 Sonnet Thinking</span><span class="material-symbols-outlined" aria-hidden="true">unfold_more</span></button>
+              <button class="chat-new-button" type="button" data-action="new-chat" aria-label="Start a new chat"><span class="material-symbols-outlined" aria-hidden="true">add</span><span>New chat</span></button>
+            </div>
+          </header>
+          <div id="chat-messages" class="chat-messages" role="log" aria-live="polite" aria-label="Conversation transcript"></div>
+          <div class="chat-composer-dock">
+            <div class="chat-composer-card">
+              <div class="chat-composer-top"><span class="context-meta"><span class="material-symbols-outlined" aria-hidden="true">bolt</span>Direct Canvas Engine</span><span class="context-meta"><span class="material-symbols-outlined" aria-hidden="true">lock</span>Memory-only session</span></div>
+              <div class="chat-composer-input"><textarea id="chat-input" class="chat-textarea" rows="2" maxlength="4000" placeholder="Continue the conversation..." aria-label="Continue the conversation"></textarea></div>
+              <div class="chat-composer-bottom"><div class="shelf-tools"><button class="shelf-tool" type="button" data-action="attach" aria-label="Attach a file"><span class="material-symbols-outlined" aria-hidden="true">attach_file</span><span>Attach</span></button><button class="shelf-tool" type="button" data-action="audio" aria-label="Launch a voice session"><span class="material-symbols-outlined" aria-hidden="true">graphic_eq</span><span>Audio</span></button></div><div class="shelf-submit"><span class="shortcut-hint">⌘ + Return</span><button id="chat-send-btn" class="send-button" type="button" data-action="send-chat" aria-label="Send message" disabled><span class="material-symbols-outlined" aria-hidden="true">arrow_upward</span></button></div></div>
+            </div>
+            <p class="chat-helper">Aura is in preview mode. Responses stay in this browser tab.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="model-menu" class="model-menu" role="listbox" aria-label="Choose an AI model" hidden>
+    <div class="model-menu-heading">Active model</div>
+    <button class="model-option is-selected" type="button" role="option" aria-selected="true" data-action="select-model" data-model="Claude 3.7 Sonnet Thinking">
+      <span class="model-option-copy"><strong>Claude 3.7 Sonnet Thinking</strong><span>Balanced · 200k context</span></span><span class="material-symbols-outlined" aria-hidden="true">check</span>
+    </button>
+    <button class="model-option" type="button" role="option" aria-selected="false" data-action="select-model" data-model="Claude 3.7 Haiku">
+      <span class="model-option-copy"><strong>Claude 3.7 Haiku</strong><span>Fast · 200k context</span></span><span class="material-symbols-outlined" aria-hidden="true"></span>
+    </button>
+    <button class="model-option" type="button" role="option" aria-selected="false" data-action="select-model" data-model="Claude 3.7 Opus">
+      <span class="model-option-copy"><strong>Claude 3.7 Opus</strong><span>Deep reasoning · 200k context</span></span><span class="material-symbols-outlined" aria-hidden="true"></span>
+    </button>
+  </div>
+
+  <div id="toast-region" class="toast-region" role="status" aria-live="polite" aria-atomic="true"></div>
+
+  <script>
+    (function () {
+      'use strict';
+
+      const initialStagedFiles = [
+        { id: 'compose-prod', name: 'docker-compose.prod.yml', type: 'YAML', sizeLabel: '24 KB', sizeBytes: 24 * 1024, icon: 'terminal', tone: 'is-blue', status: 'Syntax Parsed', statusIcon: 'check_circle' },
+        { id: 'q3-churn', name: 'q3_churn_analysis.csv', type: 'DATA', sizeLabel: '1.4 MB', sizeBytes: Math.round(1.4 * 1024 * 1024), icon: 'table_chart', tone: 'is-orange', status: '12,450 rows', statusIcon: 'dataset' },
+        { id: 'auth-architecture', name: 'auth_architecture_diagram.png', type: 'PNG', sizeLabel: '840 KB', sizeBytes: 840 * 1024, icon: 'image', tone: 'is-violet', status: 'OCR Ready', statusIcon: 'document_scanner' }
+      ];
+
+      const state = {
+        view: 'dashboard',
+        draft: '',
+        activeModel: 'Claude 3.7 Sonnet Thinking',
+        category: 'all',
+        searchQuery: '',
+        sidebarOpen: false,
+        messages: [],
+        busy: false,
+        responseTimer: null,
+        toastTimer: null,
+        lastDrawerFocus: null,
+        modelTrigger: null,
+        responseCount: 0,
+        stagedFiles: initialStagedFiles.map((file) => ({ ...file })),
+        stagingState: 'ready',
+        stagingError: '',
+        stagingTimer: null
+      };
+
+      const app = document.getElementById('app');
+      const dashboardView = document.getElementById('dashboard-view');
+      const chatView = document.getElementById('chat-view');
+      const promptInput = document.getElementById('prompt-input');
+      const chatInput = document.getElementById('chat-input');
+      const sendPromptButton = document.getElementById('send-prompt-btn');
+      const chatSendButton = document.getElementById('chat-send-btn');
+      const chatMessages = document.getElementById('chat-messages');
+      const modelMenu = document.getElementById('model-menu');
+      const sidebar = document.getElementById('sidebar');
+      const sidebarToggle = document.getElementById('sidebar-toggle');
+      const sessionFilter = document.getElementById('session-filter');
+      const sessionEmpty = document.getElementById('session-empty');
+      const globalSearch = document.getElementById('global-search');
+      const blueprintEmpty = document.getElementById('blueprint-empty');
+      const toastRegion = document.getElementById('toast-region');
+      const stagedFileTray = document.getElementById('staged-file-tray');
+      const stagedFileInput = document.getElementById('staged-file-input');
+      const stagedDropZone = document.getElementById('staged-drop-zone');
+      const stagedCountText = document.getElementById('staged-count-text');
+      const stagedContextText = document.getElementById('staged-context-text');
+      const stagedLinterPill = document.getElementById('staged-linter-pill');
+      const stagedStateLabel = document.getElementById('staged-state-label');
+      const stagedStateMessage = document.getElementById('staged-state-message');
+      const stagedDropTitle = document.getElementById('staged-drop-title');
+      const stagingComposerCard = document.getElementById('staging-composer-card');
+      const modelOptions = Array.from(document.querySelectorAll('[data-action="select-model"]'));
+
+      function createElement(tag, className, text) {
+        const element = document.createElement(tag);
+        if (className) element.className = className;
+        if (text !== undefined && text !== null) element.textContent = text;
+        return element;
+      }
+
+      function icon(name) {
+        const element = createElement('span', 'material-symbols-outlined', name);
+        element.setAttribute('aria-hidden', 'true');
+        return element;
+      }
+
+      function formatBytes(bytes) {
+        if (!bytes) return '0 KB';
+        if (bytes < 1024) return `${bytes} B`;
+        const units = ['KB', 'MB', 'GB'];
+        let value = bytes / 1024;
+        let unitIndex = 0;
+        while (value >= 1024 && unitIndex < units.length - 1) {
+          value /= 1024;
+          unitIndex += 1;
+        }
+        const digits = value >= 10 ? 0 : 1;
+        const roundedValue = unitIndex === 1 ? Math.ceil(value * 10) / 10 : Number(value.toFixed(digits));
+        return `${roundedValue.toFixed(digits)} ${units[unitIndex]}`;
+      }
+
+      function clearStagingTimer() {
+        if (state.stagingTimer) {
+          window.clearTimeout(state.stagingTimer);
+          state.stagingTimer = null;
+        }
+      }
+
+      function renderStagingState() {
+        const hasFiles = state.stagedFiles.length > 0;
+        const labels = {
+          ready: 'Docker & Security linter ready',
+          loading: 'Parsing staged context…',
+          success: 'Context ready for analysis',
+          error: 'Context needs attention',
+          empty: 'Add a file to start'
+        };
+        if (stagingComposerCard) stagingComposerCard.dataset.state = state.stagingState;
+        if (stagedDropZone) stagedDropZone.setAttribute('aria-busy', String(state.stagingState === 'loading'));
+        if (stagedDropTitle) stagedDropTitle.textContent = hasFiles ? 'Drop additional files here' : 'Drop files to start a context';
+        if (stagedStateLabel) stagedStateLabel.textContent = labels[state.stagingState] || labels.ready;
+        if (!stagedStateMessage) return;
+        const message = state.stagingState === 'loading' ? 'Reading file metadata…' : state.stagingState === 'error' ? state.stagingError : '';
+        stagedStateMessage.replaceChildren();
+        stagedStateMessage.classList.toggle('is-error', state.stagingState === 'error');
+        if (message) {
+          stagedStateMessage.appendChild(icon(state.stagingState === 'error' ? 'error' : 'hourglass_top'));
+          stagedStateMessage.appendChild(createElement('span', '', message));
+          stagedStateMessage.hidden = false;
+        } else {
+          stagedStateMessage.hidden = true;
+        }
+      }
+
+      function setStagingState(nextState, message) {
+        state.stagingState = nextState;
+        state.stagingError = nextState === 'error' ? (message || 'Some files could not be staged.') : '';
+        renderStagingState();
+      }
+
+      function getFileType(name) {
+        const extension = String(name || '').split('.').pop().toUpperCase();
+        if (['YAML', 'YML', 'JSON', 'CSV', 'PNG', 'JPG', 'JPEG', 'MD', 'DOCX', 'TXT'].includes(extension)) return extension;
+        return 'FILE';
+      }
+
+      function getFileIcon(type) {
+        if (['PNG', 'JPG', 'JPEG'].includes(type)) return 'image';
+        if (['CSV', 'XLSX', 'XLS'].includes(type)) return 'table_chart';
+        if (['DOCX', 'TXT', 'MD'].includes(type)) return 'description';
+        return 'terminal';
+      }
+
+      function getFileTone(type) {
+        if (['PNG', 'JPG', 'JPEG'].includes(type)) return 'is-violet';
+        if (['CSV', 'XLSX', 'XLS'].includes(type)) return 'is-orange';
+        return 'is-blue';
+      }
+
+      function createStagedFile(file) {
+        const chip = createElement('div', `staged-file${file.status === 'Processing' ? ' is-pending' : ''}`);
+        chip.dataset.fileId = file.id;
+
+        const fileIcon = createElement('span', `staged-file-icon ${file.tone || 'is-blue'}`);
+        fileIcon.appendChild(icon(file.icon || 'insert_drive_file'));
+        chip.appendChild(fileIcon);
+
+        const copy = createElement('span', 'staged-file-copy');
+        const nameRow = createElement('span', 'staged-file-name-row');
+        nameRow.appendChild(createElement('span', 'staged-file-name', file.name));
+        nameRow.appendChild(createElement('span', `staged-file-tag ${file.tone || 'is-blue'}`, file.type));
+        copy.appendChild(nameRow);
+
+        const meta = createElement('span', 'staged-file-meta');
+        meta.appendChild(createElement('span', '', file.sizeLabel || formatBytes(file.sizeBytes)));
+        meta.appendChild(createElement('span', 'staged-file-meta-dot'));
+        const status = createElement('strong', file.tone === 'is-orange' ? 'is-orange' : '', file.status || 'Ready to inspect');
+        if (file.statusIcon) status.appendChild(icon(file.statusIcon));
+        meta.appendChild(status);
+        copy.appendChild(meta);
+        chip.appendChild(copy);
+
+        const remove = createElement('button', 'staged-file-remove');
+        remove.type = 'button';
+        remove.dataset.action = 'remove-staged-file';
+        remove.dataset.fileId = file.id;
+        remove.setAttribute('aria-label', `Remove ${file.name}`);
+        remove.title = 'Remove attachment';
+        remove.appendChild(icon('close'));
+        chip.appendChild(remove);
+        return chip;
+      }
+
+      function updateStagedSummary() {
+        const totalBytes = state.stagedFiles.reduce((total, file) => total + (file.sizeBytes || 0), 0);
+        if (stagedCountText) stagedCountText.textContent = `${state.stagedFiles.length} ${state.stagedFiles.length === 1 ? 'file' : 'files'} attached`;
+        if (stagedContextText) stagedContextText.textContent = `(${formatBytes(totalBytes)} / 100 MB context)`;
+        if (stagedLinterPill) stagedLinterPill.hidden = !state.stagedFiles.some((file) => /ya?ml|json|docker|csv|tsx?|py|go|rs|js$/i.test(file.name));
+        renderStagingState();
+      }
+
+      function renderStagedFiles() {
+        if (!stagedFileTray) return;
+        if (!state.stagedFiles.length && state.stagingState !== 'loading' && state.stagingState !== 'error') state.stagingState = 'empty';
+        stagedFileTray.replaceChildren();
+        if (!state.stagedFiles.length) {
+          const empty = createElement('span', 'staged-file-empty');
+          empty.appendChild(icon('inventory_2'));
+          empty.appendChild(createElement('span', '', 'No files staged. Drop a file above to add it to this context.'));
+          stagedFileTray.appendChild(empty);
+        } else {
+          state.stagedFiles.forEach((file) => stagedFileTray.appendChild(createStagedFile(file)));
+        }
+        updateStagedSummary();
+      }
+
+      function stageFiles(fileList) {
+        clearStagingTimer();
+        const incoming = Array.from(fileList || []);
+        const candidates = [];
+        let skipped = 0;
+        incoming.forEach((file) => {
+          if (!file || !file.name || state.stagedFiles.some((item) => item.name === file.name) || file.size > 50 * 1024 * 1024) {
+            skipped += 1;
+            return;
+          }
+          candidates.push(file);
+        });
+        if (!candidates.length) {
+          const message = skipped ? 'Some files were skipped because they are already staged or over 50 MB.' : 'Choose a file to add to this context.';
+          setStagingState('error', message);
+          renderStagedFiles();
+          showToast(message, skipped ? 'error' : 'info');
+          state.stagingTimer = window.setTimeout(() => {
+            state.stagingTimer = null;
+            if (state.stagingState === 'error') {
+              setStagingState(state.stagedFiles.length ? 'ready' : 'empty');
+              renderStagedFiles();
+            }
+          }, 3200);
+          return;
+        }
+        const pendingIds = [];
+        candidates.forEach((file, index) => {
+          const type = getFileType(file.name);
+          const id = `staged-${Date.now()}-${index}`;
+          pendingIds.push(id);
+          state.stagedFiles.push({
+            id,
+            name: file.name,
+            type,
+            sizeLabel: formatBytes(file.size || 0),
+            sizeBytes: file.size || 0,
+            icon: getFileIcon(type),
+            tone: getFileTone(type),
+            status: 'Processing',
+            statusIcon: 'hourglass_top'
+          });
+        });
+        setStagingState('loading');
+        renderStagedFiles();
+        showToast(`Reading metadata for ${pendingIds.length} ${pendingIds.length === 1 ? 'file' : 'files'}…`, 'hourglass_top');
+        state.stagingTimer = window.setTimeout(() => {
+          state.stagingTimer = null;
+          state.stagedFiles = state.stagedFiles.map((file) => pendingIds.includes(file.id) ? { ...file, status: 'Ready to inspect', statusIcon: 'check_circle' } : file);
+          setStagingState('success');
+          renderStagedFiles();
+          showToast(`${pendingIds.length} ${pendingIds.length === 1 ? 'file' : 'files'} ready for context.`, 'check_circle');
+        }, 520);
+        if (skipped) showToast(`${skipped} ${skipped === 1 ? 'file was' : 'files were'} skipped or already staged.`, 'info');
+      }
+
+      function removeStagedFile(fileId) {
+        const file = state.stagedFiles.find((item) => item.id === fileId);
+        if (!file) return;
+        state.stagedFiles = state.stagedFiles.filter((item) => item.id !== fileId);
+        if (!state.stagedFiles.length) {
+          clearStagingTimer();
+          setStagingState('empty');
+        } else if (state.stagingState === 'error') {
+          setStagingState('ready');
+        }
+        renderStagedFiles();
+        showToast(`${file.name} removed from context.`, 'close');
+      }
+
+      function openStagedFilePicker() {
+        if (stagedFileInput) stagedFileInput.click();
+      }
+
+      function showToast(message, iconName) {
+        const toast = createElement('div', 'toast');
+        toast.appendChild(icon(iconName || 'info'));
+        toast.appendChild(createElement('span', '', message));
+        toastRegion.appendChild(toast);
+        window.setTimeout(() => {
+          toast.classList.add('is-leaving');
+          window.setTimeout(() => toast.remove(), 220);
+        }, 3200);
+      }
+
+      function autoResize(textarea) {
+        if (!textarea) return;
+        textarea.style.height = 'auto';
+        textarea.style.height = `${Math.min(textarea.scrollHeight, 120)}px`;
+        textarea.style.overflowY = textarea.scrollHeight > 120 ? 'auto' : 'hidden';
+      }
+
+      function updateDraftState() {
+        state.draft = promptInput ? promptInput.value : '';
+        if (sendPromptButton) sendPromptButton.disabled = !state.draft.trim() || state.busy;
+      }
+
+      function updateChatDraftState() {
+        if (chatSendButton) chatSendButton.disabled = !chatInput || !chatInput.value.trim() || state.busy;
+        autoResize(chatInput);
+      }
+
+      function updateModelLabels() {
+        document.querySelectorAll('[data-model-label]').forEach((label) => {
+          label.textContent = state.activeModel;
+        });
+        modelOptions.forEach((option) => {
+          const selected = option.dataset.model === state.activeModel;
+          option.classList.toggle('is-selected', selected);
+          option.setAttribute('aria-selected', String(selected));
+          const check = option.querySelector('.material-symbols-outlined:last-child');
+          if (check) check.textContent = selected ? 'check' : '';
+        });
+      }
+
+      function positionModelMenu(trigger) {
+        if (!modelMenu || !trigger) return;
+        const rect = trigger.getBoundingClientRect();
+        const menuWidth = 230;
+        const gap = 7;
+        let left = rect.right - menuWidth;
+        let top = rect.bottom + gap;
+        if (left < 12) left = 12;
+        if (left + menuWidth > window.innerWidth - 12) left = window.innerWidth - menuWidth - 12;
+        if (top + modelMenu.offsetHeight > window.innerHeight - 12) top = rect.top - modelMenu.offsetHeight - gap;
+        modelMenu.style.left = `${Math.max(12, left)}px`;
+        modelMenu.style.top = `${Math.max(12, top)}px`;
+      }
+
+      function closeModelMenu(restoreFocus) {
+        if (!modelMenu || modelMenu.hidden) return;
+        modelMenu.hidden = true;
+        document.querySelectorAll('[data-model-trigger]').forEach((trigger) => trigger.setAttribute('aria-expanded', 'false'));
+        if (restoreFocus && state.modelTrigger) state.modelTrigger.focus();
+        state.modelTrigger = null;
+      }
+
+      function openModelMenu(trigger) {
+        if (!modelMenu || !trigger) return;
+        state.modelTrigger = trigger;
+        modelMenu.hidden = false;
+        document.querySelectorAll('[data-model-trigger]').forEach((item) => item.setAttribute('aria-expanded', String(item === trigger)));
+        positionModelMenu(trigger);
+        window.requestAnimationFrame(() => {
+          const selected = modelMenu.querySelector('.model-option.is-selected') || modelMenu.querySelector('.model-option');
+          if (selected) selected.focus();
+        });
+      }
+
+      function toggleModelMenu(trigger) {
+        if (!modelMenu) return;
+        if (modelMenu.hidden) openModelMenu(trigger);
+        else closeModelMenu(false);
+      }
+
+      function setView(view) {
+        state.view = view;
+        const chatActive = view === 'chat';
+        dashboardView.hidden = chatActive;
+        chatView.hidden = !chatActive;
+        document.body.classList.toggle('chat-active', chatActive);
+        if (chatActive) {
+          window.setTimeout(() => {
+            chatInput.focus();
+            renderChatMessages();
+          }, 0);
+        } else {
+          updateDraftState();
+        }
+      }
+
+      function clearResponseTimer() {
+        if (state.responseTimer) {
+          window.clearTimeout(state.responseTimer);
+          state.responseTimer = null;
+        }
+      }
+
+      function startNewChat() {
+        clearResponseTimer();
+        clearStagingTimer();
+        state.messages = [];
+        state.busy = false;
+        state.responseCount = 0;
+        state.draft = '';
+        state.stagingState = state.stagedFiles.length ? 'ready' : 'empty';
+        state.stagingError = '';
+        if (promptInput) promptInput.value = '';
+        if (chatInput) chatInput.value = '';
+        renderStagedFiles();
+        updateDraftState();
+        updateChatDraftState();
+        renderChatMessages();
+        closeModelMenu(false);
+        closeSidebar();
+        setView('dashboard');
+        window.setTimeout(() => promptInput && promptInput.focus(), 0);
+        showToast('A fresh Aura canvas is ready.', 'add');
+      }
+
+      function makeAssistantMessage(prompt, variant) {
+        state.responseCount += 1;
+        const opening = variant ? 'Here is a tightened follow-up pass with a few practical refinements.' : 'Here is a practical starting point I would use for this request.';
+        return {
+          id: `assistant-${Date.now()}-${state.responseCount}`,
+          role: 'assistant',
+          text: [
+            `${opening} I would keep the first move small, make the important state explicit, and then measure the behavior before broadening the surface.`,
+            'For a resilient workspace flow, separate the input boundary from the work itself, keep failures recoverable, and give the person a clear next action at every step.',
+            variant ? 'The follow-up keeps the same boundaries while tightening observability and the handoff points.' : 'A small, observable prototype gives the team a dependable place to test the next iteration.'
+          ],
+          code: "const stream = new EventSource('/api/stream');\nstream.onmessage = ({ data }) => render(data);",
+          rating: null,
+          variant: Boolean(variant)
+        };
+      }
+
+      function renderAssistantContent(bubble, message) {
+        const paragraphs = Array.isArray(message.text) ? message.text : [message.text];
+        paragraphs.forEach((text) => bubble.appendChild(createElement('p', 'message-text', text)));
+        if (message.code) bubble.appendChild(createElement('code', 'message-code', message.code));
+      }
+
+      function createMessageAction(iconName, label, action, messageId, rating) {
+        const button = createElement('button', 'message-action');
+        button.type = 'button';
+        button.dataset.action = action;
+        button.dataset.messageId = messageId;
+        if (rating) button.dataset.rating = rating;
+        button.setAttribute('aria-label', label);
+        button.title = label;
+        button.appendChild(icon(iconName));
+        return button;
+      }
+
+      function renderAssistantMessage(message) {
+        const row = createElement('div', 'message-row assistant');
+        row.dataset.messageId = message.id;
+        const avatar = createElement('div', 'message-avatar');
+        avatar.appendChild(icon('auto_awesome'));
+        row.appendChild(avatar);
+        const wrapper = createElement('div', 'message-wrapper');
+        const bubble = createElement('article', 'message-bubble');
+        renderAssistantContent(bubble, message);
+        const actions = createElement('div', 'message-actions');
+        actions.appendChild(createMessageAction('content_copy', 'Copy response', 'copy-message', message.id));
+        actions.appendChild(createMessageAction('refresh', 'Regenerate response', 'regenerate-message', message.id));
+        const up = createMessageAction('thumb_up', 'Like response', 'rate-message', message.id, 'up');
+        const down = createMessageAction('thumb_down', 'Dislike response', 'rate-message', message.id, 'down');
+        if (message.rating === 'up') up.classList.add('is-active');
+        if (message.rating === 'down') down.classList.add('is-active');
+        actions.appendChild(up);
+        actions.appendChild(down);
+        actions.appendChild(createElement('span', 'message-status', 'Local response'));
+        bubble.appendChild(actions);
+        wrapper.appendChild(bubble);
+        row.appendChild(wrapper);
+        return row;
+      }
+
+      function renderUserMessage(message) {
+        const row = createElement('div', 'message-row user');
+        row.dataset.messageId = message.id;
+        const bubble = createElement('article', 'message-bubble');
+        bubble.appendChild(createElement('p', 'message-text', message.text));
+        row.appendChild(bubble);
+        return row;
+      }
+
+      function renderTypingMessage() {
+        const row = createElement('div', 'message-row assistant');
+        row.setAttribute('aria-label', 'Aura is composing a response');
+        const avatar = createElement('div', 'message-avatar');
+        avatar.appendChild(icon('auto_awesome'));
+        const bubble = createElement('article', 'message-bubble typing-bubble');
+        bubble.appendChild(createElement('span', 'typing-dot'));
+        bubble.appendChild(createElement('span', 'typing-dot'));
+        bubble.appendChild(createElement('span', 'typing-dot'));
+        row.appendChild(avatar);
+        row.appendChild(bubble);
+        return row;
+      }
+
+      function renderChatMessages() {
+        if (!chatMessages) return;
+        chatMessages.replaceChildren();
+        state.messages.forEach((message) => {
+          chatMessages.appendChild(message.role === 'user' ? renderUserMessage(message) : renderAssistantMessage(message));
+        });
+        if (state.busy) chatMessages.appendChild(renderTypingMessage());
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+
+      function queueMockResponse(prompt, regenerate) {
+        clearResponseTimer();
+        state.busy = true;
+        if (regenerate) {
+          const lastIndex = state.messages.map((message) => message.role).lastIndexOf('assistant');
+          if (lastIndex >= 0) state.messages.splice(lastIndex, 1);
+        }
+        updateDraftState();
+        updateChatDraftState();
+        renderChatMessages();
+        state.responseTimer = window.setTimeout(() => {
+          state.responseTimer = null;
+          state.messages.push(makeAssistantMessage(prompt, regenerate));
+          state.busy = false;
+          renderChatMessages();
+          updateDraftState();
+          updateChatDraftState();
+        }, 920);
+      }
+
+      function submitPrompt(source) {
+        const textarea = source === 'chat' ? chatInput : promptInput;
+        const text = textarea ? textarea.value.trim() : '';
+        if (!text || state.busy) return;
+        if (textarea) textarea.value = '';
+        state.draft = source === 'dashboard' ? '' : state.draft;
+        if (source === 'dashboard') {
+          autoResize(textarea);
+          updateDraftState();
+        } else {
+          updateChatDraftState();
+        }
+        state.messages.push({ id: `user-${Date.now()}`, role: 'user', text });
+        setView('chat');
+        queueMockResponse(text, false);
+      }
+
+      function usePrompt(prompt) {
+        if (!prompt) return;
+        closeSidebar(false);
+        setView('dashboard');
+        if (promptInput) {
+          promptInput.value = prompt;
+          promptInput.focus();
+          autoResize(promptInput);
+          updateDraftState();
+          promptInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        showToast('Blueprint loaded into the composer.', 'auto_awesome');
+      }
+
+      function applySessionFilter() {
+        const query = sessionFilter ? sessionFilter.value.trim().toLowerCase() : '';
+        const rows = Array.from(document.querySelectorAll('[data-session-row]'));
+        let visibleCount = 0;
+        rows.forEach((row) => {
+          const name = (row.dataset.sessionName || row.textContent || '').toLowerCase();
+          const matches = !query || name.includes(query);
+          row.hidden = !matches;
+          if (matches) visibleCount += 1;
+        });
+        if (sessionEmpty) sessionEmpty.hidden = visibleCount !== 0;
+      }
+
+      function applyBlueprintFilters() {
+        const query = state.searchQuery.trim().toLowerCase();
+        const cards = Array.from(document.querySelectorAll('.prompt-starter-card'));
+        let visibleCount = 0;
+        cards.forEach((card) => {
+          const categoryMatch = state.category === 'all' || card.dataset.category === state.category;
+          const text = `${card.dataset.search || ''} ${card.textContent || ''}`.toLowerCase();
+          const searchMatch = !query || text.includes(query);
+          const visible = categoryMatch && searchMatch;
+          card.hidden = !visible;
+          if (visible) visibleCount += 1;
+        });
+        if (blueprintEmpty) blueprintEmpty.hidden = visibleCount !== 0;
+      }
+
+      function setCategory(category) {
+        state.category = category;
+        document.querySelectorAll('[data-action="filter-category"]').forEach((button) => {
+          const active = button.dataset.category === category;
+          button.classList.toggle('is-active', active);
+          button.setAttribute('aria-pressed', String(active));
+        });
+        applyBlueprintFilters();
+      }
+
+      function syncSidebarAccessibility() {
+        const mobile = window.innerWidth <= 900;
+        const hidden = mobile && !state.sidebarOpen;
+        sidebar.setAttribute('aria-hidden', String(hidden));
+        if ('inert' in sidebar) sidebar.inert = hidden;
+      }
+
+      function closeSidebar(restoreFocus) {
+        if (!state.sidebarOpen) return;
+        state.sidebarOpen = false;
+        app.classList.remove('sidebar-open');
+        sidebarToggle.setAttribute('aria-expanded', 'false');
+        syncSidebarAccessibility();
+        if (restoreFocus !== false && state.lastDrawerFocus) state.lastDrawerFocus.focus();
+        state.lastDrawerFocus = null;
+      }
+
+      function openSidebar() {
+        state.sidebarOpen = true;
+        state.lastDrawerFocus = document.activeElement;
+        app.classList.add('sidebar-open');
+        sidebarToggle.setAttribute('aria-expanded', 'true');
+        syncSidebarAccessibility();
+        window.setTimeout(() => sidebar.querySelector('.new-chat-button')?.focus(), 30);
+      }
+
+      function toggleSidebar() {
+        if (state.sidebarOpen) closeSidebar();
+        else openSidebar();
+      }
+
+      function closeMenus() {
+        closeModelMenu(false);
+      }
+
+      function handleFeedback(action) {
+        const messages = {
+          presets: ['Presets are ready to customize in this local prototype.', 'tune'],
+          attach: ['File attachments are disabled in preview mode.', 'attach_file'],
+          'add-web-link': ['Web link references are ready for this local context.', 'link'],
+          screenshot: ['Screen vision is available as a mock control in preview mode.', 'screenshot_monitor'],
+          mcp: ['4 MCP servers are connected to this local canvas.', 'hub'],
+          audio: ['Voice sessions are not connected in preview mode.', 'graphic_eq'],
+          'audio-mode': ['Audio Mode is available in the full Aura workspace.', 'graphic_eq'],
+          'view-sessions': ['Showing the five most recent Aura sessions.', 'history'],
+          license: ['Team Pro License details are available in workspace settings.', 'verified_user'],
+          'manage-plan': ['Plan management is outside this local prototype.', 'workspace_premium'],
+          profile: ['Alex’s profile is synced for this workspace.', 'person'],
+          'nav-chat': ['Chat is ready in this local canvas.', 'forum'],
+          'nav-mcp': ['Explore & MCP tools are connected for this canvas.', 'hub'],
+          'nav-canvas': ['Canvas is the active workspace view.', 'dashboard'],
+          'nav-analytics': ['Analytics snapshots are available from the workspace menu.', 'monitoring'],
+          'nav-settings': ['Settings are available in the full Aura workspace.', 'settings']
+        };
+        const message = messages[action];
+        if (message) showToast(message[0], message[1]);
+      }
+
+      function copyText(text) {
+        if (navigator.clipboard && window.isSecureContext) {
+          return navigator.clipboard.writeText(text);
+        }
+        return new Promise((resolve, reject) => {
+          const helper = document.createElement('textarea');
+          helper.value = text;
+          helper.setAttribute('readonly', '');
+          helper.style.position = 'fixed';
+          helper.style.opacity = '0';
+          document.body.appendChild(helper);
+          helper.select();
+          try {
+            const copied = document.execCommand('copy');
+            helper.remove();
+            copied ? resolve() : reject(new Error('copy unavailable'));
+          } catch (error) {
+            helper.remove();
+            reject(error);
+          }
+        });
+      }
+
+      async function copyMessage(messageId) {
+        const message = state.messages.find((item) => item.id === messageId);
+        if (!message) return;
+        const text = [...(Array.isArray(message.text) ? message.text : [message.text]), message.code].filter(Boolean).join('\n\n');
+        try {
+          await copyText(text);
+          showToast('Response copied to the clipboard.', 'content_copy');
+        } catch (error) {
+          showToast('Copy is unavailable here; select the response text to copy it.', 'info');
+        }
+      }
+
+      function regenerateMessage(messageId) {
+        if (state.busy) return;
+        const message = state.messages.find((item) => item.id === messageId);
+        if (!message) return;
+        const userMessages = state.messages.filter((item) => item.role === 'user');
+        const latestUser = userMessages[userMessages.length - 1];
+        if (!latestUser) return;
+        queueMockResponse(latestUser.text, true);
+        showToast('Regenerating the latest response.', 'refresh');
+      }
+
+      function rateMessage(messageId, rating) {
+        const message = state.messages.find((item) => item.id === messageId);
+        if (!message || message.role !== 'assistant') return;
+        message.rating = message.rating === rating ? null : rating;
+        renderChatMessages();
+        if (message.rating) showToast(rating === 'up' ? 'Thanks for the feedback.' : 'Feedback noted for this response.', rating === 'up' ? 'thumb_up' : 'thumb_down');
+      }
+
+      function handleAction(target) {
+        const action = target.closest('[data-action]')?.dataset.action;
+        if (!action) return;
+        if (action === 'new-chat') {
+          startNewChat();
+        } else if (action === 'toggle-sidebar') {
+          toggleSidebar();
+        } else if (action === 'close-sidebar') {
+          closeSidebar();
+        } else if (action === 'toggle-model') {
+          toggleModelMenu(target.closest('[data-model-trigger]'));
+        } else if (action === 'select-model') {
+          const option = target.closest('[data-action="select-model"]');
+          state.activeModel = option.dataset.model;
+          updateModelLabels();
+          closeModelMenu(true);
+          showToast(`${state.activeModel} is now active.`, 'auto_awesome');
+        } else if (action === 'use-prompt') {
+          usePrompt(target.closest('[data-action="use-prompt"]').dataset.prompt);
+        } else if (action === 'remove-staged-file') {
+          removeStagedFile(target.closest('[data-action="remove-staged-file"]').dataset.fileId);
+        } else if (action === 'resume-session') {
+          const prompt = target.closest('[data-session-prompt]')?.dataset.sessionPrompt || `Continue the ${target.closest('[data-session-name]')?.dataset.sessionName || 'selected'} session.`;
+          usePrompt(prompt);
+        } else if (action === 'filter-category') {
+          setCategory(target.closest('[data-action="filter-category"]').dataset.category);
+        } else if (action === 'send-prompt') {
+          submitPrompt('dashboard');
+        } else if (action === 'send-chat') {
+          submitPrompt('chat');
+        } else if (action === 'back-dashboard') {
+          closeModelMenu(false);
+          setView('dashboard');
+        } else if (action === 'go-dashboard') {
+          closeModelMenu(false);
+          closeSidebar(false);
+          setView('dashboard');
+        } else if (action === 'copy-message') {
+          copyMessage(target.closest('[data-message-id]')?.dataset.messageId);
+        } else if (action === 'regenerate-message') {
+          regenerateMessage(target.closest('[data-message-id]')?.dataset.messageId);
+        } else if (action === 'rate-message') {
+          const button = target.closest('[data-action="rate-message"]');
+          rateMessage(button.dataset.messageId, button.dataset.rating);
+        } else {
+          handleFeedback(action);
+        }
+      }
+
+      document.addEventListener('click', (event) => {
+        const clickedInsideSidebar = sidebar.contains(event.target);
+        const clickedSidebarToggle = sidebarToggle.contains(event.target);
+        if (state.sidebarOpen && !clickedInsideSidebar && !clickedSidebarToggle) {
+          closeSidebar(false);
+          return;
+        }
+        if (state.modelTrigger && !modelMenu.contains(event.target) && !event.target.closest('[data-model-trigger]')) closeModelMenu(false);
+        handleAction(event.target);
+      });
+
+      stagedFileInput?.addEventListener('change', () => {
+        stageFiles(stagedFileInput.files);
+        stagedFileInput.value = '';
+      });
+
+      ['dragenter', 'dragover'].forEach((eventName) => {
+        stagedDropZone?.addEventListener(eventName, (event) => {
+          event.preventDefault();
+          stagedDropZone.classList.add('is-dragging');
+        });
+      });
+
+      ['dragleave', 'drop'].forEach((eventName) => {
+        stagedDropZone?.addEventListener(eventName, (event) => {
+          event.preventDefault();
+          stagedDropZone.classList.remove('is-dragging');
+        });
+      });
+
+      stagedDropZone?.addEventListener('drop', (event) => {
+        stageFiles(event.dataTransfer ? event.dataTransfer.files : []);
+      });
+
+      stagedDropZone?.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          openStagedFilePicker();
+        }
+      });
+
+      promptInput.addEventListener('input', () => {
+        autoResize(promptInput);
+        updateDraftState();
+      });
+
+      chatInput.addEventListener('input', updateChatDraftState);
+
+      [promptInput, chatInput].forEach((textarea) => {
+        textarea.addEventListener('keydown', (event) => {
+          if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') {
+            event.preventDefault();
+            submitPrompt(textarea === chatInput ? 'chat' : 'dashboard');
+          }
+        });
+      });
+
+      sessionFilter.addEventListener('input', applySessionFilter);
+
+      globalSearch.addEventListener('input', () => {
+        state.searchQuery = globalSearch.value;
+        applyBlueprintFilters();
+      });
+
+      globalSearch.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          document.getElementById('blueprints')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+
+      modelMenu.addEventListener('keydown', (event) => {
+        const options = modelOptions;
+        const current = options.indexOf(document.activeElement);
+        if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+          event.preventDefault();
+          const direction = event.key === 'ArrowDown' ? 1 : -1;
+          options[(current + direction + options.length) % options.length].focus();
+        } else if (event.key === 'Escape') {
+          event.preventDefault();
+          closeModelMenu(true);
+        }
+      });
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+          if (state.sidebarOpen) closeSidebar();
+          else if (!modelMenu.hidden) closeModelMenu(true);
+          return;
+        }
+        if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+          event.preventDefault();
+          globalSearch.focus();
+          globalSearch.select();
+        }
+        if (state.sidebarOpen && event.key === 'Tab') {
+          const focusable = Array.from(sidebar.querySelectorAll('button:not([disabled]), input:not([disabled])')).filter((item) => !item.hidden);
+          if (!focusable.length) return;
+          const first = focusable[0];
+          const last = focusable[focusable.length - 1];
+          if (event.shiftKey && document.activeElement === first) {
+            event.preventDefault();
+            last.focus();
+          } else if (!event.shiftKey && document.activeElement === last) {
+            event.preventDefault();
+            first.focus();
+          }
+        }
+      });
+
+      window.addEventListener('resize', () => {
+        closeModelMenu(false);
+        if (window.innerWidth > 900) closeSidebar(false);
+        syncSidebarAccessibility();
+      });
+
+      syncSidebarAccessibility();
+      renderStagedFiles();
+      updateModelLabels();
+      updateDraftState();
+      updateChatDraftState();
+      applySessionFilter();
+      applyBlueprintFilters();
+    }());
+  </script>
+</body>
+</html>
