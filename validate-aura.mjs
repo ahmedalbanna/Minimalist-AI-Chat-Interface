@@ -104,8 +104,17 @@ try {
   assert(await page.locator('#settings-modal').isVisible(), 'settings drawer did not open');
   await page.locator('[data-action="select-settings-model"][data-model="Claude 3.7 Opus"]').click();
   assert((await page.locator('[data-model-label]').first().textContent()).includes('Opus'), 'settings model did not synchronize');
+  await page.locator('[data-action="select-theme"][data-theme="midnight"]').click();
+  assert(await page.locator('#app').getAttribute('data-theme') === 'midnight', 'midnight theme did not apply');
+  await page.locator('[data-action="select-density"][data-density="compact"]').click();
+  assert(await page.locator('#app').getAttribute('data-density') === 'compact', 'compact density did not apply');
   await page.keyboard.press('Escape');
   assert(await page.locator('#settings-modal').isHidden(), 'settings drawer did not close');
+
+  await page.locator('[data-action="nav-chat"]').click();
+  await page.waitForTimeout(80);
+  assert(await page.locator('.chat-empty-state').isVisible(), 'empty chat state did not render');
+  await page.locator('[data-action="back-dashboard"]').click();
 
   await page.locator('[data-action="nav-mcp"]').click();
   assert(await page.locator('#mcp-modal').isVisible(), 'MCP drawer did not open');
@@ -137,8 +146,16 @@ try {
   await page.locator('#prompt-input').fill('browser validation');
   await page.locator('#send-prompt-btn').click();
   assert(await page.locator('.typing-bubble').count() === 1, 'chat typing state is missing');
-  await page.waitForTimeout(1050);
-  assert(await page.locator('.message-code').count() === 1, 'mock response is missing');
+  await page.waitForTimeout(2600);
+  assert(await page.locator('.response-code').count() === 1, 'generated response code is missing');
+  assert(await page.locator('.message-rich h2').count() === 1, 'rich response heading is missing');
+  assert(await page.locator('.source-chip').count() >= 1, 'response source trail is incomplete');
+  await page.locator('#chat-input').fill('stop this response');
+  await page.locator('#chat-input').press('Enter');
+  await page.waitForTimeout(700);
+  assert(await page.locator('#chat-send-btn').getAttribute('data-action') === 'stop-response', 'send control did not become stop control');
+  await page.locator('#chat-send-btn').click();
+  assert((await page.locator('.response-meta').last().textContent()).includes('Stopped by you'), 'stopped response state is missing');
   assert(errors.length === 0, `desktop application errors: ${errors.join('; ')}`);
 
   const mobile = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true });
@@ -177,7 +194,22 @@ try {
   assert(await mobile.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'mobile overflow after settings');
   assert(mobileErrors.length === 0, `mobile application errors: ${mobileErrors.join('; ')}`);
 
-  console.log('Browser checks passed: desktop, direct file, search, commands, staging, camera, settings, MCP, audio, chat, and mobile');
+  for (const viewport of [{ width: 1024, height: 900 }, { width: 320, height: 800 }]) {
+    const matrixPage = await browser.newPage({ viewport, isMobile: viewport.width < 900 });
+    const matrixErrors = [];
+    matrixPage.on('pageerror', (error) => matrixErrors.push(`pageerror: ${error.message}`));
+    matrixPage.on('console', (message) => {
+      if (message.type() === 'error') matrixErrors.push(`console: ${message.text()}`);
+    });
+    await matrixPage.goto(sourceUrl);
+    await matrixPage.waitForTimeout(450);
+    assert(await matrixPage.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${viewport.width}px viewport overflows`);
+    assert(await matrixPage.locator('#dashboard-view').isVisible(), `${viewport.width}px dashboard did not render`);
+    assert(matrixErrors.length === 0, `${viewport.width}px application errors: ${matrixErrors.join('; ')}`);
+    await matrixPage.close();
+  }
+
+  console.log('Browser checks passed: desktop, direct file, search, commands, staging, camera, settings, MCP, audio, chat, mobile, and responsive matrix');
 } finally {
   await browser.close();
 }

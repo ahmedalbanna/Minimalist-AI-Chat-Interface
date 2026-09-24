@@ -155,6 +155,8 @@
 
     .app-shell {
       min-height: 100vh;
+      color: var(--text);
+      background: var(--canvas);
     }
 
     .topbar {
@@ -723,6 +725,7 @@
       width: min(100%, var(--content-width));
       margin: 0 auto;
       padding: 34px 24px 28px;
+      overflow-x: hidden;
     }
 
     .content-wrap::before {
@@ -4601,7 +4604,867 @@
       .sidebar-scroll {
         padding-top: 68px;
       }
+    }
 
+    .brand-mark svg {
+      width: 19px;
+      height: 19px;
+      fill: currentColor;
+    }
+
+    .appearance-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      flex: 0 0 36px;
+      color: var(--secondary);
+      background: transparent;
+      border-radius: 10px;
+      transition: color .18s ease, background .18s ease, transform .18s ease;
+    }
+
+    .appearance-button:hover {
+      color: var(--blue);
+      background: var(--blue-soft);
+    }
+
+    .appearance-button:active {
+      transform: scale(.96);
+    }
+
+    .appearance-swatch {
+      display: flex;
+      align-items: center;
+      width: 19px;
+      height: 19px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      box-shadow: 0 2px 5px rgba(15, 23, 42, .08);
+      transform: rotate(-8deg);
+    }
+
+    .appearance-swatch i {
+      display: block;
+      width: 33.333%;
+      height: 100%;
+    }
+
+    .appearance-swatch i:nth-child(1) { background: var(--blue); }
+    .appearance-swatch i:nth-child(2) { background: var(--blue-soft); }
+    .appearance-swatch i:nth-child(3) { background: var(--canvas); }
+
+    .staging-welcome-copy {
+      min-width: 0;
+    }
+
+    .staging-welcome-copy p {
+      max-width: 610px;
+      margin: 8px 0 0;
+      color: #52627a;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .quick-chat-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+      margin-top: 17px;
+      padding: 0 2px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .quick-chat-row::-webkit-scrollbar {
+      display: none;
+    }
+
+    .quick-chat-label,
+    .quick-chat-row button {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      min-height: 34px;
+      flex: 0 0 auto;
+      white-space: nowrap;
+    }
+
+    .quick-chat-label {
+      padding-right: 4px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    .quick-chat-label .material-symbols-outlined {
+      color: var(--blue);
+      font-size: 16px;
+    }
+
+    .quick-chat-row button {
+      padding: 0 12px;
+      color: var(--secondary);
+      background: rgba(255, 255, 255, .7);
+      border: 1px solid var(--line-soft);
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 600;
+      transition: color .18s ease, background .18s ease, border-color .18s ease, transform .18s ease;
+    }
+
+    .quick-chat-row button .material-symbols-outlined {
+      color: var(--blue);
+      font-size: 16px;
+    }
+
+    .quick-chat-row button:hover {
+      color: var(--blue);
+      background: #fff;
+      border-color: #bfd5ff;
+      transform: translateY(-1px);
+    }
+
+    .staged-drop-zone {
+      min-height: 74px;
+      flex-direction: row;
+      justify-content: flex-start;
+      padding: 13px 15px;
+      text-align: left;
+    }
+
+    .staged-drop-icon {
+      width: 40px;
+      height: 40px;
+      flex: 0 0 40px;
+    }
+
+    .staged-drop-icon .material-symbols-outlined {
+      font-size: 21px;
+    }
+
+    .staged-drop-copy {
+      align-items: flex-start;
+      text-align: left;
+    }
+
+    #staging-composer-card[data-state='empty'] .staged-drop-zone {
+      min-height: 142px;
+      flex-direction: column;
+      justify-content: center;
+      padding: 20px;
+      text-align: center;
+    }
+
+    #staging-composer-card[data-state='empty'] .staged-drop-icon {
+      width: 44px;
+      height: 44px;
+      flex-basis: 44px;
+    }
+
+    #staging-composer-card[data-state='empty'] .staged-drop-copy {
+      align-items: center;
+      text-align: center;
+    }
+
+    .theme-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .theme-option {
+      position: relative;
+      display: grid;
+      grid-template-columns: 38px minmax(0, 1fr) 16px;
+      align-items: center;
+      gap: 9px;
+      min-height: 58px;
+      padding: 8px 9px;
+      color: var(--secondary);
+      background: #fff;
+      border: 1px solid var(--line-soft);
+      border-radius: 11px;
+      text-align: left;
+      transition: border-color .18s ease, background .18s ease, transform .18s ease;
+    }
+
+    .theme-option:hover,
+    .theme-option.is-selected {
+      color: var(--blue);
+      background: var(--blue-soft);
+      border-color: #c7dafa;
+    }
+
+    .theme-option > span:nth-child(2) {
+      display: grid;
+      min-width: 0;
+      gap: 2px;
+    }
+
+    .theme-option strong {
+      color: var(--text);
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .theme-option small {
+      color: var(--muted);
+      font-size: 9px;
+    }
+
+    .theme-option > .material-symbols-outlined {
+      color: var(--blue);
+      font-size: 15px;
+    }
+
+    .theme-preview {
+      display: flex;
+      width: 38px;
+      height: 34px;
+      overflow: hidden;
+      border: 1px solid rgba(15, 23, 42, .1);
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(15, 23, 42, .07);
+    }
+
+    .theme-preview i:first-child {
+      width: 27%;
+    }
+
+    .theme-preview i:nth-child(2) {
+      flex: 1;
+    }
+
+    .theme-preview i:last-child {
+      width: 18%;
+    }
+
+    .theme-option-aura .theme-preview { background: #eff4ff; }
+    .theme-option-aura .theme-preview i:first-child { background: #2563eb; }
+    .theme-option-aura .theme-preview i:nth-child(2) { background: #fff; }
+    .theme-option-aura .theme-preview i:last-child { background: #dce9ff; }
+    .theme-option-midnight .theme-preview { background: #111827; }
+    .theme-option-midnight .theme-preview i:first-child { background: #090d18; }
+    .theme-option-midnight .theme-preview i:nth-child(2) { background: #182235; }
+    .theme-option-midnight .theme-preview i:last-child { background: #7c9cff; }
+    .theme-option-sage .theme-preview { background: #eef5ef; }
+    .theme-option-sage .theme-preview i:first-child { background: #315d4b; }
+    .theme-option-sage .theme-preview i:nth-child(2) { background: #fff; }
+    .theme-option-sage .theme-preview i:last-child { background: #d6e8dc; }
+    .theme-option-ember .theme-preview { background: #fff3e9; }
+    .theme-option-ember .theme-preview i:first-child { background: #b45309; }
+    .theme-option-ember .theme-preview i:nth-child(2) { background: #fff; }
+    .theme-option-ember .theme-preview i:last-child { background: #fed7aa; }
+
+    .density-control {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 4px;
+      padding: 4px;
+      background: #edf3ff;
+      border: 1px solid #dbe8ff;
+      border-radius: 10px;
+    }
+
+    .density-control button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      min-height: 34px;
+      color: var(--secondary);
+      background: transparent;
+      border-radius: 7px;
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .density-control button[aria-checked='true'] {
+      color: var(--blue);
+      background: #fff;
+      box-shadow: 0 2px 7px rgba(30, 64, 175, .08);
+    }
+
+    .density-control .material-symbols-outlined {
+      font-size: 16px;
+    }
+
+    .chat-context-summary {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-width: 0;
+      color: var(--blue);
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .chat-context-summary .material-symbols-outlined {
+      font-size: 15px;
+    }
+
+    .message-row.assistant .message-bubble {
+      width: min(100%, 680px);
+      max-width: calc(100% - 38px);
+      padding: 17px 19px;
+      background: rgba(255, 255, 255, .88);
+      border-radius: 6px 18px 18px 18px;
+    }
+
+    .message-row.assistant .message-avatar {
+      background: linear-gradient(145deg, #eef4ff, #dce9ff);
+      box-shadow: 0 3px 9px rgba(37, 99, 235, .09);
+    }
+
+    .message-rich {
+      display: grid;
+      gap: 10px;
+    }
+
+    .message-rich h2,
+    .message-rich h3 {
+      margin: 5px 0 0;
+      color: var(--text-strong);
+      letter-spacing: -.025em;
+      line-height: 1.35;
+    }
+
+    .message-rich h2 {
+      font-size: 17px;
+    }
+
+    .message-rich h3 {
+      font-size: 14px;
+    }
+
+    .message-rich p,
+    .message-rich ul {
+      margin: 0;
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.72;
+    }
+
+    .message-rich ul {
+      display: grid;
+      gap: 7px;
+      padding-left: 19px;
+    }
+
+    .message-rich li::marker {
+      color: var(--blue);
+    }
+
+    .message-rich strong {
+      color: var(--text-strong);
+      font-weight: 700;
+    }
+
+    .message-inline-code {
+      padding: 2px 5px;
+      color: #1e40af;
+      background: #edf3ff;
+      border: 1px solid #dbe8ff;
+      border-radius: 5px;
+      font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 11px;
+    }
+
+    .response-code {
+      margin: 5px 0 1px;
+      overflow: hidden;
+      background: #101827;
+      border: 1px solid #26344d;
+      border-radius: 12px;
+    }
+
+    .response-code-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      min-height: 38px;
+      padding: 0 9px 0 13px;
+      color: #a8b6cf;
+      background: #172238;
+      border-bottom: 1px solid #28364f;
+      font-size: 9px;
+    }
+
+    .response-code-file {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .response-code-file .material-symbols-outlined {
+      color: #7c9cff;
+      font-size: 15px;
+    }
+
+    .response-code-copy {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      min-height: 26px;
+      padding: 0 7px;
+      color: #c6d2e8;
+      background: transparent;
+      border-radius: 6px;
+      font-size: 9px;
+    }
+
+    .response-code-copy:hover {
+      color: #fff;
+      background: #26344d;
+    }
+
+    .response-code-copy .material-symbols-outlined {
+      font-size: 14px;
+    }
+
+    .response-code pre {
+      margin: 0;
+      padding: 14px 15px 16px;
+      overflow-x: auto;
+      color: #dbeafe;
+      font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 11px;
+      line-height: 1.7;
+      tab-size: 2;
+    }
+
+    .response-sources {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 3px;
+    }
+
+    .response-sources-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-right: 2px;
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .response-sources-label .material-symbols-outlined {
+      font-size: 14px;
+    }
+
+    .source-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      min-height: 25px;
+      max-width: 220px;
+      padding: 0 8px;
+      overflow: hidden;
+      color: var(--secondary);
+      background: #f5f8fd;
+      border: 1px solid var(--line-soft);
+      border-radius: 7px;
+      font-size: 9px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .source-chip .material-symbols-outlined {
+      flex: 0 0 auto;
+      color: var(--blue);
+      font-size: 14px;
+    }
+
+    .response-meta {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 9px;
+    }
+
+    .response-meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .response-meta .material-symbols-outlined {
+      font-size: 13px;
+    }
+
+    .message-caret {
+      display: inline-block;
+      width: 2px;
+      height: 1em;
+      margin-left: 3px;
+      vertical-align: -.13em;
+      background: var(--blue);
+      border-radius: 2px;
+      animation: caret-blink .8s steps(2, jump-none) infinite;
+    }
+
+    @keyframes caret-blink {
+      50% { opacity: 0; }
+    }
+
+    .message-context {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 9px;
+      padding-top: 8px;
+      color: rgba(255, 255, 255, .72);
+      border-top: 1px solid rgba(255, 255, 255, .18);
+      font-size: 9px;
+    }
+
+    .message-context .material-symbols-outlined {
+      font-size: 13px;
+    }
+
+    .typing-copy {
+      margin-right: 4px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 500;
+    }
+
+    .chat-empty-state {
+      display: grid;
+      justify-items: center;
+      width: min(100%, 640px);
+      margin: auto;
+      padding: 40px 0 54px;
+      text-align: center;
+    }
+
+    .chat-empty-mark {
+      display: grid;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      color: var(--blue);
+      background: linear-gradient(145deg, #f0f5ff, #dce9ff);
+      border: 1px solid #cfddfa;
+      border-radius: 15px;
+      box-shadow: 0 8px 22px rgba(37, 99, 235, .11);
+    }
+
+    .chat-empty-mark .material-symbols-outlined {
+      font-size: 24px;
+    }
+
+    .chat-empty-state h2 {
+      margin: 17px 0 0;
+      color: var(--text-strong);
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -.04em;
+    }
+
+    .chat-empty-state > p {
+      max-width: 470px;
+      margin: 8px 0 0;
+      color: var(--secondary);
+      font-size: 12px;
+      line-height: 1.65;
+    }
+
+    .chat-empty-prompts {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 9px;
+      width: 100%;
+      margin-top: 24px;
+    }
+
+    .chat-empty-prompts button {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 56px;
+      padding: 9px 11px;
+      color: var(--secondary);
+      background: #fff;
+      border: 1px solid var(--line-soft);
+      border-radius: 12px;
+      text-align: left;
+      box-shadow: var(--shadow-card);
+      transition: border-color .18s ease, transform .18s ease, box-shadow .18s ease;
+    }
+
+    .chat-empty-prompts button:hover {
+      border-color: #c7dafa;
+      box-shadow: 0 7px 18px rgba(30, 64, 175, .07);
+      transform: translateY(-1px);
+    }
+
+    .chat-empty-prompts .material-symbols-outlined {
+      color: var(--blue);
+      font-size: 20px;
+    }
+
+    .chat-empty-prompts span {
+      display: grid;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .chat-empty-prompts strong {
+      color: var(--text);
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .chat-empty-prompts small {
+      overflow: hidden;
+      color: var(--muted);
+      font-size: 9px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .send-button.is-stopping {
+      background: #26364f;
+      box-shadow: 0 5px 12px rgba(15, 23, 42, .18);
+    }
+
+    .send-button.is-stopping:hover:not(:disabled) {
+      background: #172033;
+      box-shadow: 0 7px 15px rgba(15, 23, 42, .24);
+    }
+
+    .send-button.is-stopping .material-symbols-outlined {
+      width: 13px;
+      height: 13px;
+      border-radius: 2px;
+      background: currentColor;
+    }
+
+    .app-shell.is-focus-mode .mobile-menu-button {
+      display: inline-flex !important;
+    }
+
+    .app-shell.is-focus-mode .sidebar {
+      box-shadow: 18px 0 48px rgba(15, 23, 42, .15);
+      transform: translateX(-102%);
+    }
+
+    .app-shell.is-focus-mode.sidebar-open .sidebar {
+      transform: translateX(0);
+    }
+
+    .app-shell.is-focus-mode .main-content {
+      margin-left: 0;
+    }
+
+    .app-shell.is-focus-mode .brand-region {
+      flex-basis: 180px;
+    }
+
+    .app-shell[data-density='compact'] .content-wrap {
+      padding-top: 24px;
+    }
+
+    .app-shell[data-density='compact'] .staging-composer {
+      margin-top: 28px;
+    }
+
+    .app-shell[data-density='compact'] .staged-drop-zone {
+      min-height: 58px;
+      padding-top: 9px;
+      padding-bottom: 9px;
+    }
+
+    .app-shell[data-density='compact'] #staging-composer-card[data-state='empty'] .staged-drop-zone {
+      min-height: 116px;
+    }
+
+    .app-shell[data-density='compact'] .staged-file {
+      min-height: 52px;
+    }
+
+    .app-shell[data-density='compact'] .staging-blueprints-section,
+    .app-shell[data-density='compact'] .staging-resume-section {
+      margin-top: 28px;
+    }
+
+    .app-shell[data-density='compact'] .prompt-starter-card.staged-blueprint-card {
+      min-height: 188px;
+    }
+
+    .app-shell[data-theme='midnight'] {
+      color-scheme: dark;
+      --canvas: #090d18;
+      --surface: #0e1423;
+      --sidebar: #0c1220;
+      --card: #11192a;
+      --card-blue: #14213a;
+      --text: #e6edf9;
+      --text-strong: #f8fbff;
+      --secondary: #a7b5cb;
+      --muted: #76869f;
+      --line: #34425c;
+      --line-soft: #222e44;
+      --blue: #7c9cff;
+      --blue-dark: #9ab2ff;
+      --blue-soft: #182541;
+      --blue-container: #25385e;
+      --tertiary: #f0a46c;
+      --green: #6ed3a0;
+      --error: #ff9b98;
+      --shadow-card: 0 1px 2px rgba(0, 0, 0, .2), 0 8px 24px rgba(0, 0, 0, .12);
+      --shadow-float: 0 18px 42px rgba(0, 0, 0, .3);
+    }
+
+    .app-shell[data-theme='sage'] {
+      --canvas: #f4f8f4;
+      --surface: #f4f8f4;
+      --sidebar: #f8fbf8;
+      --card: #ffffff;
+      --card-blue: #eaf3ec;
+      --text: #17241e;
+      --text-strong: #102219;
+      --secondary: #496056;
+      --muted: #75867d;
+      --line: #b8c8be;
+      --line-soft: #dce7df;
+      --blue: #315d4b;
+      --blue-dark: #244838;
+      --blue-soft: #e8f2eb;
+      --blue-container: #d3e7d9;
+      --tertiary: #a5531f;
+      --green: #2f7b4d;
+      --shadow-card: 0 1px 2px rgba(22, 50, 35, .03), 0 5px 15px rgba(22, 50, 35, .04);
+      --shadow-float: 0 15px 34px rgba(22, 50, 35, .09);
+    }
+
+    .app-shell[data-theme='ember'] {
+      --canvas: #fff8f1;
+      --surface: #fff8f1;
+      --sidebar: #fffaf5;
+      --card: #ffffff;
+      --card-blue: #fff0e2;
+      --text: #2d1c13;
+      --text-strong: #21130c;
+      --secondary: #6b5144;
+      --muted: #927c70;
+      --line: #d9bfae;
+      --line-soft: #f0dfd2;
+      --blue: #b45309;
+      --blue-dark: #92400e;
+      --blue-soft: #fff0e2;
+      --blue-container: #fed7aa;
+      --tertiary: #0f766e;
+      --green: #3f7d57;
+      --shadow-card: 0 1px 2px rgba(67, 35, 16, .03), 0 5px 15px rgba(67, 35, 16, .04);
+      --shadow-float: 0 15px 34px rgba(67, 35, 16, .09);
+    }
+
+    .app-shell[data-theme='midnight'] .topbar {
+      background: rgba(9, 13, 24, .9);
+      border-bottom-color: #222e44;
+    }
+
+    .app-shell[data-theme='midnight'] :is(.topbar-search, .sidebar-filter, .message-code, .staged-drop-icon, .staging-model-summary, .status-pill),
+    .app-shell[data-theme='sage'] :is(.topbar-search, .sidebar-filter, .message-code, .staged-drop-icon, .staging-model-summary, .status-pill),
+    .app-shell[data-theme='ember'] :is(.topbar-search, .sidebar-filter, .message-code, .staged-drop-icon, .staging-model-summary, .status-pill) {
+      color: var(--secondary);
+      background: var(--card-blue);
+      border-color: var(--line-soft);
+    }
+
+    .app-shell[data-theme='midnight'] :is(.composer-card, .staging-composer-card, .chat-composer-card, .resume-card, .prompt-starter-card, .staging-resume-card, .metric-card, .staged-file, .staged-drop-zone, .staged-prompt-box, .staging-onboarding, .message-row.assistant .message-bubble, .search-dialog, .settings-dialog, .mcp-dialog, .camera-dialog, .audio-dialog, .model-menu),
+    .app-shell[data-theme='sage'] :is(.composer-card, .staging-composer-card, .chat-composer-card, .resume-card, .prompt-starter-card, .staging-resume-card, .metric-card, .staged-file, .staged-drop-zone, .staged-prompt-box, .staging-onboarding, .message-row.assistant .message-bubble, .search-dialog, .settings-dialog, .mcp-dialog, .camera-dialog, .audio-dialog, .model-menu),
+    .app-shell[data-theme='ember'] :is(.composer-card, .staging-composer-card, .chat-composer-card, .resume-card, .prompt-starter-card, .staging-resume-card, .metric-card, .staged-file, .staged-drop-zone, .staged-prompt-box, .staging-onboarding, .message-row.assistant .message-bubble, .search-dialog, .settings-dialog, .mcp-dialog, .camera-dialog, .audio-dialog, .model-menu) {
+      color: var(--text);
+      background: var(--card);
+      border-color: var(--line-soft);
+    }
+
+    .app-shell[data-theme='midnight'] :is(.sidebar, .staged-file-tray, .staging-onboarding),
+    .app-shell[data-theme='sage'] :is(.sidebar, .staged-file-tray, .staging-onboarding),
+    .app-shell[data-theme='ember'] :is(.sidebar, .staged-file-tray, .staging-onboarding) {
+      background: var(--sidebar);
+    }
+
+    .app-shell[data-theme='midnight'] :is(.theme-option, .density-control button, .search-result, .settings-preference, .settings-model-option, .mcp-tool-option, .mcp-server-option, .command-option),
+    .app-shell[data-theme='sage'] :is(.theme-option, .density-control button, .search-result, .settings-preference, .settings-model-option, .mcp-tool-option, .mcp-server-option, .command-option),
+    .app-shell[data-theme='ember'] :is(.theme-option, .density-control button, .search-result, .settings-preference, .settings-model-option, .mcp-tool-option, .mcp-server-option, .command-option) {
+      color: var(--secondary);
+      background: var(--card);
+      border-color: var(--line-soft);
+    }
+
+    .app-shell[data-theme='midnight'] :is(.theme-option:hover, .theme-option.is-selected, .search-result:hover, .settings-preference:hover, .settings-model-option.is-selected, .mcp-tool-option:hover, .mcp-server-option.is-selected, .command-option:hover, .command-option.is-selected),
+    .app-shell[data-theme='sage'] :is(.theme-option:hover, .theme-option.is-selected, .search-result:hover, .settings-preference:hover, .settings-model-option.is-selected, .mcp-tool-option:hover, .mcp-server-option.is-selected, .command-option:hover, .command-option.is-selected),
+    .app-shell[data-theme='ember'] :is(.theme-option:hover, .theme-option.is-selected, .search-result:hover, .settings-preference:hover, .settings-model-option.is-selected, .mcp-tool-option:hover, .mcp-server-option.is-selected, .command-option:hover, .command-option.is-selected) {
+      color: var(--blue);
+      background: var(--blue-soft);
+      border-color: var(--line);
+    }
+
+    .app-shell[data-theme='midnight'] :is(.settings-content, .mcp-tool-panel, .search-results, .sidebar-scroll),
+    .app-shell[data-theme='sage'] :is(.settings-content, .mcp-tool-panel, .search-results, .sidebar-scroll),
+    .app-shell[data-theme='ember'] :is(.settings-content, .mcp-tool-panel, .search-results, .sidebar-scroll) {
+      background: var(--surface);
+    }
+
+    .app-shell[data-theme='midnight'] :is(.staging-state-message, .status-pill, .model-trigger, .staging-status-pill, .staged-file-tag, .category-pill, .prompt-chip, .response-badge),
+    .app-shell[data-theme='sage'] :is(.staging-state-message, .status-pill, .model-trigger, .staging-status-pill, .staged-file-tag, .category-pill, .prompt-chip, .response-badge),
+    .app-shell[data-theme='ember'] :is(.staging-state-message, .status-pill, .model-trigger, .staging-status-pill, .staged-file-tag, .category-pill, .prompt-chip, .response-badge) {
+      color: var(--blue);
+      background: var(--blue-soft);
+      border-color: var(--line-soft);
+    }
+
+    .app-shell[data-theme='midnight'] .message-row.user .message-bubble {
+      background: #4f6fce;
+      border-color: #607fd5;
+    }
+
+    .app-shell[data-theme='midnight'] :is(.quick-chat-row button, .chat-empty-prompts button, .source-chip),
+    .app-shell[data-theme='sage'] :is(.quick-chat-row button, .chat-empty-prompts button, .source-chip),
+    .app-shell[data-theme='ember'] :is(.quick-chat-row button, .chat-empty-prompts button, .source-chip) {
+      color: var(--text);
+      background: var(--card);
+      border-color: var(--line-soft);
+    }
+
+    .app-shell[data-theme='midnight'] :is(.quick-chat-row button:hover, .chat-empty-prompts button:hover),
+    .app-shell[data-theme='sage'] :is(.quick-chat-row button:hover, .chat-empty-prompts button:hover),
+    .app-shell[data-theme='ember'] :is(.quick-chat-row button:hover, .chat-empty-prompts button:hover) {
+      color: var(--blue);
+      background: var(--blue-soft);
+      border-color: var(--line);
+    }
+
+    .app-shell[data-theme='midnight'] .staging-welcome-copy p,
+    .app-shell[data-theme='sage'] .staging-welcome-copy p,
+    .app-shell[data-theme='ember'] .staging-welcome-copy p {
+      color: var(--secondary);
+    }
+
+    @media (max-width: 900px) {
       .mobile-sidebar-close {
         position: absolute;
         top: 14px;
@@ -5506,6 +6369,34 @@
       }
     }
 
+    @media (max-width: 430px) {
+      .chat-empty-state {
+        padding-top: 24px;
+      }
+
+      .chat-empty-state h2 {
+        font-size: 21px;
+      }
+
+      .chat-empty-prompts {
+        grid-template-columns: 1fr;
+      }
+
+      .quick-chat-label {
+        display: none;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .theme-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .staging-welcome-copy p {
+        font-size: 12px;
+      }
+    }
+
     @media (prefers-reduced-motion: reduce) {
       *,
       *::before,
@@ -5519,7 +6410,7 @@
   </style>
 </head>
 <body>
-  <div id="app" class="app-shell">
+  <div id="app" class="app-shell" data-theme="aura" data-density="comfortable">
     <header class="topbar" aria-label="Application header">
       <div class="topbar-inner">
         <div class="brand-region">
@@ -5527,7 +6418,7 @@
             <span class="material-symbols-outlined" aria-hidden="true">menu</span>
           </button>
           <a class="brand" href="#dashboard-view" data-action="go-dashboard" aria-label="Aura home">
-            <span class="brand-mark" aria-hidden="true"><span class="material-symbols-outlined">flare</span></span>
+            <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M12 2.7 14.1 9l6.2 2.1-6.2 2.1L12 19.5l-2.1-6.3-6.2-2.1L9.9 9 12 2.7Z"/><path d="m18.4 15.2.8 2.3 2.3.8-2.3.8-.8 2.3-.8-2.3-2.3-.8 2.3-.8.8-2.3Z"/></svg></span>
             <span class="brand-copy">Aura AI<small>intelligence</small></span>
           </a>
         </div>
@@ -5545,6 +6436,7 @@
           <button class="nav-button" type="button" data-action="nav-settings"><span class="material-symbols-outlined" aria-hidden="true">settings</span><span>Settings</span></button>
         </nav>
         <div class="top-actions">
+          <button class="appearance-button" type="button" data-action="cycle-theme" aria-label="Switch color theme" title="Switch color theme"><span class="appearance-swatch" aria-hidden="true"><i></i><i></i><i></i></span></button>
           <button class="audio-mode" type="button" data-action="audio-mode" aria-label="Open audio mode">
             <span class="material-symbols-outlined" aria-hidden="true">graphic_eq</span><span>Audio Mode</span>
           </button>
@@ -5579,6 +6471,19 @@
           <button class="settings-close" type="button" data-action="close-settings" aria-label="Close assistant settings"><span class="material-symbols-outlined" aria-hidden="true">close</span></button>
         </header>
         <div class="settings-content">
+          <section class="settings-section" aria-labelledby="settings-appearance-heading">
+            <div class="settings-section-heading"><h3 id="settings-appearance-heading">Appearance</h3><p>Choose a visual mood and information density for this preview.</p></div>
+            <div class="theme-grid" role="radiogroup" aria-label="Color theme">
+              <button class="theme-option theme-option-aura is-selected" type="button" role="radio" aria-checked="true" data-action="select-theme" data-theme="aura"><span class="theme-preview" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>Aura</strong><small>Calm blue</small></span><span class="material-symbols-outlined" aria-hidden="true">check</span></button>
+              <button class="theme-option theme-option-midnight" type="button" role="radio" aria-checked="false" data-action="select-theme" data-theme="midnight"><span class="theme-preview" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>Midnight</strong><small>Deep focus</small></span><span class="material-symbols-outlined" aria-hidden="true"></span></button>
+              <button class="theme-option theme-option-sage" type="button" role="radio" aria-checked="false" data-action="select-theme" data-theme="sage"><span class="theme-preview" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>Sage</strong><small>Grounded focus</small></span><span class="material-symbols-outlined" aria-hidden="true"></span></button>
+              <button class="theme-option theme-option-ember" type="button" role="radio" aria-checked="false" data-action="select-theme" data-theme="ember"><span class="theme-preview" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>Ember</strong><small>Warm contrast</small></span><span class="material-symbols-outlined" aria-hidden="true"></span></button>
+            </div>
+            <div class="density-control" role="radiogroup" aria-label="Interface density">
+              <button type="button" role="radio" aria-checked="true" data-action="select-density" data-density="comfortable"><span class="material-symbols-outlined" aria-hidden="true">view_agenda</span>Comfortable</button>
+              <button type="button" role="radio" aria-checked="false" data-action="select-density" data-density="compact"><span class="material-symbols-outlined" aria-hidden="true">density_small</span>Compact</button>
+            </div>
+          </section>
           <section class="settings-section" aria-labelledby="settings-model-heading">
             <div class="settings-section-heading"><h3 id="settings-model-heading">Active model</h3><p>Choose the response personality used for this browser session.</p></div>
             <div id="settings-model-list" class="settings-model-list" role="listbox" aria-label="Active model">
@@ -5718,7 +6623,7 @@
               <span class="staging-workspace">Workspace: Infrastructure &amp; BI</span>
             </div>
             <div class="staging-welcome-main">
-              <h1 id="dashboard-title">Good evening, Alex</h1>
+              <div class="staging-welcome-copy"><h1 id="dashboard-title">Good evening, Alex</h1><p>Ask once or bring your whole workspace into focus. Aura will reason across the files you choose.</p></div>
               <div class="staging-welcome-meta">
                 <button class="staging-model-summary" type="button" data-action="toggle-model" data-model-trigger aria-label="Change active model" aria-haspopup="listbox" aria-controls="model-menu" aria-expanded="false">
                   <span class="material-symbols-outlined" aria-hidden="true">memory</span><span data-model-label>Claude 3.7 Sonnet Thinking</span>
@@ -5761,6 +6666,13 @@
               </div>
             </div>
           </section>
+
+          <div class="quick-chat-row" aria-label="Suggested questions">
+            <span class="quick-chat-label"><span class="material-symbols-outlined" aria-hidden="true">auto_awesome</span>Try asking</span>
+            <button type="button" data-action="use-prompt" data-prompt="Review the staged deployment for security risks, reliability issues, and the three highest-priority fixes."><span class="material-symbols-outlined" aria-hidden="true">shield</span>Audit this deployment</button>
+            <button type="button" data-action="use-prompt" data-prompt="Analyze the churn dataset and identify the strongest cohort signals, likely drivers, and recommended experiments."><span class="material-symbols-outlined" aria-hidden="true">query_stats</span>Find churn signals</button>
+            <button type="button" data-action="use-prompt" data-prompt="Summarize the staged architecture, explain the main trust boundaries, and call out the most important design trade-offs."><span class="material-symbols-outlined" aria-hidden="true">account_tree</span>Explain the architecture</button>
+          </div>
 
           <section id="blueprints" class="staging-blueprints-section" aria-labelledby="blueprints-title">
             <div class="staging-section-heading">
@@ -5818,11 +6730,11 @@
           <div id="chat-messages" class="chat-messages" role="log" aria-live="polite" aria-label="Conversation transcript"></div>
           <div class="chat-composer-dock">
             <div class="chat-composer-card">
-              <div class="chat-composer-top"><span class="context-meta"><span class="material-symbols-outlined" aria-hidden="true">bolt</span>Direct Canvas Engine</span><span class="context-meta"><span class="material-symbols-outlined" aria-hidden="true">lock</span>Memory-only session</span></div>
-              <div class="chat-composer-input"><textarea id="chat-input" class="chat-textarea" rows="2" maxlength="4000" placeholder="Continue the conversation..." aria-label="Continue the conversation"></textarea></div>
-              <div class="chat-composer-bottom"><div class="shelf-tools"><button class="shelf-tool" type="button" data-action="attach" aria-label="Attach a file"><span class="material-symbols-outlined" aria-hidden="true">attach_file</span><span>Attach</span></button><button class="shelf-tool" type="button" data-action="audio" aria-label="Launch a voice session"><span class="material-symbols-outlined" aria-hidden="true">graphic_eq</span><span>Audio</span></button></div><div class="shelf-submit"><span class="shortcut-hint">⌘ + Return</span><button id="chat-send-btn" class="send-button" type="button" data-action="send-chat" aria-label="Send message" disabled><span class="material-symbols-outlined" aria-hidden="true">arrow_upward</span></button></div></div>
+              <div class="chat-composer-top"><span id="chat-context-summary" class="chat-context-summary"><span class="material-symbols-outlined" aria-hidden="true">inventory_2</span><span>3 files in context</span></span><span class="context-meta"><span class="material-symbols-outlined" aria-hidden="true">lock</span>Memory-only session</span></div>
+              <div class="chat-composer-input"><textarea id="chat-input" class="chat-textarea" rows="2" maxlength="4000" placeholder="Message Aura…" aria-label="Continue the conversation"></textarea></div>
+              <div class="chat-composer-bottom"><div class="shelf-tools"><button class="shelf-tool" type="button" data-action="attach" aria-label="Attach a file"><span class="material-symbols-outlined" aria-hidden="true">attach_file</span><span>Attach</span></button><button class="shelf-tool" type="button" data-action="audio" aria-label="Launch a voice session"><span class="material-symbols-outlined" aria-hidden="true">graphic_eq</span><span>Audio</span></button><button class="shelf-tool" type="button" data-action="chat-focus" aria-label="Toggle focus layout"><span class="material-symbols-outlined" aria-hidden="true">center_focus_strong</span><span>Focus</span></button></div><div class="shelf-submit"><span class="shortcut-hint">Enter to send</span><button id="chat-send-btn" class="send-button" type="button" data-action="chat-submit" aria-label="Send message" disabled><span class="material-symbols-outlined" aria-hidden="true">arrow_upward</span></button></div></div>
             </div>
-            <p class="chat-helper">Aura is in preview mode. Responses stay in this browser tab.</p>
+            <p class="chat-helper">Prototype responses are generated locally in this tab. No message or file is uploaded.</p>
           </div>
         </div>
       </section>
@@ -5856,6 +6768,9 @@
 
       const state = {
         view: 'dashboard',
+        visualTheme: 'aura',
+        density: 'comfortable',
+        focusMode: false,
         draft: '',
         activeModel: 'Claude 3.7 Sonnet Thinking',
         category: 'all',
@@ -5864,6 +6779,9 @@
         messages: [],
         busy: false,
         responseTimer: null,
+        streamTimer: null,
+        activeResponseId: null,
+        responseStartedAt: 0,
         toastTimer: null,
         lastDrawerFocus: null,
         modelTrigger: null,
@@ -5910,6 +6828,7 @@
       const sendPromptButton = document.getElementById('send-prompt-btn');
       const chatSendButton = document.getElementById('chat-send-btn');
       const chatMessages = document.getElementById('chat-messages');
+      const chatContextSummary = document.getElementById('chat-context-summary');
       const modelMenu = document.getElementById('model-menu');
       const sidebar = document.getElementById('sidebar');
       const sidebarToggle = document.getElementById('sidebar-toggle');
@@ -5986,6 +6905,57 @@
         });
       }
 
+      function renderAppearance() {
+        if (!app) return;
+        app.dataset.theme = state.visualTheme;
+        app.dataset.density = state.density;
+        const themeColor = document.querySelector('meta[name="theme-color"]');
+        if (themeColor) themeColor.content = { aura: '#f8f9ff', midnight: '#090d18', sage: '#f4f8f4', ember: '#fff8f1' }[state.visualTheme] || '#f8f9ff';
+        document.querySelectorAll('[data-action="select-theme"]').forEach((option) => {
+          const selected = option.dataset.theme === state.visualTheme;
+          option.classList.toggle('is-selected', selected);
+          option.setAttribute('aria-checked', String(selected));
+          const check = option.querySelector('.material-symbols-outlined:last-child');
+          if (check) check.textContent = selected ? 'check' : '';
+        });
+        document.querySelectorAll('[data-action="select-density"]').forEach((option) => {
+          option.setAttribute('aria-checked', String(option.dataset.density === state.density));
+        });
+        const cycleButton = document.querySelector('[data-action="cycle-theme"]');
+        if (cycleButton) {
+          const names = { aura: 'Aura', midnight: 'Midnight', sage: 'Sage', ember: 'Ember' };
+          cycleButton.setAttribute('aria-label', `Switch color theme. Current theme: ${names[state.visualTheme] || 'Aura'}`);
+          cycleButton.title = `Theme: ${names[state.visualTheme] || 'Aura'}`;
+        }
+      }
+
+      function setTheme(theme, announce) {
+        const allowed = ['aura', 'midnight', 'sage', 'ember'];
+        if (!allowed.includes(theme)) return;
+        state.visualTheme = theme;
+        renderAppearance();
+        if (announce) showToast(`${theme.charAt(0).toUpperCase() + theme.slice(1)} theme applied.`, 'palette');
+      }
+
+      function cycleTheme() {
+        const themes = ['aura', 'midnight', 'sage', 'ember'];
+        const next = themes[(themes.indexOf(state.visualTheme) + 1) % themes.length];
+        setTheme(next, true);
+      }
+
+      function setDensity(density, announce) {
+        if (!['comfortable', 'compact'].includes(density)) return;
+        state.density = density;
+        renderAppearance();
+        if (announce) showToast(`${density === 'compact' ? 'Compact' : 'Comfortable'} density applied.`, 'density_small');
+      }
+
+      function toggleFocusMode(announce) {
+        state.focusMode = !state.focusMode;
+        app.classList.toggle('is-focus-mode', state.focusMode);
+        if (announce) showToast(state.focusMode ? 'Focus layout enabled.' : 'Workspace layout restored.', 'center_focus_strong');
+      }
+
       function openSettings(trigger) {
         if (!settingsModal) return;
         state.settingsFocusGuard = false;
@@ -5993,6 +6963,7 @@
         state.settingsTrigger = trigger || document.querySelector('[data-action="nav-settings"]');
         settingsModal.hidden = false;
         renderSettings();
+        renderAppearance();
         window.requestAnimationFrame(() => {
           const selected = settingsModelOptions.find((option) => option.classList.contains('is-selected')) || settingsModelOptions[0];
           selected?.focus();
@@ -6589,7 +7560,15 @@
         if (stagedCountText) stagedCountText.textContent = `${state.stagedFiles.length} ${state.stagedFiles.length === 1 ? 'file' : 'files'} attached`;
         if (stagedContextText) stagedContextText.textContent = `(${formatBytes(totalBytes)} / 100 MB context)`;
         if (stagedLinterPill) stagedLinterPill.hidden = !state.stagedFiles.some((file) => /ya?ml|json|docker|csv|tsx?|py|go|rs|js$/i.test(file.name));
+        renderChatContextSummary();
         renderStagingState();
+      }
+
+      function renderChatContextSummary() {
+        if (!chatContextSummary) return;
+        chatContextSummary.replaceChildren();
+        chatContextSummary.appendChild(icon(state.stagedFiles.length ? 'inventory_2' : 'attach_file'));
+        chatContextSummary.appendChild(createElement('span', '', state.stagedFiles.length ? `${state.stagedFiles.length} ${state.stagedFiles.length === 1 ? 'file' : 'files'} in context` : 'Add files for deeper answers'));
       }
 
       function renderStagedFiles() {
@@ -6706,7 +7685,14 @@
       }
 
       function updateChatDraftState() {
-        if (chatSendButton) chatSendButton.disabled = !chatInput || !chatInput.value.trim() || state.busy;
+        if (chatSendButton) {
+          chatSendButton.disabled = state.busy ? false : !chatInput || !chatInput.value.trim();
+          chatSendButton.dataset.action = state.busy ? 'stop-response' : 'chat-submit';
+          chatSendButton.classList.toggle('is-stopping', state.busy);
+          chatSendButton.setAttribute('aria-label', state.busy ? 'Stop response' : 'Send message');
+          const buttonIcon = chatSendButton.querySelector('.material-symbols-outlined');
+          if (buttonIcon) buttonIcon.textContent = state.busy ? '' : 'arrow_upward';
+        }
         autoResize(chatInput);
       }
 
@@ -6784,6 +7770,10 @@
           window.clearTimeout(state.responseTimer);
           state.responseTimer = null;
         }
+        if (state.streamTimer) {
+          window.clearInterval(state.streamTimer);
+          state.streamTimer = null;
+        }
       }
 
       function startNewChat() {
@@ -6791,6 +7781,8 @@
         clearStagingTimer();
         state.messages = [];
         state.busy = false;
+        state.activeResponseId = null;
+        state.responseStartedAt = 0;
         state.responseCount = 0;
         state.draft = '';
         state.stagingState = state.stagedFiles.length ? 'ready' : 'empty';
@@ -6814,27 +7806,229 @@
         showToast('A fresh Aura canvas is ready.', 'add');
       }
 
-      function makeAssistantMessage(prompt, variant) {
-        state.responseCount += 1;
-        const opening = variant ? 'Here is a tightened follow-up pass with a few practical refinements.' : 'Here is a practical starting point I would use for this request.';
+      function getResponseProfile(prompt) {
+        const value = String(prompt || '').toLowerCase();
+        if (/churn|cohort|csv|metric|analytics|retention|regression|data/.test(value)) {
+          return {
+            heading: 'Churn analysis — strongest signals',
+            summary: 'The staged dataset points to an early retention problem rather than a single late-stage payment failure. Customers with low activation in their first week are overrepresented in later churn, and usage depth is the strongest visible separator.',
+            findings: [
+              '**Activation is the leading signal.** Accounts that complete the core setup action in their first seven days show materially stronger week-four retention than stalled accounts.',
+              '**Usage depth matters more than raw sign-ins.** A small group of highly engaged accounts masks a broad cohort that logs in but does not reach recurring workflows.',
+              '**One high-intent segment is recoverable.** Users who invite a teammate before their third session respond well to collaboration prompts, while solo evaluators churn quickly after a limited trial.'
+            ],
+            recommendation: 'Start with a seven-day activation experiment, then compare retained cohorts by setup completion and recurring workflow depth. I would hold campaign spend constant so the lift is easier to interpret.',
+            code: "activation = events.groupby('account_id')['core_action_completed'].max()\nweek4 = retained.merge(activation, on='account_id', how='left')\nsummary = week4.groupby('activated')['retained'].agg(['mean', 'count'])",
+            language: 'python',
+            filename: 'cohort_analysis.py',
+            activity: 'Scanned 12,450 rows · profiled 18 cohort features'
+          };
+        }
+        if (/docker|kubernetes|k8s|compose|deploy|deployment|replica|port|production|infrastructure/.test(value)) {
+          return {
+            heading: 'Deployment review — actionable risks',
+            summary: 'The deployment shape is workable, but production reliability improves when health checks, secret boundaries, and replica behavior are made explicit. The highest-value changes are small and can be verified before rollout.',
+            findings: [
+              '**Health checks are the main reliability gap.** A service without a dedicated readiness signal can receive traffic before dependencies are ready and can remain in rotation after a partial failure.',
+              '**Secret values should stay outside the committed file.** Environment references are appropriate, but any literal credentials in repository history should be rotated before deployment.',
+              '**Replica behavior needs an explicit policy.** Add a bounded rolling update strategy, a readiness probe, and enough resource limits to prevent one noisy instance from exhausting the node.'
+            ],
+            recommendation: 'Apply the health-check and rolling-update changes first, verify a clean rollout under load, then review secret history and network exposure. Keep the first rollout reversible with a retained previous image.',
+            code: "services:\n  api:\n    restart: unless-stopped\n    healthcheck:\n      test: [\"CMD\", \"curl\", \"-f\", \"http://localhost:3000/health\"]\n      interval: 30s\n      timeout: 5s\n    deploy:\n      replicas: 3\n      update_config:\n        order: start-first",
+            language: 'yaml',
+            filename: 'docker-compose.prod.yml',
+            activity: 'Read 3 context files · checked 8 deployment signals'
+          };
+        }
+        if (/security|vulnerab|threat|owasp|secret|auth|attack/.test(value)) {
+          return {
+            heading: 'Security review — prioritize exposure',
+            summary: 'The current architecture is strongest at the service boundary, but identity and session handling deserve the closest review. I would validate trust boundaries before tuning lower-level hardening.',
+            findings: [
+              '**Keep authorization close to the resource.** Every protected endpoint should verify the caller against the requested workspace, not only authenticate a valid token.',
+              '**Use short-lived credentials and explicit rotation.** Long-lived shared secrets increase blast radius and make incident response slower.',
+              '**Treat uploads and generated artifacts as untrusted.** Validate type and size at the boundary, scan before processing, and never interpolate filenames into shell commands.'
+            ],
+            recommendation: 'Build a small threat-model pass around authentication, authorization, file handling, and tool invocation. Convert each finding into a reproducible test before making broad framework changes.',
+            code: "const allowed = await workspace.canRead(session.userId, resource.workspaceId)\nif (!allowed) return new Response('Forbidden', { status: 403 })\n\nreturn NextResponse.json(await loadResource(resource.id))",
+            language: 'javascript',
+            filename: 'authorization-check.js',
+            activity: 'Mapped 6 trust boundaries · checked OWASP patterns'
+          };
+        }
+        if (/code|debug|typescript|javascript|python|api|function|error|bug|refactor/.test(value)) {
+          return {
+            heading: 'Implementation path — smallest correct fix',
+            summary: 'Start by reproducing the behavior at the boundary where the mismatch appears. Once the failing case is explicit, the implementation can stay narrow and the regression test can describe the contract directly.',
+            findings: [
+              '**Isolate the invariant.** Move the expected input shape into one typed boundary instead of validating the same assumptions in multiple components.',
+              '**Make failure observable.** Preserve the original cause and return a stable error code that the interface can act on.',
+              '**Cover the edge before the refactor.** Add a focused test for null, empty, and repeated values so the broader cleanup cannot hide a regression.'
+            ],
+            recommendation: 'Write the failing test, apply the narrow fix, then remove only the duplication that the test proves safe to simplify. Keep the public API unchanged unless the contract genuinely needs to evolve.',
+            code: "type Input = { email: string; retries: number }\n\nfunction normalize(input: Input): Input {\n  const email = input.email.trim().toLowerCase()\n  const retries = Math.max(0, Math.min(input.retries, 3))\n  return { email, retries }\n}",
+            language: 'typescript',
+            filename: 'normalized-input.ts',
+            activity: 'Reviewed request flow · isolated 3 failure boundaries'
+          };
+        }
         return {
-          id: `assistant-${Date.now()}-${state.responseCount}`,
-          role: 'assistant',
-          text: [
-            `${opening} I would keep the first move small, make the important state explicit, and then measure the behavior before broadening the surface.`,
-            'For a resilient workspace flow, separate the input boundary from the work itself, keep failures recoverable, and give the person a clear next action at every step.',
-            variant ? 'The follow-up keeps the same boundaries while tightening observability and the handoff points.' : 'A small, observable prototype gives the team a dependable place to test the next iteration.'
+          heading: 'A practical place to begin',
+          summary: 'I would turn this into a short, observable loop: define the desired result, connect only the context required for the decision, and make the first output easy to verify before expanding the surface.',
+          findings: [
+            '**Clarify the decision.** Name the person making the call and the action they need to take next.',
+            '**Reduce the context surface.** Include only the files, tools, and instructions required for the first pass.',
+            '**Create a visible handoff.** Capture decisions, open questions, and the next experiment so the work compounds instead of restarting.'
           ],
-          code: "const stream = new EventSource('/api/stream');\nstream.onmessage = ({ data }) => render(data);",
-          rating: null,
-          variant: Boolean(variant)
+          recommendation: 'Begin with one representative request, review the result with the intended user, and expand only after the interaction feels dependable. The prototype can support that loop without introducing persistence or a backend.',
+          code: "const nextStep = {\n  decision: 'Keep the first pass small',\n  evidence: ['context is explicit', 'failure is recoverable'],\n  owner: 'workspace team'\n}",
+          language: 'javascript',
+          filename: 'next-step.js',
+          activity: 'Reasoned over the current workspace context'
         };
       }
 
+      function makeAssistantMessage(prompt, variant) {
+        state.responseCount += 1;
+        const profile = getResponseProfile(prompt);
+        const sourceFiles = state.stagedFiles.slice(0, 3);
+        return {
+          id: `assistant-${Date.now()}-${state.responseCount}`,
+          role: 'assistant',
+          sourceText: [
+            `## ${profile.heading}`,
+            profile.summary,
+            '### Key findings',
+            ...profile.findings.map((finding) => `- ${finding}`),
+            '### Recommended next step',
+            profile.recommendation
+          ],
+          text: variant ? [] : [],
+          code: {
+            language: profile.language,
+            filename: profile.filename,
+            content: profile.code
+          },
+          sources: sourceFiles.map((file) => ({ name: file.name, type: file.type, icon: file.icon || 'description' })),
+          activity: profile.activity,
+          model: state.activeModel,
+          latency: variant ? '1.4s' : '0.9s',
+          tokens: variant ? '684 tokens' : '612 tokens',
+          rating: null,
+          variant: Boolean(variant),
+          streaming: false,
+          stopped: false
+        };
+      }
+
+      function renderInlineMarkdown(container, text) {
+        const parts = String(text || '').split(/(\*\*[^*]+\*\*|`[^`]+`)/g).filter(Boolean);
+        parts.forEach((part) => {
+          if (part.startsWith('**') && part.endsWith('**')) {
+            container.appendChild(createElement('strong', '', part.slice(2, -2)));
+          } else if (part.startsWith('`') && part.endsWith('`')) {
+            container.appendChild(createElement('code', 'message-inline-code', part.slice(1, -1)));
+          } else {
+            container.appendChild(document.createTextNode(part));
+          }
+        });
+      }
+
+      function renderMarkdown(container, text) {
+        const lines = String(text || '').split('\n');
+        let paragraph = [];
+        let list = null;
+        const flushParagraph = () => {
+          if (!paragraph.length) return;
+          const node = createElement('p');
+          renderInlineMarkdown(node, paragraph.join(' '));
+          container.appendChild(node);
+          paragraph = [];
+        };
+        lines.forEach((line) => {
+          const trimmed = line.trim();
+          if (!trimmed) {
+            flushParagraph();
+            list = null;
+          } else if (trimmed.startsWith('### ')) {
+            flushParagraph();
+            list = null;
+            container.appendChild(createElement('h3', '', trimmed.slice(4)));
+          } else if (trimmed.startsWith('## ')) {
+            flushParagraph();
+            list = null;
+            container.appendChild(createElement('h2', '', trimmed.slice(3)));
+          } else if (trimmed.startsWith('- ')) {
+            flushParagraph();
+            if (!list) {
+              list = createElement('ul');
+              container.appendChild(list);
+            }
+            const item = createElement('li');
+            renderInlineMarkdown(item, trimmed.slice(2));
+            list.appendChild(item);
+          } else {
+            list = null;
+            paragraph.push(trimmed);
+          }
+        });
+        flushParagraph();
+      }
+
       function renderAssistantContent(bubble, message) {
-        const paragraphs = Array.isArray(message.text) ? message.text : [message.text];
-        paragraphs.forEach((text) => bubble.appendChild(createElement('p', 'message-text', text)));
-        if (message.code) bubble.appendChild(createElement('code', 'message-code', message.code));
+        const rich = createElement('div', 'message-rich');
+        const text = Array.isArray(message.text) ? message.text.join('\n\n') : message.text;
+        renderMarkdown(rich, text);
+        if (message.streaming) rich.appendChild(createElement('span', 'message-caret', ' '));
+        bubble.appendChild(rich);
+        if (message.code && !message.streaming) {
+          const shell = createElement('div', 'response-code');
+          const header = createElement('div', 'response-code-header');
+          const file = createElement('span', 'response-code-file');
+          file.appendChild(icon('code'));
+          file.appendChild(createElement('span', '', message.code.filename || 'Generated code'));
+          header.appendChild(file);
+          const copy = createElement('button', 'response-code-copy');
+          copy.type = 'button';
+          copy.dataset.action = 'copy-code';
+          copy.dataset.messageId = message.id;
+          copy.setAttribute('aria-label', 'Copy generated code');
+          copy.appendChild(icon('content_copy'));
+          copy.appendChild(createElement('span', '', 'Copy'));
+          header.appendChild(copy);
+          shell.appendChild(header);
+          const pre = createElement('pre');
+          pre.appendChild(createElement('code', '', message.code.content || ''));
+          shell.appendChild(pre);
+          bubble.appendChild(shell);
+        }
+        if (message.sources?.length && !message.streaming) {
+          const sources = createElement('div', 'response-sources');
+          const label = createElement('span', 'response-sources-label');
+          label.appendChild(icon('link'));
+          label.appendChild(createElement('span', '', 'Context used'));
+          sources.appendChild(label);
+          message.sources.forEach((source) => {
+            const chip = createElement('span', 'source-chip');
+            chip.appendChild(icon(source.icon || 'description'));
+            chip.appendChild(createElement('span', '', source.name));
+            sources.appendChild(chip);
+          });
+          bubble.appendChild(sources);
+        }
+        if (!message.streaming) {
+          const meta = createElement('div', 'response-meta');
+          const status = createElement('span');
+          status.appendChild(icon(message.stopped ? 'stop_circle' : 'check_circle'));
+          status.appendChild(createElement('span', '', message.stopped ? 'Stopped by you' : message.activity));
+          meta.appendChild(status);
+          const model = createElement('span');
+          model.appendChild(icon('memory'));
+          model.appendChild(createElement('span', '', message.model || state.activeModel));
+          meta.appendChild(model);
+          meta.appendChild(createElement('span', '', `${message.latency} · ${message.tokens}`));
+          bubble.appendChild(meta);
+        }
       }
 
       function createMessageAction(iconName, label, action, messageId, rating) {
@@ -6858,17 +8052,19 @@
         const wrapper = createElement('div', 'message-wrapper');
         const bubble = createElement('article', 'message-bubble');
         renderAssistantContent(bubble, message);
-        const actions = createElement('div', 'message-actions');
-        actions.appendChild(createMessageAction('content_copy', 'Copy response', 'copy-message', message.id));
-        actions.appendChild(createMessageAction('refresh', 'Regenerate response', 'regenerate-message', message.id));
-        const up = createMessageAction('thumb_up', 'Like response', 'rate-message', message.id, 'up');
-        const down = createMessageAction('thumb_down', 'Dislike response', 'rate-message', message.id, 'down');
-        if (message.rating === 'up') up.classList.add('is-active');
-        if (message.rating === 'down') down.classList.add('is-active');
-        actions.appendChild(up);
-        actions.appendChild(down);
-        actions.appendChild(createElement('span', 'message-status', 'Local response'));
-        bubble.appendChild(actions);
+        if (!message.streaming) {
+          const actions = createElement('div', 'message-actions');
+          actions.appendChild(createMessageAction('content_copy', 'Copy response', 'copy-message', message.id));
+          actions.appendChild(createMessageAction('refresh', 'Regenerate response', 'regenerate-message', message.id));
+          const up = createMessageAction('thumb_up', 'Like response', 'rate-message', message.id, 'up');
+          const down = createMessageAction('thumb_down', 'Dislike response', 'rate-message', message.id, 'down');
+          if (message.rating === 'up') up.classList.add('is-active');
+          if (message.rating === 'down') down.classList.add('is-active');
+          actions.appendChild(up);
+          actions.appendChild(down);
+          actions.appendChild(createElement('span', 'message-status', 'Local prototype response'));
+          bubble.appendChild(actions);
+        }
         wrapper.appendChild(bubble);
         row.appendChild(wrapper);
         return row;
@@ -6879,6 +8075,12 @@
         row.dataset.messageId = message.id;
         const bubble = createElement('article', 'message-bubble');
         bubble.appendChild(createElement('p', 'message-text', message.text));
+        if (message.contextCount) {
+          const context = createElement('div', 'message-context');
+          context.appendChild(icon('attach_file'));
+          context.appendChild(createElement('span', '', `${message.contextCount} staged ${message.contextCount === 1 ? 'file' : 'files'} included`));
+          bubble.appendChild(context);
+        }
         row.appendChild(bubble);
         return row;
       }
@@ -6889,6 +8091,7 @@
         const avatar = createElement('div', 'message-avatar');
         avatar.appendChild(icon('auto_awesome'));
         const bubble = createElement('article', 'message-bubble typing-bubble');
+        bubble.appendChild(createElement('span', 'typing-copy', 'Reading your context'));
         bubble.appendChild(createElement('span', 'typing-dot'));
         bubble.appendChild(createElement('span', 'typing-dot'));
         bubble.appendChild(createElement('span', 'typing-dot'));
@@ -6897,36 +8100,121 @@
         return row;
       }
 
+      function renderChatEmptyState() {
+        const empty = createElement('div', 'chat-empty-state');
+        const mark = createElement('div', 'chat-empty-mark');
+        mark.appendChild(icon('auto_awesome'));
+        empty.appendChild(mark);
+        empty.appendChild(createElement('h2', '', 'What can we build together?'));
+        empty.appendChild(createElement('p', '', 'Start with a question, attach context, or choose one of these paths. Aura will keep the reasoning and source trail visible.'));
+        const prompts = createElement('div', 'chat-empty-prompts');
+        [
+          ['shield', 'Review for risks', 'Audit the current context for security and reliability.'],
+          ['query_stats', 'Find the signal', 'Turn the staged data into clear findings and experiments.'],
+          ['account_tree', 'Explain the system', 'Map the architecture and its important trade-offs.'],
+          ['edit_note', 'Draft a brief', 'Create a concise, decision-ready summary.']
+        ].forEach(([iconName, title, description]) => {
+          const button = createElement('button');
+          button.type = 'button';
+          button.dataset.action = 'use-chat-starter';
+          button.dataset.prompt = description;
+          button.appendChild(icon(iconName));
+          const copy = createElement('span');
+          copy.appendChild(createElement('strong', '', title));
+          copy.appendChild(createElement('small', '', description));
+          button.appendChild(copy);
+          prompts.appendChild(button);
+        });
+        empty.appendChild(prompts);
+        return empty;
+      }
+
       function renderChatMessages() {
         if (!chatMessages) return;
+        const active = state.messages.find((message) => message.id === state.activeResponseId);
+        const activeHasText = Array.isArray(active?.text) ? active.text.length > 0 : Boolean(active?.text);
         chatView?.setAttribute('aria-busy', String(state.busy));
-        chatView?.setAttribute('data-state', state.busy ? 'typing' : state.messages.length ? 'response' : 'idle');
+        chatView?.setAttribute('data-state', state.busy ? (activeHasText ? 'streaming' : 'typing') : state.messages.length ? 'response' : 'idle');
         chatMessages.replaceChildren();
+        if (!state.messages.length && !state.busy) chatMessages.appendChild(renderChatEmptyState());
         state.messages.forEach((message) => {
-          chatMessages.appendChild(message.role === 'user' ? renderUserMessage(message) : renderAssistantMessage(message));
+          if (message.role === 'user' || !message.streaming || (Array.isArray(message.text) ? message.text.length > 0 : Boolean(message.text))) {
+            chatMessages.appendChild(message.role === 'user' ? renderUserMessage(message) : renderAssistantMessage(message));
+          }
         });
-        if (state.busy) chatMessages.appendChild(renderTypingMessage());
+        if (state.busy && !activeHasText) chatMessages.appendChild(renderTypingMessage());
         chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+
+      function finishResponse(message, stopped) {
+        clearResponseTimer();
+        if (!message) return;
+        if (stopped) {
+          const current = Array.isArray(message.text) ? message.text.join('').trim() : String(message.text || '').trim();
+          message.text = current ? [current] : message.sourceText.slice(0, 2);
+          message.code = null;
+          message.sources = [];
+          message.stopped = true;
+        } else {
+          message.text = message.sourceText;
+        }
+        message.streaming = false;
+        state.busy = false;
+        state.activeResponseId = null;
+        updateDraftState();
+        updateChatDraftState();
+        renderChatMessages();
+      }
+
+      function streamResponse(message) {
+        if (!message || state.activeResponseId !== message.id) return;
+        const raw = message.sourceText.join('\n\n');
+        const step = Math.max(6, Math.ceil(raw.length / 84));
+        let position = 0;
+        state.streamTimer = window.setInterval(() => {
+          if (state.activeResponseId !== message.id) return;
+          position = Math.min(raw.length, position + step);
+          let end = position;
+          if (position < raw.length) {
+            const boundary = raw.lastIndexOf(' ', end);
+            if (boundary > position - step * 2) end = boundary + 1;
+          }
+          message.text = [raw.slice(0, end)];
+          if (end >= raw.length) finishResponse(message, false);
+          else renderChatMessages();
+        }, 18);
+      }
+
+      function stopResponse() {
+        const active = state.messages.find((message) => message.id === state.activeResponseId);
+        if (!active) return;
+        finishResponse(active, true);
+        showToast('Response stopped.', 'stop_circle');
       }
 
       function queueMockResponse(prompt, regenerate) {
         clearResponseTimer();
         state.busy = true;
+        state.responseStartedAt = Date.now();
         if (regenerate) {
           const lastIndex = state.messages.map((message) => message.role).lastIndexOf('assistant');
           if (lastIndex >= 0) state.messages.splice(lastIndex, 1);
         }
+        const response = makeAssistantMessage(prompt, regenerate);
+        response.streaming = Boolean(state.preferences.streaming);
+        state.activeResponseId = response.id;
+        state.messages.push(response);
         updateDraftState();
         updateChatDraftState();
         renderChatMessages();
-        state.responseTimer = window.setTimeout(() => {
-          state.responseTimer = null;
-          state.messages.push(makeAssistantMessage(prompt, regenerate));
-          state.busy = false;
-          renderChatMessages();
-          updateDraftState();
-          updateChatDraftState();
-        }, 920);
+        if (state.preferences.streaming) {
+          state.responseTimer = window.setTimeout(() => {
+            state.responseTimer = null;
+            streamResponse(response);
+          }, 520);
+        } else {
+          state.responseTimer = window.setTimeout(() => finishResponse(response, false), 920);
+        }
       }
 
       function submitPrompt(source) {
@@ -6942,7 +8230,7 @@
         } else {
           updateChatDraftState();
         }
-        state.messages.push({ id: `user-${Date.now()}`, role: 'user', text });
+        state.messages.push({ id: `user-${Date.now()}`, role: 'user', text, contextCount: state.stagedFiles.length });
         setView('chat');
         queueMockResponse(text, false);
       }
@@ -7083,7 +8371,8 @@
       async function copyMessage(messageId) {
         const message = state.messages.find((item) => item.id === messageId);
         if (!message) return;
-        const text = [...(Array.isArray(message.text) ? message.text : [message.text]), message.code].filter(Boolean).join('\n\n');
+        const code = typeof message.code === 'string' ? message.code : message.code?.content;
+        const text = [...(Array.isArray(message.text) ? message.text : [message.text]), code].filter(Boolean).join('\n\n');
         try {
           await copyText(text);
           showToast('Response copied to the clipboard.', 'content_copy');
@@ -7111,10 +8400,43 @@
         if (message.rating) showToast(rating === 'up' ? 'Thanks for the feedback.' : 'Feedback noted for this response.', rating === 'up' ? 'thumb_up' : 'thumb_down');
       }
 
+      function openChatView() {
+        closeSidebar(false);
+        closeModelMenu(false);
+        setView('chat');
+      }
+
+      function useChatStarter(prompt) {
+        if (!prompt || !chatInput) return;
+        chatInput.value = prompt;
+        updateChatDraftState();
+        chatInput.focus();
+      }
+
+      async function copyMessageCode(messageId) {
+        const message = state.messages.find((item) => item.id === messageId);
+        const code = typeof message?.code === 'string' ? message.code : message?.code?.content;
+        if (!code) return;
+        try {
+          await copyText(code);
+          showToast('Generated code copied to the clipboard.', 'content_copy');
+        } catch (error) {
+          showToast('Copy is unavailable here; select the code block to copy it.', 'info');
+        }
+      }
+
       function handleAction(target) {
         const action = target.closest('[data-action]')?.dataset.action;
         if (!action) return;
-        if (action === 'new-chat') {
+        if (action === 'cycle-theme') {
+          cycleTheme();
+        } else if (action === 'select-theme') {
+          setTheme(target.closest('[data-action="select-theme"]').dataset.theme, true);
+        } else if (action === 'select-density') {
+          setDensity(target.closest('[data-action="select-density"]').dataset.density, true);
+        } else if (action === 'chat-focus') {
+          toggleFocusMode(true);
+        } else if (action === 'new-chat') {
           startNewChat();
         } else if (action === 'toggle-sidebar') {
           toggleSidebar();
@@ -7135,6 +8457,10 @@
           showToast(`${state.activeModel} is now active.`, 'auto_awesome');
         } else if (action === 'use-prompt') {
           usePrompt(target.closest('[data-action="use-prompt"]').dataset.prompt);
+        } else if (action === 'use-chat-starter') {
+          useChatStarter(target.closest('[data-action="use-chat-starter"]').dataset.prompt);
+        } else if (action === 'attach') {
+          openStagedFilePicker();
         } else if (action === 'remove-staged-file') {
           removeStagedFile(target.closest('[data-action="remove-staged-file"]').dataset.fileId);
         } else if (action === 'browse-staging') {
@@ -7182,8 +8508,10 @@
           setCategory(target.closest('[data-action="filter-category"]').dataset.category);
         } else if (action === 'send-prompt') {
           submitPrompt('dashboard');
-        } else if (action === 'send-chat') {
+        } else if (action === 'send-chat' || action === 'chat-submit') {
           submitPrompt('chat');
+        } else if (action === 'stop-response') {
+          stopResponse();
         } else if (action === 'back-dashboard') {
           closeModelMenu(false);
           setView('dashboard');
@@ -7193,11 +8521,15 @@
           setView('dashboard');
         } else if (action === 'copy-message') {
           copyMessage(target.closest('[data-message-id]')?.dataset.messageId);
+        } else if (action === 'copy-code') {
+          copyMessageCode(target.closest('[data-message-id]')?.dataset.messageId);
         } else if (action === 'regenerate-message') {
           regenerateMessage(target.closest('[data-message-id]')?.dataset.messageId);
         } else if (action === 'rate-message') {
           const button = target.closest('[data-action="rate-message"]');
           rateMessage(button.dataset.messageId, button.dataset.rating);
+        } else if (action === 'nav-chat') {
+          openChatView();
         } else if (action === 'nav-settings') {
           openSettings(target.closest('[data-action="nav-settings"]'));
         } else if (action === 'profile') {
@@ -7271,7 +8603,8 @@
 
       [promptInput, chatInput].forEach((textarea) => {
         textarea.addEventListener('keydown', (event) => {
-          if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') {
+          if (event.defaultPrevented) return;
+          if (event.key === 'Enter' && !event.shiftKey && !event.isComposing) {
             event.preventDefault();
             submitPrompt(textarea === chatInput ? 'chat' : 'dashboard');
           }
@@ -7358,6 +8691,7 @@
           else if (!commandMenu.hidden) closeCommandMenu();
           else if (state.sidebarOpen) closeSidebar();
           else if (!modelMenu.hidden) closeModelMenu(true);
+          else if (state.busy) stopResponse();
           return;
         }
         if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
@@ -7452,6 +8786,7 @@
       });
 
       syncSidebarAccessibility();
+      renderAppearance();
       renderStagedFiles();
       updateModelLabels();
       renderSettings();
