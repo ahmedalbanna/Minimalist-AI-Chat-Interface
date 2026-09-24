@@ -53,6 +53,18 @@ try {
   assert(await page.locator('.staged-file').count() === 3, 'default staged files are missing');
   assert(await page.locator('#staging-composer-card').getAttribute('data-state') === 'ready', 'initial staging state is not ready');
   assert(await page.locator('#staging-onboarding').isHidden(), 'onboarding should be hidden with files');
+  await page.locator('[data-action="open-camera"]').click();
+  assert(await page.locator('#camera-modal').isVisible(), 'camera drawer did not open');
+  assert(await page.locator('.camera-dialog').getAttribute('data-camera-state') === 'ready', 'camera initial state is not ready');
+  assert((await page.locator('#camera-file-name').textContent()).includes('auth_architecture_diagram.png'), 'camera image metadata missing');
+  await page.locator('#camera-primary').click();
+  assert(await page.locator('.camera-dialog').getAttribute('data-camera-state') === 'analyzing', 'camera analyzing state missing');
+  await page.waitForTimeout(800);
+  assert(await page.locator('.camera-dialog').getAttribute('data-camera-state') === 'success', 'camera success state missing');
+  await page.locator('[data-action="camera-error"]').click();
+  assert(await page.locator('.camera-dialog').getAttribute('data-camera-state') === 'error', 'camera error state missing');
+  await page.keyboard.press('Escape');
+  assert(await page.locator('#camera-modal').isHidden(), 'camera drawer did not close');
 
   await page.keyboard.press('Control+KeyK');
   assert(await page.locator('#search-modal').isVisible(), 'global search did not open');
@@ -73,6 +85,10 @@ try {
   }
   assert(await page.locator('#staging-composer-card').getAttribute('data-state') === 'empty', 'empty staging state is missing');
   assert(await page.locator('#staging-onboarding').isVisible(), 'onboarding state is missing');
+  await page.locator('[data-action="open-camera"]').click();
+  assert(await page.locator('#camera-modal').isVisible(), 'empty camera drawer did not open');
+  assert(await page.locator('.camera-dialog').getAttribute('data-camera-state') === 'empty', 'empty camera state is missing');
+  await page.keyboard.press('Escape');
   await page.locator('#staged-file-input').setInputFiles({ name: 'validation.json', mimeType: 'application/json', buffer: Buffer.from('{"ok":true}') });
   assert(await page.locator('#staging-composer-card').getAttribute('data-state') === 'loading', 'loading staging state is missing');
   await page.waitForTimeout(650);
@@ -139,6 +155,11 @@ try {
   assert(await mobile.locator('.settings-dialog').evaluate((element) => element.getBoundingClientRect().width <= innerWidth), 'mobile settings exceed viewport');
   await mobile.keyboard.press('Escape');
   assert(await mobile.locator('#settings-modal').isHidden(), 'mobile settings did not close');
+  await mobile.locator('[data-action="open-camera"]').click();
+  assert(await mobile.locator('#camera-modal').isVisible(), 'mobile camera drawer did not open');
+  assert(await mobile.locator('.camera-dialog').evaluate((element) => element.getBoundingClientRect().width <= innerWidth), 'mobile camera drawer exceeds viewport');
+  await mobile.keyboard.press('Escape');
+  assert(await mobile.locator('#camera-modal').isHidden(), 'mobile camera drawer did not close');
   await mobile.locator('#sidebar-toggle').click();
   await mobile.locator('.integration-row[data-action="mcp"]').click();
   assert(await mobile.locator('#mcp-modal').isVisible(), 'mobile MCP drawer did not open');
@@ -156,7 +177,7 @@ try {
   assert(await mobile.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'mobile overflow after settings');
   assert(mobileErrors.length === 0, `mobile application errors: ${mobileErrors.join('; ')}`);
 
-  console.log('Browser checks passed: desktop, direct file, search, commands, staging, settings, MCP, audio, chat, and mobile');
+  console.log('Browser checks passed: desktop, direct file, search, commands, staging, camera, settings, MCP, audio, chat, and mobile');
 } finally {
   await browser.close();
 }

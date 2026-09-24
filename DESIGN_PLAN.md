@@ -74,7 +74,7 @@ Visual rules:
 | Assistant & Model Settings | `fb81a25568074c57b03db3bd190e6433` | `#settings-modal` and `#model-menu` | Add a responsive settings drawer with model selection and local preview preferences. |
 | MCP Servers & Tools | `dbb62bc62b3f45388da49829f360d30d` | `#mcp-modal` and sidebar integration row | Add a searchable, responsive preview drawer for connected servers and tools. |
 | Voice Call & Audio Mode | `82e03fdb65a94c0281a6eba7838efe5c` and `10796b9357d349979f7c5dc636b66d46` | `#audio-modal` and audio controls | Add a responsive, deterministic voice preview with explicit idle/listening/processing/playing/error states and no microphone access. |
-| Multimodal Camera Inspection | `eb5e7fe281144c8491fd386596ecc219` | screenshot/preview controls | Defer; do not imply camera capture in the metadata-only prototype. |
+| Multimodal Camera Inspection | `eb5e7fe281144c8491fd386596ecc219` | `#camera-modal` and staging image metadata | Add a responsive metadata-only image preview with empty/ready/analyzing/success/error states and no camera permissions or pixel storage. |
 
 ## State model
 
@@ -171,6 +171,7 @@ Acceptance criteria:
 - Add local preview preferences for streaming mode, memory-only sessions, and MCP context status.
 - Add a searchable MCP drawer that presents connected servers, tool metadata, and preview invocation feedback without transport.
 - Add a responsive voice/audio preview with idle, requesting, listening, processing, playing, error, and reset transitions.
+- Add a metadata-only camera inspection drawer for staged PNG/JPG/JPEG files with empty, ready, analyzing, success, and error transitions.
 - Preserve New Chat, regenerate, copy, and rating actions through delegated handlers.
 
 Acceptance criteria:
@@ -180,11 +181,12 @@ Acceptance criteria:
 - The settings drawer opens from navigation, traps focus, supports model/preference updates, and closes with Escape.
 - The MCP drawer supports server/tool search, selection, focus return, and a non-transport preview action.
 - The audio drawer exposes every preview state, returns focus, and never requests microphone or speaker access.
+- The camera drawer handles missing, staged, analyzing, success, and error image states without camera permissions.
 - Back-to-dashboard, New Chat, and model selection all leave a consistent state.
 
 ### Phase 6 — Deferred product surfaces
 
-- Do not implement real microphone/speaker access, camera, MCP transport, uploads, or backend persistence in this fixture.
+- Do not implement real microphone/speaker access, camera capture, MCP transport, uploads, or backend persistence in this fixture.
 - If requested later, add each as a separate feature slice with its own state and Stitch screen reference.
 
 ## File-level change map
@@ -212,6 +214,7 @@ Browser checks at 1600×1000, 1024×900, 390×844, and 320×800:
 - Slash command open, keyboard selection, insertion, and Escape.
 - Settings drawer model/preferences, MCP server/tool browsing, search, selection, preview activation, and focus return.
 - Audio drawer idle/requesting/listening/processing/playing/error/reset states and focus return.
+- Camera drawer empty/ready/analyzing/success/error states, metadata, and mobile fit.
 - File picker, drag/drop, pending/loading, success, duplicate/oversize error, recovery, and remove-last-file.
 - Send disabled, chat typing, response, action toolbar, New Chat, and model menu.
 - Mobile drawer open/close, focus return, safe-area composer, no horizontal overflow, and reduced motion.

@@ -20,6 +20,7 @@ Use Stitch project `5056153100982867775` and design system `assets/3811946a70054
 - `fb81a25568074c57b03db3bd190e6433` — assistant and model settings.
 - `dbb62bc62b3f45388da49829f360d30d` — MCP servers and tools.
 - `82e03fdb65a94c0281a6eba7838efe5c` and `10796b9357d349979f7c5dc636b66d46` — voice call and audio mode.
+- `eb5e7fe281144c8491fd386596ecc219` — multimodal camera inspection.
 
 Use MCP metadata, screenshots, and design-system tokens as references. Generated HTML download links may require authenticated browser access and are not local dependencies.
 
@@ -55,6 +56,11 @@ Completion criterion: every new control has one state owner, one update path, an
 | `disabled` | Prompt is empty or chat is busy | Disabled send control with unchanged readable label |
 | `search-empty` | Blueprint or session query has no match | Focused empty result with a recovery hint |
 | `chat-loading` | Prompt is submitted | Typing indicator and guarded duplicate submit |
+| `camera-empty` | No image is staged | Inviting empty preview and file-selection path |
+| `camera-ready` | A PNG/JPG/JPEG is staged | Metadata summary and enabled analysis action |
+| `camera-analyzing` | Analysis is requested | Progress cue, disabled action, and stable preview |
+| `camera-success` | Metadata analysis completes | Confirmation and next-action summary |
+| `camera-error` | Preview failure is simulated | Plain-language error and retry path |
 
 State transitions are one-way until the user changes the input: `ready → loading → success`, `ready → error → ready`, or `success → empty`. New Chat cancels timers and returns to `ready` when context remains or `empty` when it does not.
 
@@ -123,7 +129,17 @@ Completion criterion: MCP browsing is useful, responsive, and clearly bounded to
 
 Completion criterion: the audio flow is understandable and testable without implying real voice transport.
 
-### 8. Preserve prompt and chat flow
+### 8. Preview camera inspection without capture access
+
+- Open the camera drawer from the staged composer inspection control.
+- Use the first staged PNG/JPG/JPEG metadata as the current image without reading pixels.
+- Represent empty, ready, analyzing, success, and error states with a stable preview frame.
+- Keep camera permission, upload, and storage explicitly disabled; provide a clear file-selection recovery path.
+- Trap focus, close with Escape, return focus, and keep the mobile dialog full-width and scroll-safe.
+
+Completion criterion: the inspection flow is useful and testable while remaining clearly metadata-only.
+
+### 9. Preserve prompt and chat flow
 
 The dashboard composer is a context prompt, not a persistence boundary. Keep the default staged prompt usable, update the send disabled state on input, and route submission through the existing mock chat flow. Staged files may remain in the active context when switching between dashboard and chat; a new chat clears the transcript without silently persisting anything.
 
@@ -131,7 +147,7 @@ Use delegated actions for cards, remove buttons, model selection, and feedback c
 
 Completion criterion: submitting a staged prompt opens chat, shows a typing state, produces a deterministic assistant response, and New Chat returns to a usable dashboard.
 
-### 9. Preserve the Aura visual system
+### 10. Preserve the Aura visual system
 
 Use the existing CSS tokens and component language:
 
@@ -163,8 +179,8 @@ Run the project’s available checks after every material change:
 1. Run `node validate-aura.mjs` for the static pass; run `node validate-aura.mjs --browser` with Playwright available.
 2. Compile each inline script with Node's `vm.Script` or the equivalent project command.
 3. Parse the HTML and check for duplicate ids and unnamed icon-only buttons.
-4. Exercise every state in the state matrix: ready, empty, loading, success, error, disabled, search-empty, chat-loading, and audio preview states.
-5. Exercise the initial dashboard, file removal, file picker, drag/drop, prompt insertion, global search, slash commands, model menu, settings preferences, MCP server/tool browsing, voice preview states, send/typing/response, and New Chat.
+4. Exercise every state in the state matrix: ready, empty, loading, success, error, disabled, search-empty, chat-loading, audio preview, and camera inspection states.
+5. Exercise the initial dashboard, file removal, file picker, drag/drop, prompt insertion, global search, slash commands, model menu, settings preferences, MCP server/tool browsing, voice preview, camera inspection, send/typing/response, and New Chat.
 6. Check the mobile drawer, Escape close, composer submission, and viewport overflow.
 7. Open `code.html` directly with `file://` as well as through a temporary local server.
 8. Stop temporary servers and remove staging/reference folders only after the main file is verified.

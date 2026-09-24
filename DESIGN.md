@@ -120,7 +120,7 @@ spacing:
 
 - Project: `5056153100982867775` — Minimalist AI Chat Interface.
 - Design system: `assets/3811946a7005480595c5888559dfa158` — Aura AI.
-- Primary references: `a262725eaaff4063b3a58f4ae0d7c924` (file attachment and staging), `a2968e6b2073452dbb23578cde3f8331` (empty onboarding), `f1781ddc1b8643219a5b34f6868d83e8` (dynamic greeting and suggestions), `390679573b084dc5881bc20caa7c7e46` (global search), and `c7cbaa57b3034a188d63f27ebdd0deba` (slash commands).
+- Primary references: `a262725eaaff4063b3a58f4ae0d7c924` (file attachment and staging), `a2968e6b2073452dbb23578cde3f8331` (empty onboarding), `f1781ddc1b8643219a5b34f6868d83e8` (dynamic greeting and suggestions), `390679573b084dc5881bc20caa7c7e46` (global search), `c7cbaa57b3034a188d63f27ebdd0deba` (slash commands), `82e03fdb65a94c0281a6eba7838efe5c` / `10796b9357d349979f7c5dc636b66d46` (voice and audio), and `eb5e7fe281144c8491fd386596ecc219` (camera inspection).
 - The Stitch screen set is the visual and behavioral reference for `code.html`; the local fixture remains browser-openable and memory-only.
 
 ## Brand & Style

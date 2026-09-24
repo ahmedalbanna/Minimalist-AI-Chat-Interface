@@ -3848,6 +3848,291 @@
       font-size: 16px;
     }
 
+    .camera-modal {
+      position: fixed;
+      z-index: 110;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 16px;
+    }
+
+    .camera-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(11, 28, 48, .3);
+      backdrop-filter: blur(7px);
+      -webkit-backdrop-filter: blur(7px);
+    }
+
+    .camera-dialog {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      width: min(560px, 100%);
+      max-height: calc(100vh - 32px);
+      flex-direction: column;
+      overflow: hidden;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      box-shadow: 0 24px 60px rgba(15, 23, 42, .2);
+    }
+
+    .camera-dialog-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 20px 22px 14px;
+    }
+
+    .camera-dialog-heading {
+      display: grid;
+      gap: 5px;
+    }
+
+    .camera-dialog-heading h2 {
+      margin: 0;
+      color: var(--text);
+      font-size: 19px;
+      font-weight: 600;
+      letter-spacing: -.03em;
+    }
+
+    .camera-dialog-heading p {
+      margin: 0;
+      color: var(--secondary);
+      font-size: 10px;
+      line-height: 1.5;
+    }
+
+    .camera-close {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      flex: 0 0 32px;
+      color: var(--muted);
+      background: var(--blue-soft);
+      border-radius: 8px;
+    }
+
+    .camera-close:hover {
+      color: var(--blue);
+      background: #dce9ff;
+    }
+
+    .camera-stage {
+      display: grid;
+      gap: 12px;
+      padding: 18px 22px 20px;
+      background: linear-gradient(180deg, #eff4ff, #f8f9ff);
+      border-top: 1px solid var(--line-soft);
+      border-bottom: 1px solid var(--line-soft);
+    }
+
+    .camera-preview {
+      position: relative;
+      display: grid;
+      place-items: center;
+      min-height: 180px;
+      overflow: hidden;
+      color: #dbe8ff;
+      background: #14233d;
+      border: 1px solid #263b5d;
+      border-radius: 14px;
+    }
+
+    .camera-preview::before,
+    .camera-preview::after {
+      position: absolute;
+      content: '';
+      pointer-events: none;
+    }
+
+    .camera-preview::before {
+      inset: 0;
+      background: linear-gradient(135deg, rgba(37, 99, 235, .2), transparent 48%), repeating-linear-gradient(90deg, transparent 0 48px, rgba(219, 232, 255, .06) 49px 50px), repeating-linear-gradient(0deg, transparent 0 48px, rgba(219, 232, 255, .06) 49px 50px);
+    }
+
+    .camera-preview::after {
+      right: -45px;
+      bottom: -65px;
+      width: 180px;
+      height: 180px;
+      background: rgba(37, 99, 235, .22);
+      border-radius: 50%;
+      filter: blur(2px);
+    }
+
+    .camera-preview-icon {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      place-items: center;
+      width: 64px;
+      height: 64px;
+      color: #bfdbfe;
+      background: rgba(255, 255, 255, .1);
+      border: 1px solid rgba(191, 219, 254, .3);
+      border-radius: 18px;
+    }
+
+    .camera-preview-icon .material-symbols-outlined {
+      font-size: 32px;
+    }
+
+    .camera-preview-label {
+      position: absolute;
+      z-index: 1;
+      right: 12px;
+      bottom: 10px;
+      left: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      color: #bfdbfe;
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 9px;
+    }
+
+    .camera-dialog[data-camera-state='analyzing'] .camera-preview-icon {
+      animation: camera-scan 1.1s ease-in-out infinite;
+    }
+
+    .camera-dialog[data-camera-state='analyzing'] .camera-preview::after {
+      animation: camera-sweep 1.1s ease-in-out infinite;
+    }
+
+    @keyframes camera-scan {
+      0%, 100% { transform: scale(.96); opacity: .7; }
+      50% { transform: scale(1.04); opacity: 1; }
+    }
+
+    @keyframes camera-sweep {
+      0%, 100% { transform: translate(-35px, 35px); opacity: .35; }
+      50% { transform: translate(35px, -35px); opacity: .7; }
+    }
+
+    .camera-file-summary {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 12px;
+      background: #fff;
+      border: 1px solid var(--line-soft);
+      border-radius: 10px;
+    }
+
+    .camera-file-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      flex: 0 0 30px;
+      color: var(--blue);
+      background: var(--blue-soft);
+      border-radius: 8px;
+    }
+
+    .camera-file-icon .material-symbols-outlined {
+      font-size: 17px;
+    }
+
+    .camera-file-copy {
+      display: grid;
+      flex: 1;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .camera-file-copy strong {
+      overflow: hidden;
+      color: var(--text);
+      font-size: 11px;
+      font-weight: 600;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .camera-file-copy span {
+      color: var(--muted);
+      font-size: 9px;
+    }
+
+    .camera-insight {
+      min-height: 58px;
+      padding: 11px 12px;
+      color: var(--secondary);
+      background: #fff;
+      border: 1px solid var(--line-soft);
+      border-radius: 10px;
+      font-size: 10px;
+      line-height: 1.55;
+    }
+
+    .camera-controls {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      padding: 16px 22px 18px;
+    }
+
+    .camera-primary,
+    .camera-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      min-height: 40px;
+      padding: 0 14px;
+      border-radius: 9px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .camera-primary {
+      color: #fff;
+      background: var(--blue);
+      box-shadow: 0 5px 12px rgba(37, 99, 235, .16);
+    }
+
+    .camera-primary:hover {
+      background: var(--blue-dark);
+    }
+
+    .camera-secondary {
+      color: var(--secondary);
+      background: var(--blue-soft);
+      border: 1px solid #d5e2fb;
+    }
+
+    .camera-secondary:hover {
+      color: var(--blue);
+      background: #dce9ff;
+    }
+
+    .camera-dialog-footer {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 12px 22px max(16px, env(safe-area-inset-bottom));
+      color: var(--muted);
+      border-top: 1px solid var(--line-soft);
+      font-size: 10px;
+      line-height: 1.45;
+    }
+
+    .camera-dialog-footer .material-symbols-outlined {
+      color: var(--blue);
+      font-size: 16px;
+    }
+
     .audio-modal {
       position: fixed;
       z-index: 110;
@@ -5166,6 +5451,33 @@
     }
 
     @media (max-width: 720px) {
+      .camera-modal {
+        padding: 0;
+      }
+
+      .camera-dialog {
+        width: 100%;
+        max-height: 100vh;
+        border: 0;
+        border-radius: 0;
+      }
+
+      .camera-dialog-header {
+        padding: 18px 16px 14px;
+      }
+
+      .camera-stage {
+        padding: 16px;
+      }
+
+      .camera-controls {
+        padding: 14px 16px 16px;
+      }
+
+      .camera-dialog-footer {
+        padding: 12px 16px max(16px, env(safe-area-inset-bottom));
+      }
+
       .audio-modal {
         padding: 0;
       }
@@ -5323,6 +5635,24 @@
       </aside>
     </div>
 
+    <div id="camera-modal" class="camera-modal" hidden>
+      <button class="camera-backdrop" type="button" data-action="close-camera" aria-label="Close camera inspection"></button>
+      <aside class="camera-dialog" data-camera-state="empty" role="dialog" aria-modal="true" aria-labelledby="camera-title" aria-describedby="camera-description">
+        <header class="camera-dialog-header">
+          <div class="camera-dialog-heading"><h2 id="camera-title">Multimodal camera inspection</h2><p id="camera-description">Preview how Aura can inspect a staged image without camera permissions.</p></div>
+          <button class="camera-close" type="button" data-action="close-camera" aria-label="Close camera inspection"><span class="material-symbols-outlined" aria-hidden="true">close</span></button>
+        </header>
+        <div class="camera-stage">
+          <div class="camera-preview"><span class="camera-preview-icon"><span class="material-symbols-outlined" aria-hidden="true">photo_camera</span></span><span class="camera-preview-label"><span>LOCAL IMAGE CONTEXT</span><span>PREVIEW ONLY</span></span></div>
+          <div class="camera-file-summary"><span class="camera-file-icon"><span class="material-symbols-outlined" aria-hidden="true">image</span></span><span class="camera-file-copy"><strong id="camera-file-name">No image staged</strong><span id="camera-file-meta">Add a PNG, JPG, or JPEG to inspect it.</span></span></div>
+          <div id="camera-status" class="staging-state-message" role="status" aria-live="polite">Waiting for a staged image.</div>
+          <div id="camera-insight" class="camera-insight">Image metadata will appear here after analysis. No pixels are uploaded or stored.</div>
+        </div>
+        <div class="camera-controls"><button id="camera-primary" class="camera-primary" type="button" data-action="camera-primary"><span class="material-symbols-outlined" aria-hidden="true">auto_awesome</span><span id="camera-primary-label">Analyze image</span></button><button class="camera-secondary" type="button" data-action="camera-choose"><span class="material-symbols-outlined" aria-hidden="true">upload_file</span>Use another image</button><button class="camera-secondary" type="button" data-action="camera-error"><span class="material-symbols-outlined" aria-hidden="true">cloud_off</span>Simulate issue</button></div>
+        <footer class="camera-dialog-footer"><span class="material-symbols-outlined" aria-hidden="true">info</span><span>Camera permission, image upload, and pixel storage are intentionally disabled in this preview.</span></footer>
+      </aside>
+    </div>
+
     <aside id="sidebar" class="sidebar" aria-label="Workspace navigation">
       <button class="icon-button mobile-sidebar-close" type="button" data-action="close-sidebar" aria-label="Close workspace navigation">
         <span class="material-symbols-outlined" aria-hidden="true">close</span>
@@ -5425,6 +5755,7 @@
                 <div class="staging-footer-actions">
                   <button class="staging-icon-button" type="button" data-action="add-web-link" aria-label="Add web link reference" title="Add web link reference"><span class="material-symbols-outlined" aria-hidden="true">link</span></button>
                   <button class="staging-icon-button" type="button" data-action="mcp" aria-label="MCP Tools picker" title="MCP Tools picker"><span class="material-symbols-outlined" aria-hidden="true">extension</span></button>
+                  <button class="staging-icon-button" type="button" data-action="open-camera" aria-label="Inspect staged image" title="Inspect staged image"><span class="material-symbols-outlined" aria-hidden="true">photo_camera</span></button>
                   <button id="send-prompt-btn" class="staging-send-button" type="button" data-action="send-prompt" aria-label="Send prompt"><span>Send Prompt</span><span class="material-symbols-outlined" aria-hidden="true">keyboard_return</span></button>
                 </div>
               </div>
@@ -5558,6 +5889,12 @@
         audioFocusGuard: false,
         audioState: 'idle',
         audioTimer: null,
+        cameraOpen: false,
+        cameraTrigger: null,
+        cameraFocusGuard: false,
+        cameraState: 'empty',
+        cameraFileId: null,
+        cameraTimer: null,
         preferences: {
           streaming: true,
           memoryOnly: true,
@@ -5612,6 +5949,14 @@
       const audioTranscript = document.getElementById('audio-transcript-text');
       const audioPrimary = document.getElementById('audio-primary');
       const audioPrimaryLabel = document.getElementById('audio-primary-label');
+      const cameraModal = document.getElementById('camera-modal');
+      const cameraDialog = cameraModal?.querySelector('.camera-dialog');
+      const cameraStatus = document.getElementById('camera-status');
+      const cameraFileName = document.getElementById('camera-file-name');
+      const cameraFileMeta = document.getElementById('camera-file-meta');
+      const cameraInsight = document.getElementById('camera-insight');
+      const cameraPrimary = document.getElementById('camera-primary');
+      const cameraPrimaryLabel = document.getElementById('camera-primary-label');
       const modelOptions = Array.from(document.querySelectorAll('[data-action="select-model"]'));
 
       function createElement(tag, className, text) {
@@ -5884,6 +6229,94 @@
         clearAudioTimer();
         state.audioState = 'error';
         renderAudioState();
+      }
+
+      function clearCameraTimer() {
+        if (state.cameraTimer) {
+          window.clearTimeout(state.cameraTimer);
+          state.cameraTimer = null;
+        }
+      }
+
+      function getStagedImage() {
+        return state.stagedFiles.find((file) => ['PNG', 'JPG', 'JPEG'].includes(file.type)) || null;
+      }
+
+      function renderCameraState() {
+        if (!cameraDialog) return;
+        const image = getStagedImage();
+        if (image && state.cameraState === 'empty') state.cameraState = 'ready';
+        if (!image && state.cameraState !== 'analyzing') state.cameraState = 'empty';
+        const copy = {
+          empty: { status: 'Waiting for a staged image.', insight: 'Add a PNG, JPG, or JPEG to inspect it. No pixels are uploaded or stored.', action: 'Analyze image', disabled: true },
+          ready: { status: 'Image staged and ready to inspect.', insight: `${image?.name || 'This image'} is available as metadata-only context.`, action: 'Analyze image', disabled: false },
+          analyzing: { status: 'Analyzing image metadata…', insight: 'Aura is preparing a local visual summary for this preview.', action: 'Analyzing…', disabled: true },
+          success: { status: 'Image context ready.', insight: `Detected a staged ${image?.type || 'image'} reference with ${image?.sizeLabel || 'local metadata'} available for the next prompt.`, action: 'Analyze again', disabled: false },
+          error: { status: 'Image preview unavailable.', insight: 'The local analysis could not complete. Try again or choose another staged image.', action: 'Try again', disabled: !image }
+        };
+        const current = copy[state.cameraState] || copy.empty;
+        state.cameraFileId = image?.id || null;
+        cameraDialog.dataset.cameraState = state.cameraState;
+        if (cameraFileName) cameraFileName.textContent = image?.name || 'No image staged';
+        if (cameraFileMeta) cameraFileMeta.textContent = image ? `${image.type} · ${image.sizeLabel || formatBytes(image.sizeBytes)} · ${image.status || 'Ready to inspect'}` : 'Add a PNG, JPG, or JPEG to inspect it.';
+        if (cameraStatus) {
+          cameraStatus.textContent = current.status;
+          cameraStatus.classList.toggle('is-error', state.cameraState === 'error');
+        }
+        if (cameraInsight) cameraInsight.textContent = current.insight;
+        if (cameraPrimaryLabel) cameraPrimaryLabel.textContent = current.action;
+        if (cameraPrimary) {
+          cameraPrimary.disabled = current.disabled;
+          const iconElement = cameraPrimary.querySelector('.material-symbols-outlined');
+          if (iconElement) iconElement.textContent = state.cameraState === 'analyzing' ? 'hourglass_top' : state.cameraState === 'error' ? 'refresh' : 'auto_awesome';
+        }
+      }
+
+      function openCamera(trigger) {
+        if (!cameraModal) return;
+        clearCameraTimer();
+        state.cameraFocusGuard = false;
+        state.cameraOpen = true;
+        state.cameraTrigger = trigger || document.querySelector('[data-action="open-camera"]');
+        cameraModal.hidden = false;
+        renderCameraState();
+        window.requestAnimationFrame(() => cameraPrimary?.focus());
+      }
+
+      function closeCamera(restoreFocus) {
+        if (!state.cameraOpen) return;
+        clearCameraTimer();
+        state.cameraOpen = false;
+        if (cameraModal) cameraModal.hidden = true;
+        if (restoreFocus !== false && state.cameraTrigger?.isConnected) {
+          state.cameraFocusGuard = true;
+          state.cameraTrigger.focus();
+          window.setTimeout(() => { state.cameraFocusGuard = false; }, 0);
+        }
+        state.cameraTrigger = null;
+      }
+
+      function analyzeCamera() {
+        const image = getStagedImage();
+        if (!image) {
+          state.cameraState = 'empty';
+          renderCameraState();
+          return;
+        }
+        clearCameraTimer();
+        state.cameraState = 'analyzing';
+        renderCameraState();
+        state.cameraTimer = window.setTimeout(() => {
+          state.cameraTimer = null;
+          state.cameraState = 'success';
+          renderCameraState();
+        }, 720);
+      }
+
+      function simulateCameraError() {
+        clearCameraTimer();
+        state.cameraState = 'error';
+        renderCameraState();
       }
 
       const slashCommands = [
@@ -6172,6 +6605,7 @@
           state.stagedFiles.forEach((file) => stagedFileTray.appendChild(createStagedFile(file)));
         }
         updateStagedSummary();
+        if (state.cameraOpen) renderCameraState();
       }
 
       function stageFiles(fileList) {
@@ -6366,6 +6800,7 @@
         closeSettings(false);
         closeMcp(false);
         closeAudio(false);
+        closeCamera(false);
         if (promptInput) promptInput.value = '';
         if (chatInput) chatInput.value = '';
         renderStagedFiles();
@@ -6602,6 +7037,7 @@
         closeSettings(false);
         closeMcp(false);
         closeAudio(false);
+        closeCamera(false);
         closeCommandMenu();
       }
 
@@ -6610,7 +7046,6 @@
           presets: ['Presets are ready to customize in this local prototype.', 'tune'],
           attach: ['File attachments are disabled in preview mode.', 'attach_file'],
           'add-web-link': ['Web link references are ready for this local context.', 'link'],
-          screenshot: ['Screen vision is available as a mock control in preview mode.', 'screenshot_monitor'],
           'view-sessions': ['Showing the five most recent Aura sessions.', 'history'],
           license: ['Team Pro License details are available in workspace settings.', 'verified_user'],
           'manage-plan': ['Plan management is outside this local prototype.', 'workspace_premium'],
@@ -6712,6 +7147,15 @@
           closeMcp(true);
         } else if (action === 'close-audio') {
           closeAudio(true);
+        } else if (action === 'close-camera') {
+          closeCamera(true);
+        } else if (action === 'camera-primary') {
+          analyzeCamera();
+        } else if (action === 'camera-choose') {
+          closeCamera(false);
+          openStagedFilePicker();
+        } else if (action === 'camera-error') {
+          simulateCameraError();
         } else if (action === 'audio-primary') {
           handleAudioPrimary();
         } else if (action === 'audio-secondary') {
@@ -6762,6 +7206,8 @@
           openMcp(target.closest('[data-action]'));
         } else if (action === 'audio' || action === 'audio-mode') {
           openAudio(target.closest('[data-action]'));
+        } else if (action === 'open-camera' || action === 'screenshot') {
+          openCamera(target.closest('[data-action]'));
         } else {
           handleFeedback(action);
         }
@@ -6771,6 +7217,7 @@
         if (state.settingsOpen && !settingsModal.contains(event.target)) closeSettings(false);
         if (state.mcpOpen && !mcpModal.contains(event.target)) closeMcp(false);
         if (state.audioOpen && !audioModal.contains(event.target)) closeAudio(false);
+        if (state.cameraOpen && !cameraModal.contains(event.target)) closeCamera(false);
         if (!commandMenu.hidden && !commandMenu.contains(event.target) && event.target !== promptInput) closeCommandMenu();
         const clickedInsideSidebar = sidebar.contains(event.target);
         const clickedSidebarToggle = sidebarToggle.contains(event.target);
@@ -6907,6 +7354,7 @@
           else if (state.settingsOpen) closeSettings(true);
           else if (state.mcpOpen) closeMcp(true);
           else if (state.audioOpen) closeAudio(true);
+          else if (state.cameraOpen) closeCamera(true);
           else if (!commandMenu.hidden) closeCommandMenu();
           else if (state.sidebarOpen) closeSidebar();
           else if (!modelMenu.hidden) closeModelMenu(true);
@@ -6969,6 +7417,19 @@
             first.focus();
           }
         }
+        if (state.cameraOpen && event.key === 'Tab') {
+          const focusable = Array.from(cameraModal.querySelectorAll('.camera-dialog button:not([disabled])')).filter((item) => !item.hidden);
+          if (!focusable.length) return;
+          const first = focusable[0];
+          const last = focusable[focusable.length - 1];
+          if (event.shiftKey && document.activeElement === first) {
+            event.preventDefault();
+            last.focus();
+          } else if (!event.shiftKey && document.activeElement === last) {
+            event.preventDefault();
+            first.focus();
+          }
+        }
         if (state.sidebarOpen && event.key === 'Tab') {
           const focusable = Array.from(sidebar.querySelectorAll('button:not([disabled]), input:not([disabled])')).filter((item) => !item.hidden);
           if (!focusable.length) return;
@@ -6996,6 +7457,7 @@
       renderSettings();
       renderMcp();
       renderAudioState();
+      renderCameraState();
       updateDraftState();
       updateChatDraftState();
       applySessionFilter();
