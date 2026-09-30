@@ -1,0 +1,16 @@
+{
+  "name": "aura-bridge",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Local bridge that serves the Aura single-file dashboard and proxies OpenAI, Ollama and erpnext-mcp. No runtime dependencies.",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node aura-server.mjs",
+    "validate": "node validate-aura.mjs",
+    "validate:browser": "node validate-aura.mjs --browser",
+    "validate:live": "AURA_LIVE=1 node validate-live.mjs"
+  }
+}

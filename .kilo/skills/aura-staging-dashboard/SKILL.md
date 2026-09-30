@@ -1,11 +1,13 @@
 ---
 name: aura-staging-dashboard
-description: Build and maintain the Aura single-file dashboard in this workspace, especially Multimodal Context Engine states, staged file attachments, prompt context, file picker and drag-drop behavior, and the responsive Aura shell. Trigger when a task mentions Aura, File_Attachment, staging state, staged files, context composer, or a dashboard reference image.
+description: Build and maintain the Aura single-file dashboard in this workspace, especially Multimodal Context Engine states, staged file attachments, prompt context, file picker and drag-drop behavior, the responsive Aura shell, and its OpenAI/Ollama providers and erpnext-mcp tool calling with write-tool approval. Trigger when a task mentions Aura, File_Attachment, staging state, staged files, context composer, a dashboard reference image, the Aura bridge, MCP tool tiers, or tool-call approval.
 ---
 
 # Aura Staging Dashboard
 
 Aura is a browser-openable, no-build prototype whose primary source is `code.html`. Keep the design and behavior coherent when changing the shell, staged context, or chat flow.
+
+Aura is also a real agent when `aura-server.mjs` is running. That changes several rules below, most importantly in sections 5, 6, and 9. Read `README-AURA-BRIDGE.md` before changing anything that touches providers, MCP, or tool calling.
 
 ## Stitch reference
 
@@ -27,8 +29,9 @@ Use MCP metadata, screenshots, and design-system tokens as references. Generated
 ## Source of truth
 
 1. Read `code.html` before editing and preserve the existing shell, event delegation, and memory-only behavior.
-2. Treat the supplied design image and design notes as visual references, not as permission to add a backend.
+2. Treat the supplied design image and design notes as visual references. They are not permission to add a backend — the only backend Aura has is `aura-server.mjs`, and adding routes there is a separate, explicit decision.
 3. Keep one browser session authoritative: state lives in JavaScript memory and resets on refresh.
+4. New code stays inside the single IIFE. No ESM `import` and no top-level `await`: `validate-aura.mjs` compiles every inline script with `vm.Script` as a classic script.
 
 ## Implement workflow
 
@@ -63,6 +66,17 @@ Completion criterion: every new control has one state owner, one update path, an
 | `camera-error` | Preview failure is simulated | Plain-language error and retry path |
 
 State transitions are one-way until the user changes the input: `ready → loading → success`, `ready → error → ready`, or `success → empty`. New Chat cancels timers and returns to `ready` when context remains or `empty` when it does not.
+
+A tool call adds its own status family on `.tool-run[data-status]`. Each needs a distinct dot, icon, and label, and each transition needs a browser assertion:
+
+| Status | Entry | Meaning |
+| --- | --- | --- |
+| `running` | The call was sent upstream | Pulsing dot; the container is a `role="status"` live region. |
+| `done` | The server reported success | The only status that may support a claim of success in the assistant's text. |
+| `error` | The server reported a failure | The row shows the server's own message. Recoverable: the exchange continues. |
+| `blocked` | The gateway's own gate refused the call | Distinct from `error` — nothing was rejected, the gateway declined. |
+| `rejected` | The user chose Reject or pressed Escape | The model is told the call was rejected so it adapts. |
+| `cancelled` | The user pressed Stop mid-call | Never a claim of success. |
 
 Completion criterion: each state has a visible or accessible representation, a deterministic transition, and a browser assertion.
 
@@ -105,20 +119,25 @@ Completion criterion: both surfaces are reachable by keyboard, preserve prompt t
 ### 5. Keep assistant settings local and accessible
 
 - Open the settings drawer from the primary navigation without replacing the dashboard.
-- Keep model selection synchronized across dashboard, chat, and settings.
+- Keep model selection synchronized across dashboard, chat, and settings. `updateModelLabels()` is the single writer of every `[data-model-label]`; do not introduce a second one.
 - Use native buttons for preferences, expose pressed state, and keep values in JavaScript memory only.
 - Trap focus inside the modal, close with Escape, and return focus to the navigation trigger.
+- The Tab trap must cover `button`, `input`, `select`, and `textarea`. Selecting only buttons silently excluded the Providers section's controls and broke keyboard access.
+- The Providers section reports per-provider status, host, discovered model count, and a bridge connection log so a gateway 401 is diagnosable without devtools. It names the exact env var a provider needs, from `/api/config` when the bridge answers and from the local `providerCatalog` when it does not — the `file://` path never fetches, so the fallback is load-bearing.
 
-Completion criterion: settings remain usable at desktop and mobile widths without implying backend persistence.
+Completion criterion: settings remain usable at desktop and mobile widths, no secret is ever rendered, and interface preferences still reset on refresh.
 
-### 6. Expose MCP preview surfaces
+### 6. Expose the live MCP surface
 
 - Open the MCP drawer from the sidebar integration row or top navigation.
-- Present connected servers, tool names, descriptions, and statuses from one local catalog.
-- Support search, server selection, keyboard focus, Escape close, and focus return.
-- Treat tool activation as a preview action; do not imply transport, credentials, or persistence.
+- Tool names, descriptions, and tiers come from a real `tools/list` and `get_tool_manifest` call, not a local catalog. Group by tier with per-group counts, and show an `unknown` group for tools the manifest does not tier.
+- The drawer shows the **full** catalogue, including tools the retriever will never offer a model. The drawer is the user's view of the server; the retriever alone decides what a model may see. Filtering the catalogue here hides tools the server genuinely has.
+- Show which tools are in the current turn's shortlist, and the count in the drawer header. Without it, "it cannot see my invoices" is indistinguishable from a real limit.
+- Support search, tier selection, keyboard focus, Escape close, and focus return. Search is token-AND, not substring: only `make_sales_invoice` contains the literal phrase "sales invoice", so substring matching hides 6 of 8 real hits.
+- Activating a tool prefills the composer with `Use the <tool> tool to `. It must **not** auto-execute — an implicit ERP query from a button click is not predictable.
+- Never bypass a tool's tier to read it. `call_tool` is a generic escape hatch that reaches a write tool while its own tier reads "unknown"; exclude it at both the retriever and the executor.
 
-Completion criterion: MCP browsing is useful, responsive, and clearly bounded to the current browser tab.
+Completion criterion: the drawer reflects the connected server, and a reader can tell which tools a given turn's model can actually see.
 
 ### 7. Preview voice mode without device access
 
@@ -145,7 +164,25 @@ The dashboard composer is a context prompt, not a persistence boundary. Keep the
 
 Use delegated actions for cards, remove buttons, model selection, and feedback controls. Use `textContent` for user-authored messages and filenames.
 
+The `demo` provider still owns the deterministic mock flow. It must never fabricate tool activity: offline tool-timeline visibility comes from `seedSessions`, not from the mock generator. `queueMockResponse` is the `demo` transport's implementation and stays untouched by the real agent loop.
+
 Completion criterion: submitting a staged prompt opens chat, shows a typing state, produces a deterministic assistant response, and New Chat returns to a usable dashboard.
+
+### 9a. Keep the real agent loop correct
+
+This applies when a real provider is selected. `README-AURA-BRIDGE.md` has the protocol details.
+
+- The upstream transcript is **derived** from `state.messages` and `state.toolRuns` by `buildUpstreamMessages()`. Never keep a second mutable copy alongside `messages`; it desyncs across the five splice sites.
+- The five splice sites change together: `saveEditedMessage`, `regenerateMessage`, `startNewChat`, `saveActiveSession`/`resumeSession`, and `seedSessions`. A tool row that outlives its exchange is worse than a missing row.
+- Render tool calls as `div.tool-run` rows between messages, **not** `.message-row`, so the `.message-row` count keeps meaning "prose turn".
+- Render a row's raw result lazily on first expand. A 200 KB `<pre>` rebuilt on every render is a real jank source.
+- `renderChatMessages` does a full `replaceChildren`. Re-running it at 60fps destroys scroll and focus: during streaming, patch only the active bubble's text node, coalesced to one `requestAnimationFrame`, and fully re-render only on `done`, on tool-row transitions, and on error.
+- Gate every network call on `location.protocol === 'http:'` before issuing it. On `file://` a relative `/api/health` resolves to `file:///api/health` and Chromium logs a CORS console error, which fails the zero-console-error assertion.
+- A real provider that fails shows an error and a Retry. It must **never** silently fall back to `demo`; that would hide a real outage behind a plausible answer. `demo` is auto-selected only when the bridge is unreachable at boot.
+- `isError` from MCP is unreliable — a pydantic validation failure arrives with `isError:false` and `{"status":"error"}`. Branch on the status, and prefer the inner envelope's status over the outer one.
+- Never throw out of a stream loop. A malformed tool-argument string is a row showing the raw text plus a continued exchange, not a dead page.
+
+Completion criterion: Stop leaves no upstream connection and no pending approval, a rejected tool call tells the model it was rejected so it adapts, and the row reports the server's own status rather than an assumption.
 
 ### 10. Preserve the Aura visual system
 
@@ -176,13 +213,16 @@ Completion criterion: the new state matches the reference hierarchy at desktop a
 
 Run the project’s available checks after every material change:
 
-1. Run `node validate-aura.mjs` for the static pass; run `node validate-aura.mjs --browser` with Playwright available.
-2. Compile each inline script with Node's `vm.Script` or the equivalent project command.
+1. Run `node validate-aura.mjs` for the static pass; run `node validate-aura.mjs --browser` with Playwright available. Both are required: the static pass catches what the browser cannot see (a swallowed key, a duplicate id, a banned API), and the browser pass is the only thing that catches a regression in a live exchange.
+2. Compile each inline script with Node's `vm.Script`. Use `node --check` instead for `.mjs` files — `vm.Script` cannot parse ESM.
 3. Parse the HTML and check for duplicate ids and unnamed icon-only buttons.
 4. Exercise every state in the state matrix: ready, empty, loading, success, error, disabled, search-empty, chat-loading, audio preview, and camera inspection states.
-5. Exercise the initial dashboard, file removal, file picker, drag/drop, prompt insertion, global search, slash commands, model menu, settings preferences, MCP server/tool browsing, voice preview, camera inspection, send/typing/response, and New Chat.
-6. Check the mobile drawer, Escape close, composer submission, and viewport overflow.
-7. Open `code.html` directly with `file://` as well as through a temporary local server.
-8. Stop temporary servers and remove staging/reference folders only after the main file is verified.
+5. Exercise the initial dashboard, file removal, file picker, drag/drop, prompt insertion, global search, slash commands, model menu, settings preferences, MCP tool browsing, voice preview, camera inspection, send/typing/response, and New Chat.
+6. With the bridge running, also exercise a real exchange: a tool row appearing and resolving, a tool error that the exchange recovers from, a write tool opening the approval dialog, Stop mid-stream, and the shortlist count in the MCP drawer.
+7. Check the mobile drawer, Escape close, composer submission, and viewport overflow.
+8. Open `code.html` directly with `file://` as well as through the bridge. The `file://` pass asserts the degraded path: no banner is wrong, and any `/api/` or `/proxy/` request at all is a failure.
+9. Stop temporary servers and remove staging/reference folders only after the main file is verified.
+
+Chromium logs a console error for every non-2xx response it sees. A group that deliberately provokes an upstream error must assert on uncaught `pageerror` only, or filter `Failed to load resource: the server responded with a status of` out of the console stream — otherwise a correct app fails the zero-console-error gate for a reason that is not a bug.
 
 Completion criterion: the dashboard has no page errors, the staged-state assertions pass, and the requested reference folder is gone only when removal is part of the task.
